@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">LoveCuteY</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Senha</string>
+    <string name="prompt_repassword">Digite novamente sua senha</string>
+    <string name="digite_nome">Digite seu nome</string>
+    <string name="action_sign_in">Login</string>
+    <string name="toActivityRegister">Registre-se</string>
+    <string name="idadetext">Sua idade</string>
+    <string name="idadelabel">Sua idade</string>
+    <string name="RegisterText">Você ainda não tem uma conta?</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"BEM-VINDO "</string>
+    <string name="invalid_username">Seu nome de Usuario é invalido, redigite novamente e tente novamente!</string>
+    <string name="invalid_password">A senha precisa de ser 5 caracteres para cima!</string>
+    <string name="login_failed">"O login falhou... Contate o programador do Apliativo ou veja os status do servidor!"</string>
+    <string name="title_activity_register">RegisterActivity</string>
+</resources>

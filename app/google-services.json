@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "156179362424",
+    "project_id": "lovecutey-95cc0",
+    "storage_bucket": "lovecutey-95cc0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156179362424:android:ec7e5f27e22d62a15a338d",
+        "android_client_info": {
+          "package_name": "com.herorickystudios.lovecutey"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "156179362424-89hsqt5ac78vb9cm4q767kl1mupvechr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9AfpSNW5KTnZaPN7b8BdU2YsNbljmdbc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "156179362424-89hsqt5ac78vb9cm4q767kl1mupvechr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
