@@ -1,5 +1,7 @@
 package com.herorickystudios.lovecutey.ui.login;
 
+//Programado por HeroRickyGames
+
 public class ItemModel {
 
     private int image;

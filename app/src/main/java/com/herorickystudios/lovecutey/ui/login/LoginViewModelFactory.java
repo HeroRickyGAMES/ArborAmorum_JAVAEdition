@@ -1,5 +1,7 @@
 package com.herorickystudios.lovecutey.ui.login;
 
+//Programado por HeroRickyGames
+
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.annotation.NonNull;

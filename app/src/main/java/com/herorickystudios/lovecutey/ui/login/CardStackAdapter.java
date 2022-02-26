@@ -1,5 +1,7 @@
 package com.herorickystudios.lovecutey.ui.login;
 
+//Programado por HeroRickyGames
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

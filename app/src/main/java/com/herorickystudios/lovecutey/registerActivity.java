@@ -31,6 +31,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+//Programado por HeroRickyGames
+
 public class registerActivity extends AppCompatActivity {
 
     private EditText edit_Nome,edit_Email,edit_senha,reeditsenha, idade_text;

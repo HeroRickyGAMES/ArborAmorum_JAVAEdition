@@ -1,5 +1,8 @@
 package com.herorickystudios.lovecutey.ui.login;
 
+//Programado por HeroRickyGames
+
+
 /**
  * Class exposing authenticated user details to the UI.
  */
