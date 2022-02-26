@@ -19,6 +19,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -31,6 +37,9 @@ public class registerActivity extends AppCompatActivity {
     private Button register_button;
     String[] menssagens = {"Preencha todos os campos para continuar", "Cadastro feito com sucesso!"};
     String usuarioID;
+
+    public DatabaseReference referencia = FirebaseDatabase.getInstance().getReference("Usuarios");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +63,10 @@ public class registerActivity extends AppCompatActivity {
                 String email = edit_Email.getText().toString();
                 String senha = edit_senha.getText().toString();
                 String resenha = reeditsenha.getText().toString();
+                String idade = idade_text.getText().toString();
 
                 //E se foi cadastrado?
-                if(nome.isEmpty() || email.isEmpty() || senha.isEmpty() || resenha.isEmpty()){
+                if(nome.isEmpty() || email.isEmpty() || senha.isEmpty() || resenha.isEmpty() || idade.isEmpty()){
                 //Falta campos USUARIO!
                     Snackbar snackbar = Snackbar.make(view, menssagens[0],Snackbar.LENGTH_LONG);
                     snackbar.show();
@@ -84,10 +94,23 @@ public class registerActivity extends AppCompatActivity {
 
                 if (task.isSuccessful()){
 
-                    SalvarDadosUsuario();
-
                     Snackbar snackbar = Snackbar.make(view, menssagens[1],Snackbar.LENGTH_LONG);
                     snackbar.show();
+
+
+                    FirebaseUser usuarioLogado = FirebaseAuth.getInstance().getCurrentUser();
+
+                    String getUID = usuarioLogado.getUid();
+
+                    String nome = edit_Nome.getText().toString();
+                    String idade = idade_text.getText().toString();
+                    String email = idade_text.getText().toString();
+
+                    //Documentos
+                    referencia.child(getUID).child("Dados do Usuario").child("nome").setValue(nome);
+                    referencia.child(getUID).child("Dados do Usuario").child("email").setValue(email);
+                    referencia.child(getUID).child("Dados do Usuario").child("idade").setValue(idade);
+
                 }else{
 
                     String erro;
@@ -116,32 +139,4 @@ public class registerActivity extends AppCompatActivity {
         });
 
     }
-        private void SalvarDadosUsuario(){
-        String nome = edit_Nome.getText().toString();
-        String idade = idade_text.getText().toString();
-
-
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-            Map<String, Object> usuarios = new HashMap<>();
-            usuarios.put("nome",nome);
-            usuarios.put("idade",idade);
-
-            usuarioID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-            DocumentReference documentReference = db.collection("Usuarios").document(usuarioID);
-            documentReference.set(usuarios).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    Log.d("db", "sucesso ao gravar os dados no servidor!");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d("db_error", "Ocorreu um erro ao cadastrar no servidor, é melhor eu verificar o que eu escrevi!" + e.toString());
-                }
-            });
-
-        }
-
 }
