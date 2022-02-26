@@ -104,7 +104,7 @@ public class registerActivity extends AppCompatActivity {
 
                     String nome = edit_Nome.getText().toString();
                     String idade = idade_text.getText().toString();
-                    String email = idade_text.getText().toString();
+                    String email = edit_Email.getText().toString();
 
                     //Documentos
                     referencia.child(getUID).child("Dados do Usuario").child("nome").setValue(nome);
