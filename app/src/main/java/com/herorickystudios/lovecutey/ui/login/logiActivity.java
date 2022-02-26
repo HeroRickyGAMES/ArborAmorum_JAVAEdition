@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.herorickystudios.lovecutey.ListUsersActivity;
 import com.herorickystudios.lovecutey.R;
 import com.herorickystudios.lovecutey.registerActivity;
@@ -58,7 +59,19 @@ public class logiActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser usuarioLogado = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(usuarioLogado != null){
+
+            AbrirTelaInicial();
+
+        }
 
     }
 
