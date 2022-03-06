@@ -4,17 +4,26 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.lorentzos.flingswipe.SwipeFlingAdapterView;
+
+import java.util.ArrayList;
 
 //Programado por HeroRickyGames
 
 public class ListUsersActivity extends AppCompatActivity {
+
+    ArrayList<String> arrayListE;
+    ArrayAdapter arrayAdapter;
+    int n=0;
 
     TextView nome, idade, cidade;
     public DatabaseReference referencia = FirebaseDatabase.getInstance().getReference("Usuarios");
@@ -32,6 +41,45 @@ public class ListUsersActivity extends AppCompatActivity {
         cidade = findViewById(R.id.textLocalização);
 
         usernamessc();
+
+        arrayListE= new ArrayList<String >();
+        arrayListE.add("UM");
+        arrayListE.add("DOIS");
+        arrayListE.add("TRÊS");
+        arrayListE.add("QUAATRO");
+        arrayListE.add("RECARREGA");
+        SwipeFlingAdapterView swipeFlingAdapterView= (SwipeFlingAdapterView) findViewById(R.id.usersSwipe);
+
+
+    arrayAdapter= new ArrayAdapter<String>(this, R.layout.detalhes,R.id.exibir, arrayListE);
+    swipeFlingAdapterView.setAdapter(arrayAdapter);
+    swipeFlingAdapterView.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
+        @Override
+        public void removeFirstObjectInAdapter() {
+            arrayListE.remove(0);
+            arrayAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onLeftCardExit(Object o) {
+            Toast.makeText(ListUsersActivity.this, "Movido para o lado", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onRightCardExit(Object o) {
+            Toast.makeText(ListUsersActivity.this, "Movido paro oto", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onAdapterAboutToEmpty(int i) {
+
+        }
+
+        @Override
+        public void onScroll(float v) {
+
+        }
+    });
 
     }
 

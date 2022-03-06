@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".ListUsersActivity">
 
+    <com.lorentzos.flingswipe.SwipeFlingAdapterView
+        android:id="@+id/usersSwipe"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/textNomeUser"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:max_visible="7"
+        app:min_adapter_stack="8"
+        app:rotation_degrees="20"
+        android:background="@color/browser_actions_bg_grey"/>
+
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
@@ -57,5 +71,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textIdadeUser" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
