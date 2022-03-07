@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,6 +39,7 @@ public class registerActivity extends AppCompatActivity {
 
     private EditText edit_Nome,edit_Email,edit_senha,reeditsenha, idade_text;
     private Button register_button;
+    private RadioGroup radioGrup;
     String[] menssagens = {"Preencha todos os campos para continuar", "Cadastro feito com sucesso!"};
     String usuarioID;
 
@@ -55,6 +58,7 @@ public class registerActivity extends AppCompatActivity {
         reeditsenha = findViewById(R.id.repassword_Register);
         register_button = findViewById(R.id.register_button);
         idade_text = findViewById(R.id.idade_text);
+        radioGrup = findViewById(R.id.radioGroup);
 
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +103,6 @@ public class registerActivity extends AppCompatActivity {
                     Snackbar snackbar = Snackbar.make(view, menssagens[1],Snackbar.LENGTH_LONG);
                     snackbar.show();
 
-
                     FirebaseUser usuarioLogado = FirebaseAuth.getInstance().getCurrentUser();
 
                     String getUID = usuarioLogado.getUid();
@@ -108,10 +111,18 @@ public class registerActivity extends AppCompatActivity {
                     String idade = idade_text.getText().toString();
                     String email = edit_Email.getText().toString();
 
-                    //Documentos
-                    referencia.child(getUID).child("Dados do Usuario").child("nome").setValue(nome);
-                    referencia.child(getUID).child("Dados do Usuario").child("email").setValue(email);
-                    referencia.child(getUID).child("Dados do Usuario").child("idade").setValue(idade);
+                    int selectID = radioGrup.getCheckedRadioButtonId();
+                    final RadioButton radioButton = (RadioButton) findViewById(selectID);
+
+                    if(radioButton.getText() == null){
+                        return;
+                    }
+
+                    String genero = radioButton.getText().toString();
+
+                    referencia.child(genero).child(getUID).child("Dados do Usuario").child("nome").setValue(nome);
+                    referencia.child(genero).child(getUID).child("Dados do Usuario").child("email").setValue(email);
+                    referencia.child(genero).child(getUID).child("Dados do Usuario").child("idade").setValue(idade);
 
                 }else{
 
