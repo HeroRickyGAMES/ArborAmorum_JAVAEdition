@@ -1,6 +1,7 @@
 package com.herorickystudios.lovecutey;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,15 +44,9 @@ public class ListUsersActivity extends AppCompatActivity {
         //Esconde a action Bar
         getSupportActionBar().hide();
 
+        checkUserSex();
+
         al = new ArrayList<>();
-        al.add("php");
-        al.add("c");
-        al.add("python");
-        al.add("java");
-        al.add("html");
-        al.add("c++");
-        al.add("css");
-        al.add("javascript");
 
         arrayAdapter = new ArrayAdapter<>(this, R.layout.item, R.id.helloText, al);
         //@InjectView(R.id.frame) SwipeFlingAdapterView flingContainer;
@@ -61,9 +57,7 @@ public class ListUsersActivity extends AppCompatActivity {
             @Override
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
-                Log.d("LIST", "removed object!");
                 al.remove(0);
-                arrayAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -72,11 +66,13 @@ public class ListUsersActivity extends AppCompatActivity {
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
                 Toast.makeText(ListUsersActivity.this, "Pu lado", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
                 Toast.makeText(ListUsersActivity.this, "Pro oto", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -110,6 +106,7 @@ public class ListUsersActivity extends AppCompatActivity {
     static void makeToast(Context ctx, String s) {
         Toast.makeText(ctx, s, Toast.LENGTH_SHORT).show();
      }
+
      public void deslogbtn(View view){
          FirebaseAuth.getInstance().signOut();
          Intent intent = new Intent(this, logiActivity.class);
@@ -117,4 +114,101 @@ public class ListUsersActivity extends AppCompatActivity {
          finish();
          return;
      }
+     private String userSex;
+     private String notUserSex;
+    private String oppositeUserSex;
+     public void checkUserSex(){
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        DatabaseReference maleDb= FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Masculino");
+         maleDb.addChildEventListener(new ChildEventListener() {
+             @Override
+             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                 if(snapshot.getKey().equals(user.getUid())){
+                     userSex = "Masculino";
+                     oppositeUserSex = "Feminino";
+                     getOppositeSexUsers();
+                 }
+             }
+
+             @Override
+             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+             }
+
+             @Override
+             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+             }
+
+             @Override
+             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+             }
+
+             @Override
+             public void onCancelled(@NonNull DatabaseError error) {
+             }
+         });
+
+         DatabaseReference femDB= FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Feminino");
+         femDB.addChildEventListener(new ChildEventListener() {
+             @Override
+             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                 if(snapshot.getKey().equals(user.getUid())){
+                     userSex = "Feminino";
+                     notUserSex = "Masculino";
+                     getOppositeSexUsers();
+                 }
+             }
+
+             @Override
+             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+             }
+
+             @Override
+             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+             }
+
+             @Override
+             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+             }
+
+             @Override
+             public void onCancelled(@NonNull DatabaseError error) {
+             }
+         });
+     }
+    public void getOppositeSexUsers(){
+
+        DatabaseReference opositeSexDb= FirebaseDatabase.getInstance().getReference().child("Usuarios").child(oppositeUserSex);
+        opositeSexDb.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+               if(snapshot.exists()){
+
+                   al.add(snapshot.child("Dados do Usuario").child("nome").getValue().toString());
+                   arrayAdapter.notifyDataSetChanged();
+
+               }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+    }
 }
