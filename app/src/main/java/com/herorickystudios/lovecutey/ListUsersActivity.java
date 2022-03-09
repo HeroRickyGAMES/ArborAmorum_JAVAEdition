@@ -119,7 +119,7 @@ public class ListUsersActivity extends AppCompatActivity {
      }
      private String userSex;
      private String notUserSex;
-    private String oppositeUserSex;
+     private String oppositeUserSex;
      public void checkUserSex(){
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -159,7 +159,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
                  if(snapshot.getKey().equals(user.getUid())){
                      userSex = "Feminino";
-                     notUserSex = "Masculino";
+                     oppositeUserSex = "Masculino";
                      getOppositeSexUsers();
                  }
              }
@@ -183,11 +183,21 @@ public class ListUsersActivity extends AppCompatActivity {
      }
     public void getOppositeSexUsers(){
 
-        DatabaseReference opositeSexDb= FirebaseDatabase.getInstance().getReference().child("Usuarios").child(oppositeUserSex);
+        DatabaseReference opositeSexDb = FirebaseDatabase.getInstance().getReference().child("Usuarios").child(oppositeUserSex);
         opositeSexDb.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                String idadee = snapshot.child("Dados do Usuario").child("idade").getValue().toString();
 
+                int idade =Integer.valueOf(idadee);
+
+                if(idade <= 18){
+                    Toast.makeText(ListUsersActivity.this, "Não aceita!", Toast.LENGTH_SHORT).show();
+                }else{
+
+                }
+
+                System.out.println(idade);
                if(snapshot.exists()){
 
 
