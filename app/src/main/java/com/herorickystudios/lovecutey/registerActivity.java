@@ -3,6 +3,7 @@ package com.herorickystudios.lovecutey;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -29,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.installations.local.PersistedInstallationEntry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,14 +74,31 @@ public class registerActivity extends AppCompatActivity {
                 String resenha = reeditsenha.getText().toString();
                 String idade = idade_text.getText().toString();
 
+                int idadee =Integer.valueOf(idade);
+
                 //E se foi cadastrado?
                 if(nome.isEmpty() || email.isEmpty() || senha.isEmpty() || resenha.isEmpty() || idade.isEmpty()){
                 //Falta campos USUARIO!
                     Snackbar snackbar = Snackbar.make(view, menssagens[0],Snackbar.LENGTH_LONG);
                     snackbar.show();
                 }else{
-                    //No caso ta tudo digitado então vamos cadastrar o fulano de tal no banco de dados mlkada!
-                    CadastrarUsuario(view);
+
+                    //Verificação de idade
+                    if(idadee <= 15){
+
+                        Toast.makeText(registerActivity.this, "Você é menor que 16 anos!", Toast.LENGTH_SHORT).show();
+
+                    }else{
+
+                        if(senha.intern() == resenha.intern()){
+                            Toast.makeText(registerActivity.this, "Cadastro feito com sucesso!", Toast.LENGTH_SHORT).show();
+                            //No caso ta tudo digitado certo e a idade bate, então vamos cadastrar o fulano de tal no banco de dados mlkada!
+                            CadastrarUsuario(view);
+                        }else{
+                            Toast.makeText(registerActivity.this, "Senhas não iguais", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
                 }
 
             }
@@ -111,6 +131,8 @@ public class registerActivity extends AppCompatActivity {
                     String idade = idade_text.getText().toString();
                     String email = edit_Email.getText().toString();
 
+
+
                     int selectID = radioGrup.getCheckedRadioButtonId();
                     final RadioButton radioButton = (RadioButton) findViewById(selectID);
 
@@ -123,6 +145,10 @@ public class registerActivity extends AppCompatActivity {
                     referencia.child(genero).child(getUID).child("Dados do Usuario").child("nome").setValue(nome);
                     referencia.child(genero).child(getUID).child("Dados do Usuario").child("email").setValue(email);
                     referencia.child(genero).child(getUID).child("Dados do Usuario").child("idade").setValue(idade);
+
+                    //Lançar activity dps do cadastro
+                    Intent intent = new Intent(registerActivity.this, ListUsersActivity.class);
+                    startActivity(intent);
 
                 }else{
 

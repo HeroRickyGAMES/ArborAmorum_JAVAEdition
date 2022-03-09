@@ -187,17 +187,7 @@ public class ListUsersActivity extends AppCompatActivity {
         opositeSexDb.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                String idadee = snapshot.child("Dados do Usuario").child("idade").getValue().toString();
 
-                int idade =Integer.valueOf(idadee);
-
-                if(idade <= 18){
-                    Toast.makeText(ListUsersActivity.this, "Não aceita!", Toast.LENGTH_SHORT).show();
-                }else{
-
-                }
-
-                System.out.println(idade);
                if(snapshot.exists()){
 
 
