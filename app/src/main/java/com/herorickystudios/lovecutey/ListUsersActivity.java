@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,16 +26,20 @@ import com.herorickystudios.lovecutey.ui.login.logiActivity;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //Programado por HeroRickyGames
 
 public class ListUsersActivity extends AppCompatActivity {
 
-    private ArrayList<String> al;
-    private ArrayAdapter<String> arrayAdapter;
+    private cards cards_data[];
+    private ArrayAdapter arrayAdapter;
     private int i;
 
     SwipeFlingAdapterView flingContainer;
+
+    ListView listView;
+    List<cards> rowItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +51,9 @@ public class ListUsersActivity extends AppCompatActivity {
 
         checkUserSex();
 
-        al = new ArrayList<>();
+        rowItems = new ArrayList<cards>();
 
-        arrayAdapter = new ArrayAdapter<>(this, R.layout.item, R.id.helloText, al);
+        arrayAdapter = new arrayAdapter(this, R.layout.item, rowItems);
         //@InjectView(R.id.frame) SwipeFlingAdapterView flingContainer;
         SwipeFlingAdapterView flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
 
@@ -57,7 +62,7 @@ public class ListUsersActivity extends AppCompatActivity {
             @Override
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
-                al.remove(0);
+                rowItems.remove(0);
             }
 
             @Override
@@ -78,8 +83,6 @@ public class ListUsersActivity extends AppCompatActivity {
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
                 // Ask for more data here
-                al.add("XML ".concat(String.valueOf(i)));
-                arrayAdapter.notifyDataSetChanged();
                 Log.d("LIST", "notified");
                 i++;
             }
@@ -187,7 +190,11 @@ public class ListUsersActivity extends AppCompatActivity {
 
                if(snapshot.exists()){
 
-                   al.add(snapshot.child("Dados do Usuario").child("nome").getValue().toString());
+
+                   //Tive dificuldades de adicionar mais adiconei como uma String e assim foi!
+                   //Bugs acontecem e isso foi, porem tá corrigodo!!
+                   cards Item = new cards((String) snapshot.child("Dados do Usuario").child("nome").getValue(), snapshot.child("Dados do Usuario").child("nome").getValue().toString());
+                   rowItems.add(Item);
                    arrayAdapter.notifyDataSetChanged();
 
                }

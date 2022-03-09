@@ -1,7 +1,7 @@
 package com.herorickystudios.lovecutey.data;
 
 /**
- * A generic class that holds a result success w/ data or an error exception.
+ //Programado por HeroRickyGames
  */
 public class Result<T> {
     // hide the private constructor to limit subclass types (Success, Error)

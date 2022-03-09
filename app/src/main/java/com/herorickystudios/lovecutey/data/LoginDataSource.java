@@ -5,7 +5,7 @@ import com.herorickystudios.lovecutey.data.model.LoggedInUser;
 import java.io.IOException;
 
 /**
- * Class that handles authentication w/ login credentials and retrieves user information.
+ //Programado por HeroRickyGames
  */
 public class LoginDataSource {
 
