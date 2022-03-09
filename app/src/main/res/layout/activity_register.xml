@@ -12,7 +12,7 @@
         android:id="@+id/imageView2"
         android:layout_width="157dp"
         android:layout_height="128dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -60,7 +60,19 @@
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Genero não definido"
+            android:text="Homem_Homossexual"
+            android:textColor="#000000" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mulher_Homossexual"
+            android:textColor="#000000" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bissexual"
             android:textColor="#000000" />
 
     </RadioGroup>
@@ -160,7 +172,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Se caso voê colocar o genero errado, contate-nos! Caso o contrario sua conta pode ser desativada!"
+        android:text="Coloque seu generio aqui ou se você é Homossexual ou Bissexual seja homem ou mulher coloque a que você mais se identifica!!"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username_Register" />
