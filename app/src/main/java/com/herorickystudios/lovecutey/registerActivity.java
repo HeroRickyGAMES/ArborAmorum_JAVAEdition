@@ -13,6 +13,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -46,8 +48,13 @@ public class registerActivity extends AppCompatActivity {
     String[] menssagens = {"Preencha todos os campos para continuar", "Cadastro feito com sucesso!"};
     String usuarioID;
 
-    public DatabaseReference referencia = FirebaseDatabase.getInstance().getReference("Usuarios");
+    //API para a localização dos usuarios
+    FusedLocationProviderClient fusedLocationProviderClient;
 
+    LocationRequest locationRequest;
+
+
+    public DatabaseReference referencia = FirebaseDatabase.getInstance().getReference("Usuarios");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +69,13 @@ public class registerActivity extends AppCompatActivity {
         register_button = findViewById(R.id.register_button);
         idade_text = findViewById(R.id.idade_text);
         radioGrup = findViewById(R.id.radioGroup);
+
+        locationRequest = new LocationRequest();
+        locationRequest.setInterval(1000 * 30);
+        locationRequest.setFastestInterval(1000 * 5);
+
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+
 
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
