@@ -2,8 +2,13 @@ package com.herorickystudios.lovecutey;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,6 +48,7 @@ import java.util.Map;
 
 public class registerActivity extends AppCompatActivity {
 
+    private static final int PERMISSIONS_FINE_LOCATION = 99;
     private EditText edit_Nome,edit_Email,edit_senha,reeditsenha, idade_text;
     private Button register_button;
     private RadioGroup radioGrup;
@@ -70,13 +77,17 @@ public class registerActivity extends AppCompatActivity {
         idade_text = findViewById(R.id.idade_text);
         radioGrup = findViewById(R.id.radioGroup);
 
+
+        //Codigos de localização
         locationRequest = new LocationRequest();
         locationRequest.setInterval(1000 * 30);
         locationRequest.setFastestInterval(1000 * 5);
 
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
 
+
+        //Codigos de registro
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,6 +131,23 @@ public class registerActivity extends AppCompatActivity {
 
         //Esconde a action Bar
         getSupportActionBar().hide();
+
+        updateGPS();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode){
+            case PERMISSIONS_FINE_LOCATION:
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    updateGPS();
+                }else{
+                    Toast.makeText(this, "Esse aplicativo precisa das permissões para funcionar, caso você negou sem querer, acesse as configurações!", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+        }
     }
 
     private void CadastrarUsuario(View view){
@@ -190,6 +218,49 @@ public class registerActivity extends AppCompatActivity {
 
             }
         });
+    }
+    private void updateGPS(){
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+
+                    System.out.println(location.getLatitude());
+                    System.out.println(location.getLongitude());
+                    System.out.println(location.getLongitude());
+                    System.out.println(location.getAccuracy());
+
+                    if( location.hasAltitude() ){
+                        System.out.println( "Latitude " + location.getLatitude());
+                    }else{
+                        Toast.makeText(registerActivity.this, "Não disponivel", Toast.LENGTH_SHORT).show();
+                    }
+                    if( location.hasSpeed() ){
+                        System.out.println("Velocidade " + location.getSpeed());
+                    }else{
+                        Toast.makeText(registerActivity.this, "Não disponivel", Toast.LENGTH_SHORT).show();
+                    }
+                    if( location.hasAltitude() ){
+                        System.out.println("Altitude " +location.getLatitude());
+                    }else{
+                        Toast.makeText(registerActivity.this, "Não disponivel", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        }else{
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                requestPermissions(new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, PERMISSIONS_FINE_LOCATION);
+            }
+
+        }
 
     }
+
+
 }
