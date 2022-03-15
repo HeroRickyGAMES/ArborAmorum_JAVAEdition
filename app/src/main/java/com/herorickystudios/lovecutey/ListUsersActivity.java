@@ -317,7 +317,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
                                 //Tive dificuldades de adicionar mais adiconei como uma String e assim foi!
                                 //Bugs acontecem e isso foi, porem tá corrigodo!!
-                                cards Item = new cards((String) snapshot.child("Dados do Usuario").child("nome").getValue(), snapshot.child("Guarulhos").child("Dados do Usuario").child("nome").getValue().toString());
+                                cards Item = new cards((String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child("Guarulhos").child("Dados do Usuario").child("nome").getValue().toString());
                                 rowItems.add(Item);
                                 arrayAdapter.notifyDataSetChanged();
 
