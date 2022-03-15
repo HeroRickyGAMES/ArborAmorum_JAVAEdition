@@ -16,7 +16,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:rotation_degrees="15.5"
-        tools:context=".MyActivity" />
+        tools:context=".MyActivity">
+    </com.lorentzos.flingswipe.SwipeFlingAdapterView>
 
     <Button
         android:id="@+id/button2"
