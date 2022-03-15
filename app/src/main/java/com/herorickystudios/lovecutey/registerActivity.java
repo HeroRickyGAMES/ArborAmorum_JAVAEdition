@@ -7,6 +7,8 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,6 +44,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.installations.local.PersistedInstallationEntry;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //Programado por HeroRickyGames
@@ -87,47 +90,8 @@ public class registerActivity extends AppCompatActivity {
 
 
 
-        //Codigos de registro
-        register_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                //strings para verificação se ou não
-                String nome = edit_Nome.getText().toString();
-                String email = edit_Email.getText().toString();
-                String senha = edit_senha.getText().toString();
-                String resenha = reeditsenha.getText().toString();
-                String idade = idade_text.getText().toString();
 
-                int idadee =Integer.valueOf(idade);
-
-                //E se foi cadastrado?
-                if(nome.isEmpty() || email.isEmpty() || senha.isEmpty() || resenha.isEmpty() || idade.isEmpty()){
-                //Falta campos USUARIO!
-                    Snackbar snackbar = Snackbar.make(view, menssagens[0],Snackbar.LENGTH_LONG);
-                    snackbar.show();
-                }else{
-
-                    //Verificação de idade
-                    if(idadee <= 15){
-
-                        Toast.makeText(registerActivity.this, "Você é menor que 16 anos!", Toast.LENGTH_SHORT).show();
-
-                    }else{
-
-                        if(senha.intern() == resenha.intern()){
-                            Toast.makeText(registerActivity.this, "Cadastro feito com sucesso!", Toast.LENGTH_SHORT).show();
-                            //No caso ta tudo digitado certo e a idade bate, então vamos cadastrar o fulano de tal no banco de dados mlkada!
-                            CadastrarUsuario(view);
-                        }else{
-                            Toast.makeText(registerActivity.this, "Senhas não iguais", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                }
-
-            }
-        });
 
         //Esconde a action Bar
         getSupportActionBar().hide();
@@ -152,75 +116,9 @@ public class registerActivity extends AppCompatActivity {
 
     private void CadastrarUsuario(View view){
 
-        //Cadastrando o fulano.
-        String email = edit_Email.getText().toString();
-        String senha = edit_senha.getText().toString();
 
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-
-                if (task.isSuccessful()){
-
-                    Snackbar snackbar = Snackbar.make(view, menssagens[1],Snackbar.LENGTH_LONG);
-                    snackbar.show();
-
-                    FirebaseUser usuarioLogado = FirebaseAuth.getInstance().getCurrentUser();
-
-                    String getUID = usuarioLogado.getUid();
-
-                    String nome = edit_Nome.getText().toString();
-                    String idade = idade_text.getText().toString();
-                    String email = edit_Email.getText().toString();
-
-
-
-                    int selectID = radioGrup.getCheckedRadioButtonId();
-                    final RadioButton radioButton = (RadioButton) findViewById(selectID);
-
-                    if(radioButton.getText() == null){
-                        return;
-                    }
-
-                    String genero = radioButton.getText().toString();
-
-                    referencia.child(genero).child(getUID).child("Dados do Usuario").child("nome").setValue(nome);
-                    referencia.child(genero).child(getUID).child("Dados do Usuario").child("email").setValue(email);
-                    referencia.child(genero).child(getUID).child("Dados do Usuario").child("idade").setValue(idade);
-
-                    //Lançar activity dps do cadastro
-                    Intent intent = new Intent(registerActivity.this, ListUsersActivity.class);
-                    startActivity(intent);
-
-                }else{
-
-                    String erro;
-                    try {
-
-                        throw task.getException();
-                    }
-                    catch (FirebaseAuthWeakPasswordException e) {
-                        erro = "Digite uma senha com no mínimo 6 caracteres!";
-                    }catch (FirebaseAuthUserCollisionException e) {
-
-                        erro = "Essa conta já foi criada, crie uma nova conta ou clique em esqueci minha senha na tela de login!";
-                    }catch (FirebaseAuthInvalidCredentialsException e){
-
-                        erro = "Seu email está digitado errado, verifique novamente!";
-
-                    }catch (Exception e){
-                        erro = "Ao cadastrar usuário!";
-                    }
-                    Snackbar snackbar = Snackbar.make(view, erro,Snackbar.LENGTH_LONG);
-                    snackbar.show();
-
-                }
-
-            }
-        });
     }
     private void updateGPS(){
-
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
@@ -228,6 +126,91 @@ public class registerActivity extends AppCompatActivity {
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
+
+                    Geocoder geocoder = new Geocoder(registerActivity.this);
+                    try{
+                        List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+                        String cidade = addresses.get(0).getSubAdminArea();
+
+                        //Codigos de registro
+                        register_button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                //Cadastrando o fulano.
+                                String email = edit_Email.getText().toString();
+                                String senha = edit_senha.getText().toString();
+
+                                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                        if (task.isSuccessful()){
+
+                                            Snackbar snackbar = Snackbar.make(view, menssagens[1],Snackbar.LENGTH_LONG);
+                                            snackbar.show();
+
+                                            FirebaseUser usuarioLogado = FirebaseAuth.getInstance().getCurrentUser();
+
+                                            String getUID = usuarioLogado.getUid();
+
+                                            String nome = edit_Nome.getText().toString();
+                                            String idade = idade_text.getText().toString();
+                                            String email = edit_Email.getText().toString();
+
+
+                                            int selectID = radioGrup.getCheckedRadioButtonId();
+                                            final RadioButton radioButton = (RadioButton) findViewById(selectID);
+
+                                            if(radioButton.getText() == null){
+                                                return;
+                                            }
+
+                                            String genero = radioButton.getText().toString();
+
+                                            referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("nome").setValue(nome);
+                                            referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("email").setValue(email);
+                                            referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("idade").setValue(idade);
+
+                                            //Lançar activity dps do cadastro
+                                            Intent intent = new Intent(registerActivity.this, ListUsersActivity.class);
+                                            startActivity(intent);
+
+                                        }else{
+
+                                            String erro;
+                                            try {
+
+                                                throw task.getException();
+                                            }
+                                            catch (FirebaseAuthWeakPasswordException e) {
+                                                erro = "Digite uma senha com no mínimo 6 caracteres!";
+                                            }catch (FirebaseAuthUserCollisionException e) {
+
+                                                erro = "Essa conta já foi criada, crie uma nova conta ou clique em esqueci minha senha na tela de login!";
+                                            }catch (FirebaseAuthInvalidCredentialsException e){
+
+                                                erro = "Seu email está digitado errado, verifique novamente!";
+
+                                            }catch (Exception e){
+                                                erro = "Ao cadastrar usuário!";
+                                            }
+                                            Snackbar snackbar = Snackbar.make(view, erro,Snackbar.LENGTH_LONG);
+                                            snackbar.show();
+
+                                        }
+
+                                    }
+                                });
+
+                            }
+                        });
+
+                        System.out.println("LOCALIZAÇÃO EXATA: " + cidade);
+                    }catch (Exception e){
+                        System.out.println("Não foi possivel encontrar sua localização!" + e);
+                    }
 
                     System.out.println(location.getLatitude());
                     System.out.println(location.getLongitude());
@@ -237,17 +220,17 @@ public class registerActivity extends AppCompatActivity {
                     if( location.hasAltitude() ){
                         System.out.println( "Latitude " + location.getLatitude());
                     }else{
-                        Toast.makeText(registerActivity.this, "Não disponivel", Toast.LENGTH_SHORT).show();
+                        System.out.println("Não disponivel");
                     }
                     if( location.hasSpeed() ){
                         System.out.println("Velocidade " + location.getSpeed());
                     }else{
-                        Toast.makeText(registerActivity.this, "Não disponivel", Toast.LENGTH_SHORT).show();
+                        System.out.println("Não disponivel");
                     }
                     if( location.hasAltitude() ){
                         System.out.println("Altitude " +location.getLatitude());
                     }else{
-                        Toast.makeText(registerActivity.this, "Não disponivel", Toast.LENGTH_SHORT).show();
+                        System.out.println("Não disponivel");
                     }
                 }
             });
