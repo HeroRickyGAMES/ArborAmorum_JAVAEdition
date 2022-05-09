@@ -6,13 +6,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -27,7 +30,9 @@ public class logiActivity extends AppCompatActivity {
 
     private EditText edit_Email,edit_senha;
     private Button btn_login;
+    private static final int PERMISSIONS_FINE_LOCATION = 99;
     private ProgressBar progressbar_login;
+    LocationRequest locationRequest;
     String[] menssagens = {"Preencha todos os campos para continuar", "Login feito com sucesso!"};
 
     @Override
@@ -42,6 +47,14 @@ public class logiActivity extends AppCompatActivity {
         edit_senha = findViewById(R.id.password);
         btn_login = findViewById(R.id.login);
         progressbar_login = findViewById(R.id.loading);
+
+        //Codigos de localização
+        locationRequest = new LocationRequest();
+        locationRequest.setInterval(1000 * 30);
+        locationRequest.setFastestInterval(1000 * 5);
+
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,5 +128,19 @@ public class logiActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode){
+            case PERMISSIONS_FINE_LOCATION:
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                //Não fazer nada
+                }else{
+                    Toast.makeText(this, "Esse aplicativo precisa das permissões para funcionar, caso você negou sem querer, acesse as configurações!", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+        }
     }
 }
