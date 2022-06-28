@@ -4,9 +4,15 @@ package com.herorickystudios.lovecutey.ui.login;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -15,8 +21,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
@@ -26,6 +35,8 @@ import com.herorickystudios.lovecutey.ListUsersActivity;
 import com.herorickystudios.lovecutey.R;
 import com.herorickystudios.lovecutey.registerActivity;
 
+import java.util.List;
+
 public class logiActivity extends AppCompatActivity {
 
     private EditText edit_Email,edit_senha;
@@ -33,6 +44,10 @@ public class logiActivity extends AppCompatActivity {
     private static final int PERMISSIONS_FINE_LOCATION = 99;
     private ProgressBar progressbar_login;
     LocationRequest locationRequest;
+
+    //API para a localização dos usuarios
+    FusedLocationProviderClient fusedLocationProviderClient;
+
     String[] menssagens = {"Preencha todos os campos para continuar", "Login feito com sucesso!"};
 
     @Override
@@ -55,6 +70,7 @@ public class logiActivity extends AppCompatActivity {
 
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
+        updateGPS();
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +157,59 @@ public class logiActivity extends AppCompatActivity {
                     Toast.makeText(this, "Esse aplicativo precisa das permissões para funcionar, caso você negou sem querer, acesse as configurações!", Toast.LENGTH_LONG).show();
                     finish();
                 }
+        }
+    }
+    private void updateGPS() {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+
+                    Geocoder geocoder = new Geocoder(logiActivity.this);
+                    try {
+                        List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+                        String cidade = addresses.get(0).getSubAdminArea();
+
+                        //Codigos de registro
+
+                        System.out.println("LOCALIZAÇÃO EXATA: " + cidade);
+                    } catch (Exception e) {
+                        System.out.println("Não foi possivel encontrar sua localização!" + e);
+                    }
+
+                    System.out.println(location.getLatitude());
+                    System.out.println(location.getLongitude());
+                    System.out.println(location.getLongitude());
+                    System.out.println(location.getAccuracy());
+
+                    if (location.hasAltitude()) {
+                        System.out.println("Latitude " + location.getLatitude());
+                    } else {
+                        System.out.println("Não disponivel");
+                    }
+                    if (location.hasSpeed()) {
+                        System.out.println("Velocidade " + location.getSpeed());
+                    } else {
+                        System.out.println("Não disponivel");
+                    }
+                    if (location.hasAltitude()) {
+                        System.out.println("Altitude " + location.getLatitude());
+                    } else {
+                        System.out.println("Não disponivel");
+                    }
+                }
+            });
+
+        } else {
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                requestPermissions(new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, PERMISSIONS_FINE_LOCATION);
+            }
+
         }
     }
 }

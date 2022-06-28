@@ -26,9 +26,13 @@ public class arrayAdapter extends ArrayAdapter<cards>{
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item, parent, false);
         }
         TextView name = (TextView) convertView.findViewById(R.id.name);
+        TextView idade = (TextView) convertView.findViewById(R.id.idade);
+        TextView cidade = (TextView) convertView.findViewById(R.id.cidade);
         ImageView image = (ImageView) convertView.findViewById(R.id.image);
 
         name.setText(card_item.getName());
+        idade.setText(card_item.getIdade());
+        cidade.setText(card_item.getLocal());
         image.setImageResource(R.mipmap.ic_launcher);
 
         return convertView;

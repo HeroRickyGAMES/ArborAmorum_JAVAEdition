@@ -5,9 +5,13 @@ package com.herorickystudios.lovecutey;
 public class cards {
     private String userID;
     private String name;
-    public cards(String userID, String name){
+    private String idade;
+    private String local;
+    public cards(String value, String userID, String name){
         this.userID = userID;
         this.name = name;
+        this.idade = idade;
+        this.local = local;
     }
     public String getUserID(){
         return userID;
@@ -21,5 +25,21 @@ public class cards {
     }
     public void setName(String name){
         this.name = name;
+    }
+
+    public String getIdade() {
+        return idade;
+    }
+
+    public void setIdade(String idade) {
+        this.idade = idade;
+    }
+
+    public String getLocal() {
+        return local;
+    }
+
+    public void setLocal(String local) {
+        this.local = local;
     }
 }

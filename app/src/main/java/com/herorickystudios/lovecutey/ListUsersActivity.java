@@ -12,25 +12,33 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.herorickystudios.lovecutey.ui.login.logiActivity;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
@@ -46,6 +54,10 @@ public class ListUsersActivity extends AppCompatActivity {
     private ArrayAdapter arrayAdapter;
     private int i;
 
+    private static final int PERMISSIONS_FINE_LOCATION = 99;
+
+    LocationRequest locationRequest;
+
     SwipeFlingAdapterView flingContainer;
 
     ListView listView;
@@ -58,6 +70,8 @@ public class ListUsersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_users);
+
+
 
         //Esconde a action Bar
         getSupportActionBar().hide();
@@ -116,6 +130,23 @@ public class ListUsersActivity extends AppCompatActivity {
                 Toast.makeText(ListUsersActivity.this, "Foi clicado!", Toast.LENGTH_SHORT).show();
             }
         });
+
+        //Codigos de localização
+        locationRequest = new LocationRequest();
+        locationRequest.setInterval(1000 * 30);
+        locationRequest.setFastestInterval(1000 * 5);
+
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+
+
+
+
+
+        //Esconde a action Bar
+        getSupportActionBar().hide();
+
+        updateGPS();
 
     }
 
@@ -316,8 +347,14 @@ public class ListUsersActivity extends AppCompatActivity {
 
 
                                 //Tive dificuldades de adicionar mais adiconei como uma String e assim foi!
-                                //Bugs acontecem e isso foi, porem tá corrigodo!!
-                                cards Item = new cards((String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child("Guarulhos").child("Dados do Usuario").child("nome").getValue().toString());
+                                cards Item = new cards((String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString() + ", "
+                                        + snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString() + " anos");
+                                cards Item2 = new cards((String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), (String) snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue(), snapshot.child("Guarulhos").child("Dados do Usuario").child("idade").getValue().toString());
+
+                                String idadeteste = snapshot.child("Guarulhos").child("Dados do Usuario").child("idade").getValue().toString();
+
+                                System.out.println(Item2);
+
                                 rowItems.add(Item);
                                 arrayAdapter.notifyDataSetChanged();
 
@@ -379,7 +416,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
                                 //Tive dificuldades de adicionar mais adiconei como uma String e assim foi!
                                 //Bugs acontecem e isso foi, porem tá corrigodo!!
-                                cards Item = new cards((String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString());
+                                cards Item = new cards((String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), (String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString());
                                 rowItems.add(Item);
                                 arrayAdapter.notifyDataSetChanged();
 
@@ -406,7 +443,58 @@ public class ListUsersActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+    private void updateGPS() {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+
+                    Geocoder geocoder = new Geocoder(ListUsersActivity.this);
+                    try {
+                        List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+                        String cidade = addresses.get(0).getSubAdminArea();
+
+                        //Codigos de registro
+
+                        System.out.println("LOCALIZAÇÃO EXATA: " + cidade);
+                    } catch (Exception e) {
+                        System.out.println("Não foi possivel encontrar sua localização!" + e);
+                    }
+
+                    System.out.println(location.getLatitude());
+                    System.out.println(location.getLongitude());
+                    System.out.println(location.getLongitude());
+                    System.out.println(location.getAccuracy());
+
+                    if (location.hasAltitude()) {
+                        System.out.println("Latitude " + location.getLatitude());
+                    } else {
+                        System.out.println("Não disponivel");
+                    }
+                    if (location.hasSpeed()) {
+                        System.out.println("Velocidade " + location.getSpeed());
+                    } else {
+                        System.out.println("Não disponivel");
+                    }
+                    if (location.hasAltitude()) {
+                        System.out.println("Altitude " + location.getLatitude());
+                    } else {
+                        System.out.println("Não disponivel");
+                    }
+                }
+            });
+
+        } else {
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                requestPermissions(new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, PERMISSIONS_FINE_LOCATION);
+            }
+
+        }
     }
 }
