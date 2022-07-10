@@ -39,6 +39,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.herorickystudios.lovecutey.ui.login.logiActivity;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
@@ -54,6 +55,8 @@ public class ListUsersActivity extends AppCompatActivity {
     private ArrayAdapter arrayAdapter;
     private int i;
 
+    private DatabaseReference usersDb;
+
     private static final int PERMISSIONS_FINE_LOCATION = 99;
 
     LocationRequest locationRequest;
@@ -66,13 +69,15 @@ public class ListUsersActivity extends AppCompatActivity {
     //API para a localização dos usuarios
     FusedLocationProviderClient fusedLocationProviderClient;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_users);
 
 
-
+        usersDb = FirebaseDatabase.getInstance().getReference().child("Usuarios");
         //Esconde a action Bar
         getSupportActionBar().hide();
 
@@ -82,6 +87,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
         arrayAdapter = new arrayAdapter(this, R.layout.item, rowItems);
         //@InjectView(R.id.frame) SwipeFlingAdapterView flingContainer;
+
         SwipeFlingAdapterView flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
 
         flingContainer.setAdapter(arrayAdapter);
@@ -97,6 +103,58 @@ public class ListUsersActivity extends AppCompatActivity {
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
+
+                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                String UID = user.getUid();
+
+
+                DatabaseReference maleDb = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Masculino").child(UID);
+
+                maleDb.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        if (snapshot.child("Sexo").exists()) {
+                            String cidade = snapshot.child("Cidade").getValue().toString();
+                            System.out.println(cidade);
+                        }else{
+                            Toast.makeText(ListUsersActivity.this, "O Sexo é oposto! <MSG TEST>", Toast.LENGTH_SHORT).show();
+
+                            DatabaseReference fem = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Feminino").child(UID);
+
+                            fem.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot2) {
+
+                                    System.out.println(snapshot2.child("Sexo").exists());
+
+                                    if (snapshot2.child("Sexo").exists()) {
+                                        String cidade = snapshot2.child("Cidade").getValue().toString();
+                                        System.out.println(cidade);
+                                    }else{
+                                        Toast.makeText(ListUsersActivity.this, "O Sexo é oposto! <MSG TEST>", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
                 Toast.makeText(ListUsersActivity.this, "Pu lado", Toast.LENGTH_SHORT).show();
 
             }
@@ -138,11 +196,6 @@ public class ListUsersActivity extends AppCompatActivity {
         locationRequest.setFastestInterval(1000 * 5);
 
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-
-
-
-
 
         //Esconde a action Bar
         getSupportActionBar().hide();
@@ -228,94 +281,6 @@ public class ListUsersActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-        DatabaseReference homoDB = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Homem_Homossexual");
-        homoDB.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                if (snapshot.getKey().equals(user.getUid())) {
-                    userSex = "Homem_Homossexual";
-                    oppositeUserSex = "Homem_Homossexual";
-                    getOppositeSexUsers();
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-
-        DatabaseReference homo2DB = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Mulher_Homossexual");
-        homo2DB.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                if (snapshot.getKey().equals(user.getUid())) {
-                    userSex = "Mulher_Homossexual";
-                    oppositeUserSex = "Mulher_Homossexual";
-                    getOppositeSexUsers();
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-
-        DatabaseReference bissexDB = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Bissexual");
-        bissexDB.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                if (snapshot.getKey().equals(user.getUid())) {
-                    userSex = "Bissexual";
-                    oppositeUserSex = "Bissexual";
-                    bi();
-
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-
     }
 
     public void getOppositeSexUsers() {
@@ -349,11 +314,8 @@ public class ListUsersActivity extends AppCompatActivity {
 
                                 //Tive dificuldades de adicionar mais adiconei como uma String e assim foi!
 
-                                cards Item = new cards(snapshot.getKey(), (String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString(), snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString(), snapshot.child(cidade).child("Dados do Usuario").child("Cidade").getValue().toString());
-                                //cards Item = new cards((String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString() + ", "
-                                        //+ snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString() + " anos");
+                                cards Item = new cards(snapshot.getKey(), (String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString(), snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString(), snapshot.child(cidade).child("Dados do Usuario").child("cidade").getValue().toString());
 
-                                String idadeteste = snapshot.child("Guarulhos").child("Dados do Usuario").child("idade").getValue().toString();
 
                                 rowItems.add(Item);
                                 arrayAdapter.notifyDataSetChanged();
@@ -382,67 +344,6 @@ public class ListUsersActivity extends AppCompatActivity {
             });
         }
 
-    }
-
-    public void bi() {
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-
-                    Geocoder geocoder = new Geocoder(ListUsersActivity.this);
-
-                    List<Address> addresses = null;
-                    try {
-                        addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    String cidade = addresses.get(0).getSubAdminArea();
-
-
-                    DatabaseReference opositeSexDb = FirebaseDatabase.getInstance().getReference().child("Usuarios").child(oppositeUserSex);
-                    opositeSexDb.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                            if (snapshot.exists()) {
-
-
-                                //Tive dificuldades de adicionar mais adiconei como uma String e assim foi!
-                                //Bugs acontecem e isso foi, porem tá corrigodo!!
-                                cards Item = new cards(snapshot.getKey(), (String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString(), snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString(), snapshot.child(cidade).child("Dados do Usuario").child("Cidade").getValue().toString());
-                                rowItems.add(Item);
-                                arrayAdapter.notifyDataSetChanged();
-
-                            }
-                        }
-
-                        @Override
-                        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        }
-
-                        @Override
-                        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                        }
-
-                        @Override
-                        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                        }
-                    });
-
-                }
-            });
-        }
     }
     private void updateGPS() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
