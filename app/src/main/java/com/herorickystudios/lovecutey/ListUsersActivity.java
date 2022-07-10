@@ -76,6 +76,9 @@ public class ListUsersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_users);
 
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        String UID = user.getUid();
 
         usersDb = FirebaseDatabase.getInstance().getReference().child("Usuarios");
         //Esconde a action Bar
@@ -98,6 +101,7 @@ public class ListUsersActivity extends AppCompatActivity {
                 rowItems.remove(0);
             }
 
+            //Pu lado
             @Override
             public void onLeftCardExit(Object dataObject) {
                 //Do something on the left!
@@ -120,8 +124,8 @@ public class ListUsersActivity extends AppCompatActivity {
                 maleDb.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        //String data = snapshot.child("Cidade").getValue().toString();
-
+                        String data = snapshot.child("Cidade").getValue().toString();
+                        usersDb.child(oppositeUserSex).child(userIdE).child("connections").child("nope").child(UID).setValue(true);
                     }
 
                     @Override
@@ -135,8 +139,36 @@ public class ListUsersActivity extends AppCompatActivity {
 
             }
 
+            //Pu oto
             @Override
             public void onRightCardExit(Object dataObject) {
+
+                cards obj = (cards) dataObject;
+
+                //UserID do ou da pretendente
+                String userIdE = obj.getUserID();
+
+                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                System.out.println(oppositeUserSex);
+
+                String UID = user.getUid();
+
+                DatabaseReference maleDb = FirebaseDatabase.getInstance().getReference("Usuarios").child(oppositeUserSex).child(userIdE);
+
+                maleDb.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String data = snapshot.child("Cidade").getValue().toString();
+                        usersDb.child(oppositeUserSex).child(userIdE).child("connections").child("yeps").child(UID).setValue(true);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
 
                 Toast.makeText(ListUsersActivity.this, "Pro oto", Toast.LENGTH_SHORT).show();
 
@@ -260,6 +292,10 @@ public class ListUsersActivity extends AppCompatActivity {
     }
 
     public void getOppositeSexUsers() {
+
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        String UID = user.getUid();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -285,7 +321,7 @@ public class ListUsersActivity extends AppCompatActivity {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-                            if (snapshot.exists()) {
+                            if (snapshot.exists() && !snapshot.child("connections").child("nope").hasChild(UID) && !snapshot.child("connections").child("yeps").hasChild(UID)) {
 
 
                                 //Tive dificuldades de adicionar mais adiconei como uma String e assim foi!
