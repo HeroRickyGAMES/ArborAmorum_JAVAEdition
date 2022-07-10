@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LoveCuteY</string>
+    <string name="app_name">Arbor Amorum</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Senha</string>

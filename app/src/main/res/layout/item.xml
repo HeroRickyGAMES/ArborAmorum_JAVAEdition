@@ -38,6 +38,7 @@
                 android:background="#00FFFFFF"
                 android:gravity="center"
                 android:paddingTop="720dp"
+
                 android:textColor="@android:color/black"
                 android:textSize="40sp"
                 android:textStyle="bold"
@@ -45,20 +46,22 @@
 
             <TextView
                 android:id="@+id/cidade"
+                android:paddingHorizontal="90sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="90dp"
                 android:textSize="34sp"
                 android:textStyle="bold"
                 tools:text="Cidade" />
 
             <TextView
                 android:id="@+id/idade"
+                android:paddingHorizontal="90sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="30dp"
                 android:textSize="48sp"
                 tools:text="20" />
 

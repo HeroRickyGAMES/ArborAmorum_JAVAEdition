@@ -7,7 +7,7 @@ public class cards {
     private String name;
     private String idade;
     private String local;
-    public cards(String value, String userID, String name){
+    public cards(String value, String userID , String name, String idade, String local){
         this.userID = userID;
         this.name = name;
         this.idade = idade;
@@ -25,6 +25,10 @@ public class cards {
     }
     public void setName(String name){
         this.name = name;
+    }
+
+    public String getidade() {
+        return idade;
     }
 
     public String getIdade() {

@@ -103,6 +103,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
             @Override
             public void onRightCardExit(Object dataObject) {
+
                 Toast.makeText(ListUsersActivity.this, "Pro oto", Toast.LENGTH_SHORT).show();
 
             }
@@ -347,13 +348,12 @@ public class ListUsersActivity extends AppCompatActivity {
 
 
                                 //Tive dificuldades de adicionar mais adiconei como uma String e assim foi!
-                                cards Item = new cards((String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString() + ", "
-                                        + snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString() + " anos");
-                                cards Item2 = new cards((String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), (String) snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue(), snapshot.child("Guarulhos").child("Dados do Usuario").child("idade").getValue().toString());
+
+                                cards Item = new cards(snapshot.getKey(), (String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString(), snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString(), snapshot.child(cidade).child("Dados do Usuario").child("Cidade").getValue().toString());
+                                //cards Item = new cards((String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString() + ", "
+                                        //+ snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString() + " anos");
 
                                 String idadeteste = snapshot.child("Guarulhos").child("Dados do Usuario").child("idade").getValue().toString();
-
-                                System.out.println(Item2);
 
                                 rowItems.add(Item);
                                 arrayAdapter.notifyDataSetChanged();
@@ -416,7 +416,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
                                 //Tive dificuldades de adicionar mais adiconei como uma String e assim foi!
                                 //Bugs acontecem e isso foi, porem tá corrigodo!!
-                                cards Item = new cards((String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), (String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString());
+                                cards Item = new cards(snapshot.getKey(), (String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString(), snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString(), snapshot.child(cidade).child("Dados do Usuario").child("Cidade").getValue().toString());
                                 rowItems.add(Item);
                                 arrayAdapter.notifyDataSetChanged();
 
