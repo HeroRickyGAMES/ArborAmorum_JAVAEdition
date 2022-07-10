@@ -104,47 +104,23 @@ public class ListUsersActivity extends AppCompatActivity {
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
 
+                cards obj = (cards) dataObject;
+
+                //UserID do ou da pretendente
+                String userIdE = obj.getUserID();
+
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                System.out.println(oppositeUserSex);
 
                 String UID = user.getUid();
 
-
-                DatabaseReference maleDb = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Masculino").child(UID);
+                DatabaseReference maleDb = FirebaseDatabase.getInstance().getReference("Usuarios").child(oppositeUserSex).child(userIdE);
 
                 maleDb.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                        if (snapshot.child("Sexo").exists()) {
-                            String cidade = snapshot.child("Cidade").getValue().toString();
-                            System.out.println(cidade);
-                        }else{
-                            Toast.makeText(ListUsersActivity.this, "O Sexo é oposto! <MSG TEST>", Toast.LENGTH_SHORT).show();
-
-                            DatabaseReference fem = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Feminino").child(UID);
-
-                            fem.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot2) {
-
-                                    System.out.println(snapshot2.child("Sexo").exists());
-
-                                    if (snapshot2.child("Sexo").exists()) {
-                                        String cidade = snapshot2.child("Cidade").getValue().toString();
-                                        System.out.println(cidade);
-                                    }else{
-                                        Toast.makeText(ListUsersActivity.this, "O Sexo é oposto! <MSG TEST>", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-
-                        }
+                        //String data = snapshot.child("Cidade").getValue().toString();
 
                     }
 
@@ -314,7 +290,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
                                 //Tive dificuldades de adicionar mais adiconei como uma String e assim foi!
 
-                                cards Item = new cards(snapshot.getKey(), (String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString(), snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString(), snapshot.child(cidade).child("Dados do Usuario").child("cidade").getValue().toString());
+                                cards Item = new cards( snapshot.getKey(), (String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString(), snapshot.child(cidade).child("Dados do Usuario").child("cidade").getValue().toString());
 
 
                                 rowItems.add(Item);

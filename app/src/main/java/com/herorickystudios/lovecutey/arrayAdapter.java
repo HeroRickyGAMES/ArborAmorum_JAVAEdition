@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 //Programado por HeroRickyGames
@@ -29,6 +31,7 @@ public class arrayAdapter extends ArrayAdapter<cards>{
         TextView idade = (TextView) convertView.findViewById(R.id.idade);
         TextView cidade = (TextView) convertView.findViewById(R.id.cidade);
         ImageView image = (ImageView) convertView.findViewById(R.id.image);
+
 
         name.setText(card_item.getName());
         idade.setText(card_item.getIdade());

@@ -7,7 +7,7 @@ public class cards {
     private String name;
     private String idade;
     private String local;
-    public cards(String value, String userID , String name, String idade, String local){
+    public cards(String userID , String name, String idade, String local){
         this.userID = userID;
         this.name = name;
         this.idade = idade;
@@ -16,15 +16,21 @@ public class cards {
     public String getUserID(){
         return userID;
     }
-    public void setUserID(String userID){
+
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 
-    public String getName(){
-        return userID;
+    public String getName() {
+        return name;
     }
-    public void setName(String name){
+
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public void setuserID(String userID){
+        this.name = userID;
     }
 
     public String getidade() {
