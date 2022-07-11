@@ -148,11 +148,15 @@ public class ListUsersActivity extends AppCompatActivity {
                 //UserID do ou da pretendente
                 String userIdE = obj.getUserID();
 
+                isConnectiomMatch(UID, userIdE);
+                
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 System.out.println(oppositeUserSex);
 
                 String UID = user.getUid();
+
+                
 
                 DatabaseReference maleDb = FirebaseDatabase.getInstance().getReference("Usuarios").child(oppositeUserSex).child(userIdE);
 
@@ -210,6 +214,28 @@ public class ListUsersActivity extends AppCompatActivity {
 
         updateGPS();
 
+    }
+
+    private void isConnectiomMatch(String UID, String userIdE) {
+        DatabaseReference currentUserConections = usersDb.child(userSex).child(UID).child("connections").child("yeps").child(userIdE);
+        currentUserConections.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if(snapshot.exists()){
+                    Toast.makeText(ListUsersActivity.this, "Novo Match!", Toast.LENGTH_SHORT).show();
+                    usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID).setValue(true);
+                    usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).setValue(true);
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     static void makeToast(Context ctx, String s) {
