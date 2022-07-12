@@ -163,7 +163,7 @@ public class ListUsersActivity extends AppCompatActivity {
                 maleDb.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        
+
                         usersDb.child(oppositeUserSex).child(userIdE).child("connections").child("yeps").child(UID).setValue(true);
                     }
 
@@ -266,8 +266,11 @@ public class ListUsersActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
                 if (snapshot.getKey().equals(user.getUid())) {
+
+                    String SexoProcura = snapshot.child("ConfiguracoesPessoais").child("sexoDeProcura").getValue().toString();
+
                     userSex = "Masculino";
-                    oppositeUserSex = "Feminino";
+                    oppositeUserSex = SexoProcura;
                     getOppositeSexUsers();
                 }
             }
@@ -295,8 +298,103 @@ public class ListUsersActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
                 if (snapshot.getKey().equals(user.getUid())) {
+                    String SexoProcura = snapshot.child("ConfiguracoesPessoais").child("sexoDeProcura").getValue().toString();
+
                     userSex = "Feminino";
-                    oppositeUserSex = "Masculino";
+                    oppositeUserSex = SexoProcura;
+                    getOppositeSexUsers();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        DatabaseReference biQ = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Bi Sexual");
+        biQ.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                if (snapshot.getKey().equals(user.getUid())) {
+                    String SexoProcura = snapshot.child("ConfiguracoesPessoais").child("sexoDeProcura").getValue().toString();
+
+                    userSex = "Bi Sexual";
+                    oppositeUserSex = SexoProcura;
+                    getOppositeSexUsers();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        DatabaseReference LesQ = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Lesbica");
+        LesQ.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                if (snapshot.getKey().equals(user.getUid())) {
+                    String SexoProcura = snapshot.child("ConfiguracoesPessoais").child("sexoDeProcura").getValue().toString();
+
+                    userSex = "Lesbica";
+                    oppositeUserSex = SexoProcura;
+                    getOppositeSexUsers();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        DatabaseReference GayQ = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Gay");
+        GayQ.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                if (snapshot.getKey().equals(user.getUid())) {
+                    String SexoProcura = snapshot.child("ConfiguracoesPessoais").child("sexoDeProcura").getValue().toString();
+
+
+                    System.out.println(SexoProcura);
+                    userSex = "Gay";
+                    oppositeUserSex = SexoProcura;
                     getOppositeSexUsers();
                 }
             }

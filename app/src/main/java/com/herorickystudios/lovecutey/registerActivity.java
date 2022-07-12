@@ -166,6 +166,22 @@ public class registerActivity extends AppCompatActivity {
                                             referencia.child(genero).child(getUID).child("Genero").setValue(genero);
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("cidade").setValue(cidade);
 
+                                            if(genero.equals("Gay")){
+                                                referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("sexoDeProcura").setValue(genero);
+                                            }
+                                            if (genero.equals("Lesbica")){
+                                                referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("sexoDeProcura").setValue(genero);
+                                            }
+                                            if (genero.equals("Bi Sexual")){
+                                                referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("sexoDeProcura").setValue("Bi Sexual");
+                                            }
+                                            if(genero.equals("Feminino")){
+                                                referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("sexoDeProcura").setValue("Masculino");
+                                            }
+                                            if (genero.equals("Masculino")){
+                                                referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("sexoDeProcura").setValue("Feminino");
+                                            }
+
                                             int idadee = Integer.parseInt(idade);
                                             int aMais = 5;
                                             int Resultado = idadee + 5;
