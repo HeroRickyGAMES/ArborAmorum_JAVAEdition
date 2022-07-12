@@ -163,7 +163,7 @@ public class ListUsersActivity extends AppCompatActivity {
                 maleDb.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String data = snapshot.child("Cidade").getValue().toString();
+                        
                         usersDb.child(oppositeUserSex).child(userIdE).child("connections").child("yeps").child(UID).setValue(true);
                     }
 
@@ -223,7 +223,9 @@ public class ListUsersActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 if(snapshot.exists()){
+                    //Exibe o novo match!
                     Toast.makeText(ListUsersActivity.this, "Novo Match!", Toast.LENGTH_SHORT).show();
+
                     usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID).setValue(true);
                     usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).setValue(true);
 
@@ -341,43 +343,64 @@ public class ListUsersActivity extends AppCompatActivity {
 
                     String cidade = addresses.get(0).getSubAdminArea();
 
-
-                    DatabaseReference opositeSexDb = FirebaseDatabase.getInstance().getReference().child("Usuarios").child(oppositeUserSex);
-                    opositeSexDb.addChildEventListener(new ChildEventListener() {
+                    DatabaseReference userConfig = FirebaseDatabase.getInstance().getReference().child("Usuarios").child(userSex).child(UID);
+                    userConfig.addValueEventListener(new ValueEventListener() {
                         @Override
-                        public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            String idadeConfig = snapshot.child("ConfiguracoesPessoais").child("IdadeLimite").getValue().toString();
+                            DatabaseReference opositeSexDb = FirebaseDatabase.getInstance().getReference().child("Usuarios").child(oppositeUserSex);
+                            opositeSexDb.addChildEventListener(new ChildEventListener() {
+                                @Override
+                                public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-                            if (snapshot.exists() && !snapshot.child("connections").child("nope").hasChild(UID) && !snapshot.child("connections").child("yeps").hasChild(UID)) {
+                                    if (snapshot.exists() && !snapshot.child("connections").child("nope").hasChild(UID) && !snapshot.child("connections").child("yeps").hasChild(UID)) {
 
 
-                                //Tive dificuldades de adicionar mais adiconei como uma String e assim foi!
+                                        //Tive dificuldades de adicionar mais adiconei como uma String e assim foi!
 
-                                cards Item = new cards( snapshot.getKey(), (String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString(), snapshot.child(cidade).child("Dados do Usuario").child("cidade").getValue().toString());
+                                        cards Item = new cards( snapshot.getKey(), (String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString(), snapshot.child(cidade).child("Dados do Usuario").child("cidade").getValue().toString());
 
+                                        //Pega a idade do usuario para filtrar
+                                        int idadeU = Integer.parseInt(snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString());
 
-                                rowItems.add(Item);
-                                arrayAdapter.notifyDataSetChanged();
+                                        //Idade Configurada pelo proprio usuario
+                                        int idadeConfigC = Integer.parseInt(idadeConfig);
 
-                            }
-                        }
+                                        if(idadeU <= idadeConfigC){
+                                            System.out.println("As informações estão sendo exibidas com sucesso!");
 
-                        @Override
-                        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        }
+                                            rowItems.add(Item);
+                                            arrayAdapter.notifyDataSetChanged();
 
-                        @Override
-                        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                        }
+                                        }else{
 
-                        @Override
-                        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                                }
+
+                                @Override
+                                public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                                }
+
+                                @Override
+                                public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                            });
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
+
                         }
                     });
-
                 }
             });
         }

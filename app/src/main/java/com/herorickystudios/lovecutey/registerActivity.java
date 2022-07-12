@@ -12,7 +12,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +23,6 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -34,18 +32,10 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.installations.local.PersistedInstallationEntry;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 //Programado por HeroRickyGames
 
@@ -175,6 +165,16 @@ public class registerActivity extends AppCompatActivity {
                                             referencia.child(genero).child(getUID).child("cidade").setValue(cidade);
                                             referencia.child(genero).child(getUID).child("Genero").setValue(genero);
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("cidade").setValue(cidade);
+
+                                            int idadee = Integer.parseInt(idade);
+                                            int aMais = 5;
+                                            int Resultado = idadee + 5;
+
+                                            String ConfigIdade = String.valueOf(Resultado);
+
+                                            System.out.println(ConfigIdade);
+
+                                            referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("IdadeLimite").setValue(ConfigIdade);
 
                                             //Lançar activity dps do cadastro
                                             Intent intent = new Intent(registerActivity.this, ListUsersActivity.class);
