@@ -46,6 +46,7 @@ public class registerActivity extends AppCompatActivity {
     private Button register_button;
     private RadioGroup radioGrup;
     String[] menssagens = {"Preencha todos os campos para continuar", "Cadastro feito com sucesso!"};
+    //String[] Filtropalavrões = {"Preencha todos os campos para continuar", "Cadastro feito com sucesso!"};
     String usuarioID;
 
     //API para a localização dos usuarios
@@ -166,14 +167,18 @@ public class registerActivity extends AppCompatActivity {
                                             referencia.child(genero).child(getUID).child("Genero").setValue(genero);
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("cidade").setValue(cidade);
 
+
                                             if(genero.equals("Gay")){
                                                 referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("sexoDeProcura").setValue(genero);
+                                                referencia.child(genero).child(getUID).child("connections").child("yeps").child(getUID).setValue(true);
                                             }
                                             if (genero.equals("Lesbica")){
                                                 referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("sexoDeProcura").setValue(genero);
+                                                referencia.child(genero).child(getUID).child("connections").child("yeps").child(getUID).setValue(true);
                                             }
                                             if (genero.equals("Bi Sexual")){
                                                 referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("sexoDeProcura").setValue("Bi Sexual");
+                                                referencia.child(genero).child(getUID).child("connections").child("yeps").child(getUID).setValue(true);
                                             }
                                             if(genero.equals("Feminino")){
                                                 referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("sexoDeProcura").setValue("Masculino");

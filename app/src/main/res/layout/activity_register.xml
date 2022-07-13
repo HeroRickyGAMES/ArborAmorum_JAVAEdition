@@ -47,7 +47,7 @@
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Masculino"
+            android:text="@string/masculino"
             android:textAlignment="textStart"
             android:textColor="#000000"
             android:textSize="16sp" />
@@ -55,7 +55,7 @@
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Feminino"
+            android:text="@string/feminino"
             android:textColor="#000000"
             android:textSize="16sp" />
 
@@ -63,7 +63,7 @@
             android:id="@+id/radioButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Gay"
+            android:text="@string/gay"
             android:textColor="#000000"
             android:textSize="16sp" />
 
@@ -71,7 +71,7 @@
             android:id="@+id/radioButton2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lesbica"
+            android:text="@string/lesbica"
             android:textColor="#000000"
             android:textSize="16sp" />
 
@@ -79,7 +79,7 @@
             android:id="@+id/radioButton3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bi Sexual"
+            android:text="@string/bi_sexual"
             android:textColor="#000000"
             android:textSize="16sp" />
 
