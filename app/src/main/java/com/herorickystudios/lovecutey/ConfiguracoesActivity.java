@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -41,12 +43,15 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
     private EditText nameField, idadeField, bioField, idadeProcuraField;
 
-    private Button voltarbtn, Confirmbtn;
+    private TextView textIdadeLimitInfo;
+
+    private Button voltarbtn, Confirmbtn, viewAD;
 
     private ImageView profileImage;
 
     private FirebaseAuth Autenticacao;
     private DatabaseReference reference;
+    private DatabaseReference reference2;
 
     private String userID, name, idade, procura, bio, profileImageUrl;
 
@@ -66,18 +71,33 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         nameField = findViewById(R.id.name);
         idadeField = findViewById(R.id.idade);
         bioField = findViewById(R.id.bio);
+        textIdadeLimitInfo = findViewById(R.id.infoText);
+
         idadeProcuraField = findViewById(R.id.idadePocura);
+
+        idadeProcuraField.setVisibility(View.INVISIBLE);
+        textIdadeLimitInfo.setVisibility(View.INVISIBLE);
 
         profileImage = findViewById(R.id.profileImage);
 
         voltarbtn = findViewById(R.id.backBTN);
         Confirmbtn = findViewById(R.id.confirmBtn);
+        viewAD = findViewById(R.id.viewAD);
 
         Autenticacao = FirebaseAuth.getInstance();
         userID = Autenticacao.getCurrentUser().getUid();
         reference = FirebaseDatabase.getInstance().getReference().child("Usuarios").child(userSex).child(userID).child(cidade).child("Dados do Usuario");
+        reference2 = FirebaseDatabase.getInstance().getReference().child("Usuarios").child(userSex).child(userID).child("ConfiguracoesPessoais");
 
         getUserInfo();
+
+        viewAD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                idadeProcuraField.setVisibility(View.VISIBLE);
+                textIdadeLimitInfo.setVisibility(View.VISIBLE);
+            }
+        });
 
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,44 +125,61 @@ public class ConfiguracoesActivity extends AppCompatActivity {
     }
 
     private void getUserInfo() {
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists() && snapshot.getChildrenCount()>0){
+                String idadelimite = snapshot.child("IdadeLimite").getValue().toString();
 
-                    Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
+                reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists() && snapshot.getChildrenCount()>0){
+
+                            Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
 
 
-                    String nome = snapshot.child("nome").getValue().toString();
-                    String bio = snapshot.child("bio").getValue().toString();
-                    String idade = snapshot.child("idade").getValue().toString();
+                            String nome = snapshot.child("nome").getValue().toString();
+                            String bio = snapshot.child("bio").getValue().toString();
+                            String idade = snapshot.child("idade").getValue().toString();
+
+                            nameField.setText(nome);
+
+                            idadeField.setText(idade);
+
+                            bioField.setText(bio);
+
+
+                            idadeProcuraField.setText(idadelimite);
+                            if(map.get("nome") != null){
+                                name = map.get("nome").toString();
+
+                            }
+                            if(map.get("idade") != null){
+
+                            }
+                            if(map.get("bio") != null){
+
+                            }
+                            if(map.get("idadeProcura") != null){
+                                idade = map.get("bio").toString();
+
+                            }
 
 
 
-                    if(map.get("nome") != null){
-                        name = map.get("nome").toString();
-                        nameField.setText(nome);
+                            StorageReference filepath = FirebaseStorage.getInstance().getReference().child("ProfileImages").child(userID);
+                            String URL = "https://firebasestorage.googleapis.com/v0/b/lovecutey-95cc0.appspot.com/o/" +  "ProfileImages" + "%2F" + userID + "?alt=media";
+                            Glide.with(getApplication()).load(URL).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profileImage);
+
+                        }
                     }
-                    if(map.get("idade") != null){
-                        idadeField.setText(idade);
-                    }
-                    if(map.get("bio") != null){
 
-                        bioField.setText(bio);
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
                     }
-                    if(map.get("idadeProcura") != null){
-                        idade = map.get("bio").toString();
-                        nameField.setText(procura);
-                    }
+                });
 
-
-
-                    StorageReference filepath = FirebaseStorage.getInstance().getReference().child("ProfileImages").child(userID);
-                    String URL = "https://firebasestorage.googleapis.com/v0/b/lovecutey-95cc0.appspot.com/o/" +  "ProfileImages" + "%2F" + userID + "?alt=media";
-                    Glide.with(getApplication()).load(URL).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profileImage);
-
-                }
             }
 
             @Override
@@ -150,7 +187,6 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
 
@@ -160,13 +196,21 @@ public class ConfiguracoesActivity extends AppCompatActivity {
     bio = bioField.getText().toString();
     procura = idadeProcuraField.getText().toString();
 
+    if(name.isEmpty()  || idade.isEmpty() || bio.isEmpty() || procura.isEmpty()){
+        Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+    }else{
+
         Map userInfo = new HashMap();
         userInfo.put("nome", name);
         userInfo.put("idade", idade);
         userInfo.put("bio", bio);
-        userInfo.put("idadeProcura", procura);
 
         reference.updateChildren(userInfo);
+
+
+        reference2.child("IdadeLimite").setValue(procura);
+
+
         if(resultadoUri != null){
 
             StorageReference filepath = FirebaseStorage.getInstance().getReference().child("ProfileImages").child(userID);
@@ -211,7 +255,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         }else{
             finish();
         }
-
+    }
     }
 
     @Override

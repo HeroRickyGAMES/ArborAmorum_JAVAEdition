@@ -7,6 +7,9 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -23,6 +26,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -34,7 +38,11 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 //Programado por HeroRickyGames
@@ -133,6 +141,8 @@ public class registerActivity extends AppCompatActivity {
                                 String email = edit_Email.getText().toString();
                                 String senha = edit_senha.getText().toString();
 
+                                String UID = FirebaseAuth.getInstance().getUid();
+
                                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -167,6 +177,7 @@ public class registerActivity extends AppCompatActivity {
                                             referencia.child(genero).child(getUID).child("cidade").setValue(cidade);
                                             referencia.child(genero).child(getUID).child("Genero").setValue(genero);
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("cidade").setValue(cidade);
+
 
 
                                             if(genero.equals("Gay")){
