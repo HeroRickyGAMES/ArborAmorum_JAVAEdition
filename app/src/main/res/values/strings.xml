@@ -17,6 +17,7 @@
     <string name="login_failed">"O login falhou... Contate o programador do Apliativo ou veja os status do servidor!"</string>
     <string name="title_activity_register">RegisterActivity</string>
     <string name="deslogar">Deslogar</string>
+    <string name="config">Configurações</string>
     <string name="masculino">Masculino</string>
     <string name="feminino">Feminino</string>
     <string name="gay">Gay</string>

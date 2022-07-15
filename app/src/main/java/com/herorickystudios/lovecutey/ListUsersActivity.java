@@ -43,6 +43,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.herorickystudios.lovecutey.ui.login.logiActivity;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,6 +127,7 @@ public class ListUsersActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         String data = snapshot.child("Cidade").getValue().toString();
                         usersDb.child(oppositeUserSex).child(userIdE).child("connections").child("nope").child(UID).setValue(true);
+
                     }
 
                     @Override
@@ -557,4 +559,57 @@ public class ListUsersActivity extends AppCompatActivity {
 
         }
     }
+
+    public void goToSettings(View view) {
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+
+                    Geocoder geocoder = new Geocoder(ListUsersActivity.this);
+                    try {
+                        List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+                        String cidade = addresses.get(0).getSubAdminArea();
+                        Intent intent = new Intent(ListUsersActivity.this, ConfiguracoesActivity.class);
+                        intent.putExtra("userSex", userSex);
+                        intent.putExtra("cidade", cidade);
+                        startActivity(intent);
+
+                        //Codigos de registro
+
+                        System.out.println("LOCALIZAÇÃO EXATA: " + cidade);
+                    } catch (Exception e) {
+                        System.out.println("Não foi possivel encontrar sua localização!" + e);
+                    }
+
+                    System.out.println(location.getLatitude());
+                    System.out.println(location.getLongitude());
+                    System.out.println(location.getLongitude());
+                    System.out.println(location.getAccuracy());
+
+                    if (location.hasAltitude()) {
+                        System.out.println("Latitude " + location.getLatitude());
+                    } else {
+                        System.out.println("Não disponivel");
+                    }
+                    if (location.hasSpeed()) {
+                        System.out.println("Velocidade " + location.getSpeed());
+                    } else {
+                        System.out.println("Não disponivel");
+                    }
+                    if (location.hasAltitude()) {
+                        System.out.println("Altitude " + location.getLatitude());
+                    } else {
+                        System.out.println("Não disponivel");
+                    }
+                }
+            });
+        }
+    }
+
 }

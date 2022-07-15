@@ -163,6 +163,7 @@ public class registerActivity extends AppCompatActivity {
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("nome").setValue(nome);
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("email").setValue(email);
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("idade").setValue(idade);
+                                            referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("bio").setValue("Digite sua Bio!");
                                             referencia.child(genero).child(getUID).child("cidade").setValue(cidade);
                                             referencia.child(genero).child(getUID).child("Genero").setValue(genero);
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("cidade").setValue(cidade);

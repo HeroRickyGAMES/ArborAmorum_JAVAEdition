@@ -2,16 +2,21 @@ package com.herorickystudios.lovecutey;
 
 //Programado por HeroRickyGames
 
+import android.media.Image;
+
+
 public class cards {
     private String userID;
     private String name;
     private String idade;
     private String local;
+    private Image image;
     public cards(String userID , String name, String idade, String local){
         this.userID = userID;
         this.name = name;
         this.idade = idade;
         this.local = local;
+        this.image = image;
     }
     public String getUserID(){
         return userID;
@@ -51,5 +56,13 @@ public class cards {
 
     public void setLocal(String local) {
         this.local = local;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 }
