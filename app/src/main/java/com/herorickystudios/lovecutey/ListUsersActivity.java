@@ -617,4 +617,11 @@ public class ListUsersActivity extends AppCompatActivity {
         }
     }
 
+    public void matchAc(View view){
+        Intent intent = new Intent(this, MatchesActivity.class);
+        intent.putExtra("userSex", userSex);
+        intent.putExtra("oppositeUserSex", oppositeUserSex);
+        startActivity(intent);
+    }
+
 }

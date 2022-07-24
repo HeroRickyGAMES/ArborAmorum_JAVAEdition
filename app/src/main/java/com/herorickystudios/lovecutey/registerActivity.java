@@ -171,6 +171,7 @@ public class registerActivity extends AppCompatActivity {
                                             String genero = radioButton.getText().toString();
 
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("nome").setValue(nome);
+                                            referencia.child(genero).child(getUID).child("nome").setValue(nome);
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("email").setValue(email);
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("idade").setValue(idade);
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("bio").setValue("Digite sua Bio!");
@@ -179,6 +180,8 @@ public class registerActivity extends AppCompatActivity {
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("cidade").setValue(cidade);
 
                                             String URL = "https://firebasestorage.googleapis.com/v0/b/lovecutey-95cc0.appspot.com/o/" +  "ProfileImages" + "%2F" + getUID + "?alt=media";
+
+
 
                                             referencia.child(genero).child(getUID).child("profileImageUri").child(getUID).setValue(URL);
 

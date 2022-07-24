@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_home" />
+        app:srcCompat="@drawable/hearticon" />
 
     <EditText
         android:id="@+id/nome_register"
@@ -26,7 +26,7 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="@string/digite_nome"
-        android:inputType="textEmailAddress"
+        android:inputType="textPersonName"
         android:selectAllOnFocus="true"
         android:textAlignment="center"
         android:textColor="#000000"
