@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -233,24 +234,28 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                 }
             });
 
+
+
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
 
                     Task<Uri> downloadUri = taskSnapshot.getMetadata().getReference().getDownloadUrl();
 
                     System.out.println(taskSnapshot);
 
+
+
                     userInfo.put("profileImageUri", downloadUri.toString());
-
-                    //userInfo.put("profileImageUrl", downloadUri.toString());
-
-                    reference.updateChildren(userInfo);
+                                    reference.updateChildren(userInfo);
 
                     finish();
                     return;
                 }
             });
+
+
 
         }else{
             finish();

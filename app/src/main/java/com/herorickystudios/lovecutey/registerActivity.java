@@ -178,6 +178,10 @@ public class registerActivity extends AppCompatActivity {
                                             referencia.child(genero).child(getUID).child("Genero").setValue(genero);
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("cidade").setValue(cidade);
 
+                                            String URL = "https://firebasestorage.googleapis.com/v0/b/lovecutey-95cc0.appspot.com/o/" +  "ProfileImages" + "%2F" + getUID + "?alt=media";
+
+                                            referencia.child(genero).child(getUID).child("profileImageUri").child(getUID).setValue(URL);
+
 
 
                                             if(genero.equals("Gay")){

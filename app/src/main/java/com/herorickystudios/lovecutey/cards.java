@@ -2,7 +2,9 @@ package com.herorickystudios.lovecutey;
 
 //Programado por HeroRickyGames
 
+import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.widget.ImageView;
 
 
 public class cards {
@@ -10,13 +12,15 @@ public class cards {
     private String name;
     private String idade;
     private String local;
-    private Image image;
-    public cards(String userID , String name, String idade, String local){
+    private String profileImageURI;
+
+    public cards(String userID , String name, String idade, String local, String profileImageURI){
         this.userID = userID;
         this.name = name;
         this.idade = idade;
         this.local = local;
-        this.image = image;
+        this.profileImageURI = profileImageURI;
+
     }
     public String getUserID(){
         return userID;
@@ -58,11 +62,11 @@ public class cards {
         this.local = local;
     }
 
-    public Image getImage() {
-        return image;
+    public String getProfileImageURI() {
+        return profileImageURI;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
+    public void setProfileImageURI(String profileImageURI) {
+        this.profileImageURI = profileImageURI;
     }
 }
