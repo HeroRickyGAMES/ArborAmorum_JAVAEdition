@@ -69,6 +69,9 @@ public class MatchesActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
                     for(DataSnapshot match : snapshot.getChildren()){
+
+
+
                         FecthMatchInformation(match.getKey(), oppositeUserSex);
                     }
                 }

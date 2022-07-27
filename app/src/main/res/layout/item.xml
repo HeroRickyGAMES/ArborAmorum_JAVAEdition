@@ -48,8 +48,8 @@
                 android:background="#00FFFFFF"
                 android:gravity="center"
                 android:paddingTop="720dp"
+                android:textColor="@color/black"
                 android:textColorHighlight="@android:color/black"
-                android:textColor="@android:color/white"
                 android:textSize="40sp"
                 android:textStyle="bold"
                 tools:text="Mundo achar você uma florzinha" />

@@ -60,6 +60,8 @@ public class ListUsersActivity extends AppCompatActivity {
     private ArrayAdapter arrayAdapter;
     private int i;
 
+    private String nameUser;
+
     private DatabaseReference usersDb;
 
     private static final int PERMISSIONS_FINE_LOCATION = 99;
@@ -130,6 +132,7 @@ public class ListUsersActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         String data = snapshot.child("Cidade").getValue().toString();
+                        nameUser = snapshot.child("nome").getValue().toString();
                         usersDb.child(oppositeUserSex).child(userIdE).child("connections").child("nope").child(UID).setValue(true);
 
                     }
@@ -155,14 +158,14 @@ public class ListUsersActivity extends AppCompatActivity {
                 String userIdE = obj.getUserID();
 
                 isConnectiomMatch(UID, userIdE);
-                
+
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 System.out.println(oppositeUserSex);
 
                 String UID = user.getUid();
 
-                
+
 
                 DatabaseReference maleDb = FirebaseDatabase.getInstance().getReference("Usuarios").child(oppositeUserSex).child(userIdE);
 
@@ -223,20 +226,50 @@ public class ListUsersActivity extends AppCompatActivity {
     }
 
     private void isConnectiomMatch(String UID, String userIdE) {
-        DatabaseReference currentUserConections = usersDb.child(userSex).child(UID).child("connections").child("yeps").child(userIdE);
-        currentUserConections.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference chat = FirebaseDatabase.getInstance().getReference().child("Chat");
+
+        chat.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot2) {
+                DatabaseReference currentUserConections = usersDb.child(userSex).child(UID).child("connections").child("yeps").child(userIdE);
+                DatabaseReference nameDB = usersDb.child(userSex).child(UID);
+                nameDB.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot3) {
+                        currentUserConections.addListenerForSingleValueEvent(new ValueEventListener() {
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                if(snapshot.exists()){
-                    //Exibe o novo match!
-                    Toast.makeText(ListUsersActivity.this, "Novo Match!", Toast.LENGTH_SHORT).show();
 
-                    usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID).setValue(true);
-                    usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).setValue(true);
 
-                }
+                                if(snapshot.exists()){
 
+
+                                    //Exibe o novo match!
+                                    Toast.makeText(ListUsersActivity.this, "Novo Match!", Toast.LENGTH_SHORT).show();
+
+                                    usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID).setValue(true);
+                                    usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).setValue(true);
+
+                                    String name = snapshot3.child("nome").getValue().toString();
+
+                                    chat.child(UID + " " + userIdE).setValue(name + "(DATA, HORA, MINITO, SEGUNDO)" + ": Fez o Match!");
+
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override
@@ -244,6 +277,8 @@ public class ListUsersActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
 
     static void makeToast(Context ctx, String s) {
@@ -458,6 +493,8 @@ public class ListUsersActivity extends AppCompatActivity {
                                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
                                     if (snapshot.exists() && !snapshot.child("connections").child("nope").hasChild(UID) && !snapshot.child("connections").child("yeps").hasChild(UID)) {
+
+
 
                                         //Tive dificuldades de adicionar mais adiconei como uma String e assim foi!
                                         String UIDEX = snapshot.getKey();

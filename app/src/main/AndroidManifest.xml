@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LoveCuteY">
         <activity
+            android:name=".Chat.ChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".MatchesActivity"
             android:exported="false" />
         <activity
