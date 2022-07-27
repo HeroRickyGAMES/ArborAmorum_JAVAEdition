@@ -50,6 +50,7 @@ import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 //Programado por HeroRickyGames
@@ -82,6 +83,11 @@ public class ListUsersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_users);
+
+
+
+
+
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -227,33 +233,42 @@ public class ListUsersActivity extends AppCompatActivity {
 
     private void isConnectiomMatch(String UID, String userIdE) {
         DatabaseReference chat = FirebaseDatabase.getInstance().getReference().child("Chat");
-
-        chat.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot2) {
                 DatabaseReference currentUserConections = usersDb.child(userSex).child(UID).child("connections").child("yeps").child(userIdE);
                 DatabaseReference nameDB = usersDb.child(userSex).child(UID);
-                nameDB.addValueEventListener(new ValueEventListener() {
+
+                nameDB.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot3) {
                         currentUserConections.addListenerForSingleValueEvent(new ValueEventListener() {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-
-
                                 if(snapshot.exists()){
+
+                                    Calendar c = Calendar.getInstance();
+                                    String str = c.getTime().toString();
 
 
                                     //Exibe o novo match!
                                     Toast.makeText(ListUsersActivity.this, "Novo Match!", Toast.LENGTH_SHORT).show();
 
-                                    usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID).setValue(true);
-                                    usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).setValue(true);
-
                                     String name = snapshot3.child("nome").getValue().toString();
 
-                                    chat.child(UID + " " + userIdE).setValue(name + "(DATA, HORA, MINITO, SEGUNDO)" + ": Fez o Match!");
+                                    String IDChat = FirebaseDatabase.getInstance().getReference().child("Chat").push().getKey();
 
+                                    usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID).setValue(true);
+                                    usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID + " C").child("ChatId").setValue(IDChat);
+                                    //chat.child(IDChat).setValue(name + ": Fez o Match!");
+
+
+                                    usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).setValue(true);
+                                    usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey() + " C").child("ChatId").setValue(IDChat);
+                                    //usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).child(UID).child(" C").setValue(IDChat);
+
+
+
+                                    chat.child(IDChat).child(name + " " + str).setValue(": Fez o Match!");
+
+                                    System.out.println("Current time " +  str);
                                 }
 
                             }
@@ -270,15 +285,6 @@ public class ListUsersActivity extends AppCompatActivity {
 
                     }
                 });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-
     }
 
     static void makeToast(Context ctx, String s) {

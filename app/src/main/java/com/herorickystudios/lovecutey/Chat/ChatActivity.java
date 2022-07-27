@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.herorickystudios.lovecutey.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,26 +55,6 @@ public class ChatActivity extends AppCompatActivity {
         usersDb = FirebaseDatabase.getInstance().getReference().child("Usuarios");
 
         chatdb = FirebaseDatabase.getInstance().getReference().child("Chat");
-
-        chatdb.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                String valorExibido = snapshot.child(matchId + " " + UIDcurrent).getValue().toString();
-
-                String textOtherUser = msg.getText().toString();
-
-                msg.setText(valorExibido);
-
-                System.out.println(valorExibido);
-                
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
 
         String UserSexMasc = "Masculino";
         String UserSexFem = "Feminino";
@@ -107,16 +88,19 @@ public class ChatActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists()){
 
+                            Calendar c = Calendar.getInstance();
+                            String str = c.getTime().toString();
 
                             String nome = snapshot.child("nome").getValue().toString();
+                            String ConexionMatch = snapshot.child("connections").child("matches").child(matchId + " C").child("ChatId").getValue().toString();
 
                             String texto =  mandarEditText.getText().toString();
 
                             System.out.println(nome + ": "+ texto);
-                            System.out.println(matchId);
+                            System.out.println(ConexionMatch);
 
 
-                            chatdb.child(UIDcurrent + " " + matchId).setValue(nome + ": "+ texto);
+                            chatdb.child(ConexionMatch).child(nome + " " + str).setValue(texto);
 
 
 
@@ -126,13 +110,18 @@ public class ChatActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot3) {
 
+                                    Calendar c = Calendar.getInstance();
+                                    String str = c.getTime().toString();
+
                                     String nome = snapshot3.child("nome").getValue().toString();
 
                                     String texto =  mandarEditText.getText().toString();
 
+                                    String ConexionMatch = snapshot3.child("connections").child("matches").child(matchId + " C").child("ChatId").getValue().toString();
+
                                     System.out.println(nome + " : "+ texto);
 
-                                    chatdb.child(UIDcurrent + " " + matchId).setValue(nome + ": "+ texto);
+                                    chatdb.child(ConexionMatch).child(nome + " " + str).setValue(texto);
 
                                 }
 
