@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -314,7 +315,22 @@ public class ListUsersActivity extends AppCompatActivity {
 
                 if (snapshot.getKey().equals(user.getUid())) {
 
+                    //Strings para usar no sharedpreferences e em outras areas do aplicativo
                     String SexoProcura = snapshot.child("ConfiguracoesPessoais").child("sexoDeProcura").getValue().toString();
+                    String username = snapshot.child("nome").getValue().toString();
+                    String cidadeUsuario = snapshot.child("cidade").getValue().toString();
+                    String sexoUsuario = snapshot.child("Genero").getValue().toString();
+
+
+                    //SHARED PREFERENCES PARA REDUZIR O TAMANHO DO CODIGO!
+                    SharedPreferences prefs = getSharedPreferences("dados-usuario-logado", MODE_MULTI_PROCESS);
+
+                    SharedPreferences.Editor editor = prefs.edit();
+
+                    editor.putString("nome", username);
+                    editor.putString("SexoProcura", SexoProcura);
+                    editor.putString("sexoUsuario", sexoUsuario);
+                    editor.putString("cidadeUsuario", cidadeUsuario);
 
                     userSex = "Masculino";
                     oppositeUserSex = SexoProcura;
@@ -346,6 +362,22 @@ public class ListUsersActivity extends AppCompatActivity {
 
                 if (snapshot.getKey().equals(user.getUid())) {
                     String SexoProcura = snapshot.child("ConfiguracoesPessoais").child("sexoDeProcura").getValue().toString();
+
+                    String username = snapshot.child("nome").getValue().toString();
+                    String cidadeUsuario = snapshot.child("cidade").getValue().toString();
+                    String sexoUsuario = snapshot.child("Genero").getValue().toString();
+
+
+                    //SHARED PREFERENCES PARA REDUZIR O TAMANHO DO CODIGO!
+                    SharedPreferences prefs = getSharedPreferences("dados-usuario-logado", MODE_MULTI_PROCESS);
+
+                    SharedPreferences.Editor editor = prefs.edit();
+
+                    editor.putString("nome", username);
+                    editor.putString("SexoProcura", SexoProcura);
+                    editor.putString("sexoUsuario", sexoUsuario);
+                    editor.putString("cidadeUsuario", cidadeUsuario);
+
 
                     userSex = "Feminino";
                     oppositeUserSex = SexoProcura;
