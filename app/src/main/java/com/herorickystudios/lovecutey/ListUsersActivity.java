@@ -323,14 +323,18 @@ public class ListUsersActivity extends AppCompatActivity {
 
 
                     //SHARED PREFERENCES PARA REDUZIR O TAMANHO DO CODIGO!
-                    SharedPreferences prefs = getSharedPreferences("dados-usuario-logado", MODE_MULTI_PROCESS);
+                    SharedPreferences prefs = getSharedPreferences("userPreferencias", MODE_PRIVATE);
 
                     SharedPreferences.Editor editor = prefs.edit();
+
+
 
                     editor.putString("nome", username);
                     editor.putString("SexoProcura", SexoProcura);
                     editor.putString("sexoUsuario", sexoUsuario);
                     editor.putString("cidadeUsuario", cidadeUsuario);
+                    editor.commit();
+
 
                     userSex = "Masculino";
                     oppositeUserSex = SexoProcura;
@@ -369,14 +373,16 @@ public class ListUsersActivity extends AppCompatActivity {
 
 
                     //SHARED PREFERENCES PARA REDUZIR O TAMANHO DO CODIGO!
-                    SharedPreferences prefs = getSharedPreferences("dados-usuario-logado", MODE_MULTI_PROCESS);
+                    SharedPreferences prefs = getSharedPreferences("userPreferencias", MODE_PRIVATE);
 
                     SharedPreferences.Editor editor = prefs.edit();
+
 
                     editor.putString("nome", username);
                     editor.putString("SexoProcura", SexoProcura);
                     editor.putString("sexoUsuario", sexoUsuario);
                     editor.putString("cidadeUsuario", cidadeUsuario);
+                    editor.commit();
 
 
                     userSex = "Feminino";

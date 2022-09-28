@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -59,6 +61,12 @@ public class ChatActivity extends AppCompatActivity {
         String UserSexMasc = "Masculino";
         String UserSexFem = "Feminino";
 
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
+
+        String nomeUser = prefs.getString("nome", "");
+        String sexoProcura = prefs.getString("SexoProcura", "");
+        String cidadeUsuario = prefs.getString("cidadeUsuario", "");
+        String sexoUser = prefs.getString("sexoUsuario", "");
 
         UIDcurrent = FirebaseAuth.getInstance().getCurrentUser().getUid();
         matchId = getIntent().getExtras().getString("matchId");
@@ -77,12 +85,14 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                sendMenssage();
+
                 String UserSexMasc = "Masculino";
                 String UserSexFem = "Feminino";
 
                 chatdb = FirebaseDatabase.getInstance().getReference().child("Chat");
 
-                DatabaseReference nameDB = usersDb.child(UserSexMasc).child(UIDcurrent);
+                DatabaseReference nameDB = usersDb.child(sexoUser).child(UIDcurrent);
                 nameDB.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -96,40 +106,14 @@ public class ChatActivity extends AppCompatActivity {
 
                             String texto =  mandarEditText.getText().toString();
 
-                            System.out.println(nome + ": "+ texto);
+                            System.out.println(nomeUser + ": "+ texto);
                             System.out.println(ConexionMatch);
 
 
-                            chatdb.child(ConexionMatch).child(nome + " " + str).setValue(texto);
+                            chatdb.child(ConexionMatch).child(nomeUser + " " + "Dia: " + str).setValue(texto);
 
 
 
-                        }else{
-                            DatabaseReference nameDB = usersDb.child(UserSexFem).child(UIDcurrent);
-                            nameDB.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot3) {
-
-                                    Calendar c = Calendar.getInstance();
-                                    String str = c.getTime().toString();
-
-                                    String nome = snapshot3.child("nome").getValue().toString();
-
-                                    String texto =  mandarEditText.getText().toString();
-
-                                    String ConexionMatch = snapshot3.child("connections").child("matches").child(matchId + " C").child("ChatId").getValue().toString();
-
-                                    System.out.println(nome + " : "+ texto);
-
-                                    chatdb.child(ConexionMatch).child(nome + " " + str).setValue(texto);
-
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
                         }
                     }
 
@@ -148,9 +132,6 @@ public class ChatActivity extends AppCompatActivity {
             }
 
         });
-
-
-        sendMenssage();
         recyclerView.setHasFixedSize(true);
         ChatLayoutManager = new LinearLayoutManager(ChatActivity.this);
         recyclerView.setLayoutManager(ChatLayoutManager);
