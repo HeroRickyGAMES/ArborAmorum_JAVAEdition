@@ -1,11 +1,11 @@
 package com.herorickystudios.lovecutey.Chat;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,11 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.herorickystudios.lovecutey.R;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -52,6 +47,8 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+
+
         msg = findViewById(R.id.msg);
 
         usersDb = FirebaseDatabase.getInstance().getReference().child("Usuarios");
@@ -73,7 +70,7 @@ public class ChatActivity extends AppCompatActivity {
 
         MatchIDD = getIntent().getExtras().getString("MatchIdd");
 
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerChat);
         recyclerView.setNestedScrollingEnabled(false);
 
         mandarEditText = findViewById(R.id.menssage);
@@ -114,6 +111,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
 
+
                         }
                     }
 
@@ -136,11 +134,9 @@ public class ChatActivity extends AppCompatActivity {
         ChatLayoutManager = new LinearLayoutManager(ChatActivity.this);
         recyclerView.setLayoutManager(ChatLayoutManager);
 
-        ChatAdapter = new ChatAdapter(getDataSetChat(), ChatActivity.this);
+        //ChatAdapter = new ChatAdapter(getDataSetChat(), ChatActivity.this);
 
-        recyclerView.setAdapter(ChatAdapter);
-
-        getChatId();
+        //recyclerView.setAdapter(ChatAdapter);
 
     }
 
@@ -152,16 +148,4 @@ public class ChatActivity extends AppCompatActivity {
             Toast.makeText(this, "Não é possivel enviar menssagens de texto vazias!", Toast.LENGTH_SHORT).show();
         }
     }
-
-    private void getChatId(){
-
-    }
-
-    private ArrayList<ChatObject> resultsChat = new ArrayList<ChatObject>();
-
-    public List<ChatObject> getDataSetChat() {
-        return resultsChat;
-    }
-
-
 }

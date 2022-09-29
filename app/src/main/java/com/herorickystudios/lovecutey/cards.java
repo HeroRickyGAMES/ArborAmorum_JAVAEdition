@@ -2,10 +2,6 @@ package com.herorickystudios.lovecutey;
 
 //Programado por HeroRickyGames
 
-import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.widget.ImageView;
-
 
 public class cards {
     private String userID;
@@ -14,7 +10,7 @@ public class cards {
     private String local;
     private String profileImageURI;
 
-    public cards(String userID , String name, String idade, String local, String profileImageURI){
+    public cards(String userID, String name){
         this.userID = userID;
         this.name = name;
         this.idade = idade;

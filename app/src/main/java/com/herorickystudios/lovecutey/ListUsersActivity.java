@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -19,25 +18,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -48,7 +36,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.herorickystudios.lovecutey.ui.login.logiActivity;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -544,7 +531,7 @@ public class ListUsersActivity extends AppCompatActivity {
                                         String UIDEX = snapshot.getKey();
 
 
-                                        cards Item = new cards( snapshot.getKey(), (String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString(), snapshot.child(cidade).child("Dados do Usuario").child("cidade").getValue().toString(), snapshot.child("profileImageUri").child(UIDEX).getValue().toString());
+                                        cards Item = new cards( snapshot.getKey(), (String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue());
 
                                         //Pega a idade do usuario para filtrar
                                         int idadeU = Integer.parseInt(snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString());

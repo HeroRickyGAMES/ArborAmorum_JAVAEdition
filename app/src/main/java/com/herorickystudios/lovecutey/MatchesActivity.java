@@ -37,7 +37,7 @@ public class MatchesActivity extends AppCompatActivity {
         String userSex = getIntent().getExtras().getString("userSex");
         String oppositeUserSex = getIntent().getExtras().getString("oppositeUserSex");
 
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerChat);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
         MatchesLayoutManager = new LinearLayoutManager(MatchesActivity.this);
