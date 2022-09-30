@@ -2,7 +2,9 @@ package com.herorickystudios.lovecutey;
 
 //Programado por HeroRickyGames
 
-public class User {
+import com.herorickystudios.lovecutey.Chat.Users;
+
+public class User extends Users {
 
     public String getUserID() {
         return userID;

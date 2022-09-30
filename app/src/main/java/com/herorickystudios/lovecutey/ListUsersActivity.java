@@ -604,7 +604,9 @@ public class ListUsersActivity extends AppCompatActivity {
                     System.out.println(location.getLatitude());
                     System.out.println(location.getLongitude());
                     System.out.println(location.getLongitude());
-                    System.out.println(location.getAccuracy());
+
+
+
 
                     if (location.hasAltitude()) {
                         System.out.println("Latitude " + location.getLatitude());
