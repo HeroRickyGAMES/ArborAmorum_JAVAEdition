@@ -31,11 +31,14 @@ public class MatchesViewHolders extends RecyclerView.ViewHolder implements View.
 
         Bundle b = new Bundle();
         b.putString("matchId",MatchID.getText().toString());
+        b.putString("nameOposite",MatchName.getText().toString());
 
         String MatchIDd= MatchID.toString();
+        String nameOposite= MatchName.toString();
 
         intent.putExtras(b);
         intent.putExtra("MatchIdd", MatchIDd);
+        intent.putExtra("NameOposite", nameOposite);
         v.getContext().startActivity(intent);
     }
 }

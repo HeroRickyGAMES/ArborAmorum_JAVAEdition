@@ -23,7 +23,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.herorickystudios.lovecutey.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -31,7 +34,11 @@ public class ChatActivity extends AppCompatActivity {
     ArrayList<cardsChat> list;
     private RecyclerView.LayoutManager ChatLayoutManager;
 
-    private String UIDcurrent, matchId, chatId, MatchIDD;
+    private String UIDcurrent, matchId, chatId, MatchIDD, nameoposite;
+
+    Boolean clicou = false;
+
+    public List<String> tagArray;
 
     private EditText mandarEditText;
     private Button Mandar;
@@ -70,7 +77,9 @@ public class ChatActivity extends AppCompatActivity {
         String sexoUser = prefs.getString("sexoUsuario", "");
 
         UIDcurrent = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         matchId = getIntent().getExtras().getString("matchId");
+        nameoposite = getIntent().getExtras().getString("nameOposite");
 
         MatchIDD = getIntent().getExtras().getString("MatchIdd");
 
@@ -96,23 +105,38 @@ public class ChatActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists()){
 
+
                             Calendar c = Calendar.getInstance();
                             String str = c.getTime().toString();
 
                             String nome = snapshot.child("nome").getValue().toString();
                             String ConexionMatch = snapshot.child("connections").child("matches").child(matchId + " C").child("ChatId").getValue().toString();
 
+
+
                             String texto =  mandarEditText.getText().toString();
 
                             System.out.println(nomeUser + ": "+ texto);
                             System.out.println(ConexionMatch);
 
+                            if(texto.isEmpty()){
 
-                            chatdb.child(ConexionMatch).child("Dia: " + str + " " +nomeUser).setValue(texto);
+                                Toast.makeText(ChatActivity.this, "Não é possivel enviar menssagens de texto vazias!", Toast.LENGTH_SHORT).show();
+
+
+                            }else{
+
+                                chatdb.child(ConexionMatch).child("Dia: " + str + "/ " + nomeUser + ": ").setValue(texto);
+
+                            }
 
                             if(texto.equals(texto)){
 
                                 mandarEditText.setText("");
+
+                                clicou = true;
+
+                                ck();
 
                             }
                         }
@@ -158,11 +182,9 @@ public class ChatActivity extends AppCompatActivity {
 
 
     private void sendMenssage() {
+
         String sendMenssageText = mandarEditText.getText().toString();
 
-        if(sendMenssageText.isEmpty()){
-            Toast.makeText(this, "Não é possivel enviar menssagens de texto vazias!", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void messages(String ConexionMatch){
@@ -184,16 +206,24 @@ public class ChatActivity extends AppCompatActivity {
 
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
 
+                    String Menssage = dataSnapshot.toString().replace("key", "").replace("{", "").replace("}", "").replace("=", "").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "");
+
+                    String[] array = Menssage.split("\\s*, \\s");
+
+                    tagArray = Arrays.asList(array);
 
 
-                    String Menssage = dataSnapshot.toString().replace("key", "").replace("{", "").replace("}", "").replace("value", "Menssagem: ").replace("=", "").replace("DataSnapshot","").replace("", "");
-                    System.out.println(Menssage);
 
+                    //System.out.println(name);
 
+                    tagArray.size();
+
+                    cardsChat chaatTxt = new cardsChat(tagArray);
+
+                    list.add(chaatTxt);
 
                     //Users users = dataSnapshot.getValue(Users.class);
-                    cardsChat users = new cardsChat(Menssage);
-                    list.add(users);
+
 
                 }
                 adapter.notifyDataSetChanged();
@@ -208,5 +238,14 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void ck (){
+        if(clicou == true){
+
+            System.out.println("Clicado");
+
+            list.clear();
+        }
     }
 }
