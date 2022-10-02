@@ -1,15 +1,18 @@
 package com.herorickystudios.lovecutey.Chat;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DigitalClock;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +25,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.herorickystudios.lovecutey.R;
 
+import java.nio.charset.StandardCharsets;
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -35,8 +40,10 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager ChatLayoutManager;
 
     private String UIDcurrent, matchId, chatId, MatchIDD, nameoposite;
-
+    int intero = 1;
     Boolean clicou = false;
+
+    String APM;
 
     public List<String> tagArray;
 
@@ -71,10 +78,12 @@ public class ChatActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
 
+
         String nomeUser = prefs.getString("nome", "");
         String sexoProcura = prefs.getString("SexoProcura", "");
         String cidadeUsuario = prefs.getString("cidadeUsuario", "");
         String sexoUser = prefs.getString("sexoUsuario", "");
+        String clicktimere = prefs.getString("clicktime", "");
 
         UIDcurrent = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -87,6 +96,8 @@ public class ChatActivity extends AppCompatActivity {
         Mandar = findViewById(R.id.send);
 
         String currentUserID = FirebaseAuth.getInstance().getUid();
+
+
 
         Mandar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,19 +116,76 @@ public class ChatActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists()){
 
+                            int soma = intero = intero + 1;
+
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putString("clicktime", String.valueOf(intero));
+                            editor.commit();
 
                             Calendar c = Calendar.getInstance();
                             String str = c.getTime().toString();
+
+                            String Day = String.valueOf(c.get(Calendar.DATE)) + "↔";
+                            String Mes = String.valueOf(c.get(Calendar.MONTH)) + "↔";
+                            String Ano = String.valueOf(c.get(Calendar.YEAR)) + " ";
+
+                            int PMAM = c.get(Calendar.AM_PM);
+
+                            if(PMAM == 0){
+                                APM = "AM ";
+                            }else if(PMAM == 1){
+                                APM = "PM ";
+                            }
+
+                            System.out.println(intero);
+
+                            String AMPM = APM;
+
+
+
+                            String Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND);
+
+                            if(Hora.length() == 8){
+
+                                Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND)+ intero;
+
+                            }else if(Hora.length() == 7){
+                                Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND)+ intero+intero;
+                            }else if(Hora.length() == 6){
+                                Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND)+ intero+intero+intero;
+                            }else if(Hora.length() == 5){
+                                Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND)+ intero+intero+intero+intero;
+                            }else if(Hora.length() == 4){
+                                Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND)+ intero+intero+intero+intero+intero;
+                            }else if(Hora.length() == 3){
+                                Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND)+ intero+intero+intero+intero+intero+intero;
+                            }else if(Hora.length() == 2){
+                                Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND)+ intero+intero+intero+intero+intero+intero+intero;
+                            }else if(Hora.length() == 1){
+                                Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND)+ "0"+"0"+"0"+"0"+"0"+"0"+"0"+"0";
+                            }
+
+                            System.out.println("x *" + Hora.length());
+
+
+                            String DATA_HORA = Day + Mes + Ano + AMPM + Hora;
 
                             String nome = snapshot.child("nome").getValue().toString();
                             String ConexionMatch = snapshot.child("connections").child("matches").child(matchId + " C").child("ChatId").getValue().toString();
 
 
 
+                            System.out.println(DATA_HORA);
+
+
                             String texto =  mandarEditText.getText().toString();
 
+
                             System.out.println(nomeUser + ": "+ texto);
-                            System.out.println(ConexionMatch);
+
+
+
+
 
                             if(texto.isEmpty()){
 
@@ -126,7 +194,7 @@ public class ChatActivity extends AppCompatActivity {
 
                             }else{
 
-                                chatdb.child(ConexionMatch).child("Dia: " + str + "/ " + nomeUser + ": ").setValue(texto);
+                                chatdb.child(ConexionMatch).child(str +  "/ Data: " + DATA_HORA + "﹁, "+ nomeUser).setValue(texto);
 
                             }
 
@@ -206,19 +274,27 @@ public class ChatActivity extends AppCompatActivity {
 
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
 
-                    String Menssage = dataSnapshot.toString().replace("key", "").replace("{", "").replace("}", "").replace("=", "").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "");
+                    String datadb = dataSnapshot.getKey();
 
-                    String[] array = Menssage.split("\\s*, \\s");
+                    String Menssage = dataSnapshot.toString().replace(",", " ").replace(datadb,"").replace("key", "").replace("{", "").replace("}", "").replace("=", " ").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replace("﹁", ",");
+
+                    String Datan = dataSnapshot.toString().replace(",", " ").replace(datadb,"").replace("key", "").replace("{", "").replace("}", "").replace("=", "").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replace(nomeUser,"").replace(nameoposite,"");
+
+                    String UserMsg = dataSnapshot.toString().replace(",", " ").replace(datadb,"").replace("key", "").replace("{", "").replace("}", "").replace("=", ": ").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replaceAll(Datan, "");
+
+
+                    String[] array = Menssage.split("\\s*, \\s* ,");
 
                     tagArray = Arrays.asList(array);
 
 
 
-                    //System.out.println(name);
+                    System.out.println("String é " + Menssage);
 
-                    tagArray.size();
+                    cardsChat chaatTxt = new cardsChat(Menssage);
 
-                    cardsChat chaatTxt = new cardsChat(tagArray);
+
+                    System.out.println();
 
                     list.add(chaatTxt);
 

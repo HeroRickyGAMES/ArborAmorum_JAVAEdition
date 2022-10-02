@@ -3,14 +3,12 @@ package com.herorickystudios.lovecutey.Chat;
 //Programado por HeroRickyGames
 
 
-import java.util.List;
-
 public class cardsChat {
     private String name;
     //private String menssage;
 
 
-    public cardsChat(List<String> name){
+    public cardsChat(String name){
         //this.menssage = menssage;
         this.name = String.valueOf(name);
 
