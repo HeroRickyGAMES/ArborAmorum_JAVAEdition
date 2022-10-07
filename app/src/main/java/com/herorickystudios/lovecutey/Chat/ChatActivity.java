@@ -1,18 +1,15 @@
 package com.herorickystudios.lovecutey.Chat;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DigitalClock;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,12 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.herorickystudios.lovecutey.R;
 
-import java.nio.charset.StandardCharsets;
-import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
@@ -42,6 +36,8 @@ public class ChatActivity extends AppCompatActivity {
     private String UIDcurrent, matchId, chatId, MatchIDD, nameoposite;
     int intero = 1;
     Boolean clicou = false;
+
+    TextView opositeUserNameI;
 
     String APM;
 
@@ -61,9 +57,14 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
 
+        //Esconde a action Bar
+        getSupportActionBar().hide();
+
         recyclerView = findViewById(R.id.recyclerChat);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        opositeUserNameI = findViewById(R.id.userNameInterfece);
 
         list = new ArrayList<cardsChat>();
         adapter = new chatAdapter(this, list);
@@ -284,7 +285,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     String UserMsg = dataSnapshot.toString().replaceAll("é", "=").replace(",", " ").replace(datadb,"").replace("key", "").replace("{", "").replace("}", "").replace("=", ": ").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replace("➧","").replace(" ","➩").replaceAll("[" + Datan + "]", "").replace("-", " ").replace("﹁", ": ").replace("➩", " ").replace("Data  PM","");
 
-
+                    opositeUserNameI.setText(nameoposite);
 
                     String[] array = Menssage.split("\\s*, \\s* ,");
 

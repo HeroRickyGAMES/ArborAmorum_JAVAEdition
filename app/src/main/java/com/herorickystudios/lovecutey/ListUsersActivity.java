@@ -49,6 +49,8 @@ public class ListUsersActivity extends AppCompatActivity {
     private ArrayAdapter arrayAdapter;
     private int i;
 
+    String APM;
+
     private String nameUser;
 
     private DatabaseReference usersDb;
@@ -232,8 +234,35 @@ public class ListUsersActivity extends AppCompatActivity {
 
                                 if(snapshot.exists()){
 
+
                                     Calendar c = Calendar.getInstance();
                                     String str = c.getTime().toString();
+
+                                    String Day = String.valueOf(c.get(Calendar.DATE)) + "↔";
+                                    String Mes = String.valueOf(c.get(Calendar.MONTH)) + "↔";
+                                    String Ano = String.valueOf(c.get(Calendar.YEAR)) + " ";
+
+                                    int PMAM = c.get(Calendar.AM_PM);
+
+                                    if(PMAM == 0){
+                                        APM = "AM ";
+                                    }else if(PMAM == 1){
+                                        APM = "PM ";
+                                    }
+                                    String AMPM = APM;
+
+
+
+                                    String Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND);
+
+                                    Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND);
+
+
+                                    System.out.println("x *" + Hora.length());
+
+
+                                    String DATA_HORA = Day + Mes + Ano + "➧" + AMPM + Hora;
+
 
 
                                     //Exibe o novo match!
@@ -254,7 +283,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
 
 
-                                    chat.child(IDChat).child(name + " " + str).setValue(": Fez o Match!");
+                                    chat.child(IDChat).child(str + "/ Data: " + DATA_HORA + ", "+ name +  "﹁").setValue(": Fez o Match!");
 
                                     System.out.println("Current time " +  str);
                                 }
@@ -530,14 +559,16 @@ public class ListUsersActivity extends AppCompatActivity {
                                         //Tive dificuldades de adicionar mais adiconei como uma String e assim foi!
                                         String UIDEX = snapshot.getKey();
 
+                                        String profileUrl = snapshot.child("profileImageUri").child(UIDEX).getValue().toString();
 
-                                        cards Item = new cards( snapshot.getKey(), (String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue());
+                                        //Idade Configurada pelo proprio usuario
+                                        int idadeConfigC = Integer.parseInt(idadeConfig);
+
+                                        cards Item = new cards( snapshot.getKey(), (String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), profileUrl, String.valueOf(idadeConfigC), cidade);
 
                                         //Pega a idade do usuario para filtrar
                                         int idadeU = Integer.parseInt(snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString());
 
-                                        //Idade Configurada pelo proprio usuario
-                                        int idadeConfigC = Integer.parseInt(idadeConfig);
 
                                         if(idadeU <= idadeConfigC){
                                             System.out.println("As informações estão sendo exibidas com sucesso!");

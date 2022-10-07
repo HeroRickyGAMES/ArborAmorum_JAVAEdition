@@ -29,8 +29,9 @@
         android:inputType="textPersonName"
         android:selectAllOnFocus="true"
         android:textAlignment="center"
-        android:textColor="#000000"
-        android:textColorHint="#404040"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#CFCFCF"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,38 +50,14 @@
             android:layout_height="wrap_content"
             android:text="@string/masculino"
             android:textAlignment="textStart"
-            android:textColor="#000000"
+            android:textColor="#FFFFFF"
             android:textSize="16sp" />
 
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/feminino"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <RadioButton
-            android:id="@+id/radioButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/gay"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <RadioButton
-            android:id="@+id/radioButton2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/lesbica"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <RadioButton
-            android:id="@+id/radioButton3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/bi_sexual"
-            android:textColor="#000000"
+            android:textColor="#FFFFFF"
             android:textSize="16sp" />
 
     </RadioGroup>
@@ -96,8 +73,9 @@
         android:inputType="number"
         android:selectAllOnFocus="true"
         android:textAlignment="center"
-        android:textColor="#000000"
-        android:textColorHint="#404040"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#CFCFCF"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,8 +92,9 @@
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
         android:textAlignment="center"
-        android:textColor="#000000"
-        android:textColorHint="#404040"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#CFCFCF"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
@@ -131,8 +110,9 @@
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
         android:textAlignment="center"
-        android:textColor="#000000"
-        android:textColorHint="#404040"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#CFCFCF"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_Register" />
@@ -148,8 +128,9 @@
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
         android:textAlignment="center"
-        android:textColor="#000000"
-        android:textColorHint="#404040"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#CFCFCF"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
@@ -180,7 +161,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Qual é o seu genero, ou sua identidade Sexual?"
+        android:text="Qual é o seu genero?"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

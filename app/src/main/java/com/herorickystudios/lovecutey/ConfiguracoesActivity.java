@@ -66,6 +66,8 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
 
 
+        //Esconde a action Bar
+        getSupportActionBar().hide();
 
         String userSex = getIntent().getExtras().getString("userSex");
         String cidade = getIntent().getExtras().getString("cidade");

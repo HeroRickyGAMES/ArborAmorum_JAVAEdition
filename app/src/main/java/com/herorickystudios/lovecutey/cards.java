@@ -3,6 +3,8 @@ package com.herorickystudios.lovecutey;
 //Programado por HeroRickyGames
 
 
+import java.net.URI;
+
 public class cards {
     private String userID;
     private String name;
@@ -10,7 +12,7 @@ public class cards {
     private String local;
     private String profileImageURI;
 
-    public cards(String userID, String name){
+    public cards(String userID, String name, String profileImageURI, String idade, String local){
         this.userID = userID;
         this.name = name;
         this.idade = idade;
