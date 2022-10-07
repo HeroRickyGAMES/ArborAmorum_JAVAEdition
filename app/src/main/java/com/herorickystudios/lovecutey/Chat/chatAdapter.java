@@ -35,7 +35,7 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.MyViewHolder> 
 
         cardsChat users = list.get(position);
         holder.name.setText(users.getName());
-        //holder.mensage.setText(users.getMenssage());
+        holder.mensage.setText(users.getMenssage());
 
     }
 
@@ -52,7 +52,7 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.MyViewHolder> 
             super(itemView);
 
             name = itemView.findViewById(R.id.usernameCard);
-            //name = itemView.findViewById(R.id.Menssage);
+            mensage = itemView.findViewById(R.id.Menssage);
 
         }
     }

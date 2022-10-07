@@ -294,7 +294,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     System.out.println("A data é: " + Datan + " A mensagem é " + UserMsg);
 
-                    cardsChat chaatTxt = new cardsChat(UserMsg);
+                    cardsChat chaatTxt = new cardsChat(Datan, UserMsg);
 
 
                     System.out.println();
