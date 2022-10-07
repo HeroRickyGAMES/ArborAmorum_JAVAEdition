@@ -168,7 +168,7 @@ public class ChatActivity extends AppCompatActivity {
                             System.out.println("x *" + Hora.length());
 
 
-                            String DATA_HORA = Day + Mes + Ano + AMPM + Hora;
+                            String DATA_HORA = Day + Mes + Ano + "➧" + AMPM + Hora;
 
                             String nome = snapshot.child("nome").getValue().toString();
                             String ConexionMatch = snapshot.child("connections").child("matches").child(matchId + " C").child("ChatId").getValue().toString();
@@ -194,7 +194,7 @@ public class ChatActivity extends AppCompatActivity {
 
                             }else{
 
-                                chatdb.child(ConexionMatch).child(str +  "/ Data: " + DATA_HORA + "﹁, "+ nomeUser).setValue(texto);
+                                chatdb.child(ConexionMatch).child(str +  "/ Data: " + DATA_HORA + ", "+ nomeUser + "﹁").setValue(texto);
 
                             }
 
@@ -274,13 +274,16 @@ public class ChatActivity extends AppCompatActivity {
 
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
 
+
+                    //Database to frontend
                     String datadb = dataSnapshot.getKey();
 
                     String Menssage = dataSnapshot.toString().replace(",", " ").replace(datadb,"").replace("key", "").replace("{", "").replace("}", "").replace("=", " ").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replace("﹁", ",");
 
-                    String Datan = dataSnapshot.toString().replace(",", " ").replace(datadb,"").replace("key", "").replace("{", "").replace("}", "").replace("=", "").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replace(nomeUser,"").replace(nameoposite,"");
+                    String Datan = dataSnapshot.toString().replace(",", " ").replace(datadb,"").replace("key", "").replace("{", "").replace("}", "").replace("=", "").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replace(nomeUser,"").replace(nameoposite,"").replaceAll("[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzçéáãõ~´íÃÕÉÇÍÁ﹁ ]", "").replace("-", "").replace("➧"," ");
 
-                    String UserMsg = dataSnapshot.toString().replace(",", " ").replace(datadb,"").replace("key", "").replace("{", "").replace("}", "").replace("=", ": ").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replaceAll(Datan, "");
+                    String UserMsg = dataSnapshot.toString().replaceAll("é", "=").replace(",", " ").replace(datadb,"").replace("key", "").replace("{", "").replace("}", "").replace("=", ": ").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replace("➧","").replace(" ","➩").replaceAll("[" + Datan + "]", "").replace("-", " ").replace("﹁", ": ").replace("➩", " ").replace("Data  PM","");
+
 
 
                     String[] array = Menssage.split("\\s*, \\s* ,");
@@ -289,9 +292,9 @@ public class ChatActivity extends AppCompatActivity {
 
 
 
-                    System.out.println("String é " + Menssage);
+                    System.out.println("A data é: " + Datan + " A mensagem é " + UserMsg);
 
-                    cardsChat chaatTxt = new cardsChat(Menssage);
+                    cardsChat chaatTxt = new cardsChat(UserMsg);
 
 
                     System.out.println();
