@@ -270,6 +270,7 @@ public class ChatActivity extends AppCompatActivity {
         chatdb = FirebaseDatabase.getInstance().getReference().child("Chat").child(ConexionMatch);
 
         DatabaseReference nameDB = usersDb.child(sexoUser).child(UIDcurrent);
+        //DatabaseReference PhotoDb = usersDb.child(sexoUser).child(UIDcurrent);
 
         chatdb.addChildEventListener(new ChildEventListener() {
             @Override
@@ -296,12 +297,22 @@ public class ChatActivity extends AppCompatActivity {
 
                     System.out.println("A data é: " + Datan + " A mensagem é " + UserMsg);
 
-                    cardsChat chaatTxt = new cardsChat(Datan, UserMsg);
+                    //cardsChat chaatTxt = new cardsChat(Datan, UserMsg);
 
 
-                    System.out.println();
+                    if(UserMsg.contains(nomeUser)){
+                        cardsChat chaatTxt = new cardsChat(Datan, UserMsg, "https://firebasestorage.googleapis.com/v0/b/lovecutey-95cc0.appspot.com/o/balon%2FblconversaiconUser.png?alt=media&token=d51b0e2e-e294-46aa-ba7e-72b7307cd0fd");
+                        list.add(chaatTxt);
+                    }
+                    if(UserMsg.contains(nameoposite)){
+                        cardsChat chaatTxt = new cardsChat(Datan, UserMsg, "https://firebasestorage.googleapis.com/v0/b/lovecutey-95cc0.appspot.com/o/balon%2FblconversaiconOposite.png?alt=media&token=34bb37c7-ab61-4e91-ad02-e4fecd2b5174");
+                        list.add(chaatTxt);
+                    }
 
-                    list.add(chaatTxt);
+                    System.out.println("O nome do usuario contem dentro da string " + UserMsg.contains(nomeUser));
+                    System.out.println("O nome do opositor contem dentro da string " + UserMsg.contains(nameoposite));
+
+                    //list.add(chaatTxt);
 
                     //Users users = dataSnapshot.getValue(Users.class);
 

@@ -4,12 +4,15 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.herorickystudios.lovecutey.R;
+import com.herorickystudios.lovecutey.User;
 
 import java.util.ArrayList;
 
@@ -17,6 +20,7 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.MyViewHolder> 
 
     Context context;
     ArrayList<cardsChat> list;
+    public ImageView bgPhoto;
 
     public chatAdapter(Context context, ArrayList<cardsChat> list) {
         this.context = context;
@@ -37,6 +41,7 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.MyViewHolder> 
         holder.name.setText(users.getName());
         holder.mensage.setText(users.getMenssage());
 
+        Glide.with(context).load(list.get(position).getPhotoBG()).into(holder.photoBG);
     }
 
     @Override
@@ -46,13 +51,16 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.MyViewHolder> 
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
+        public ImageView bgPhoto;
         TextView name, mensage;
+        ImageView photoBG;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             name = itemView.findViewById(R.id.usernameCard);
             mensage = itemView.findViewById(R.id.Menssage);
+            photoBG = itemView.findViewById(R.id.photoBG);
 
         }
     }

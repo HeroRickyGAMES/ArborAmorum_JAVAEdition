@@ -2,7 +2,7 @@ package com.herorickystudios.lovecutey.Chat;
 
 public class Users {
 
-    String name, mensage;
+    String name, mensage, photoBG;
 
     public String getName() {
         return name;
@@ -18,5 +18,13 @@ public class Users {
 
     public void setMensage(String mensage) {
         this.mensage = mensage;
+    }
+
+    public String getPhotoBG() {
+        return photoBG;
+    }
+
+    public void setPhotoBG(String photoBG) {
+        this.photoBG = photoBG;
     }
 }
