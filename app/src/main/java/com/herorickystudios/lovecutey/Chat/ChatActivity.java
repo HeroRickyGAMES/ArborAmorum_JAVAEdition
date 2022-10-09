@@ -1,6 +1,7 @@
 package com.herorickystudios.lovecutey.Chat;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -269,10 +271,9 @@ public class ChatActivity extends AppCompatActivity {
 
         DatabaseReference nameDB = usersDb.child(sexoUser).child(UIDcurrent);
 
-        chatdb.addValueEventListener(new ValueEventListener() {
+        chatdb.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
 
 
@@ -305,11 +306,22 @@ public class ChatActivity extends AppCompatActivity {
                     //Users users = dataSnapshot.getValue(Users.class);
 
 
+                    adapter.notifyDataSetChanged();
                 }
-                adapter.notifyDataSetChanged();
+            }
 
-                //String chat = snapshot.toString();
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
             }
 
@@ -325,7 +337,7 @@ public class ChatActivity extends AppCompatActivity {
 
             System.out.println("Clicado");
 
-            list.clear();
+            //list.clear();
         }
     }
 }
