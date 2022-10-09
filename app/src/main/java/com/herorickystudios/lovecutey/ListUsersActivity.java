@@ -84,6 +84,7 @@ public class ListUsersActivity extends AppCompatActivity {
         String UID = user.getUid();
 
         usersDb = FirebaseDatabase.getInstance().getReference().child("Usuarios");
+
         //Esconde a action Bar
         getSupportActionBar().hide();
 
@@ -139,9 +140,6 @@ public class ListUsersActivity extends AppCompatActivity {
                     }
                 });
 
-
-                Toast.makeText(ListUsersActivity.this, "Pu lado", Toast.LENGTH_SHORT).show();
-
             }
 
             //Pu oto
@@ -177,10 +175,6 @@ public class ListUsersActivity extends AppCompatActivity {
 
                     }
                 });
-
-
-                Toast.makeText(ListUsersActivity.this, "Pro oto", Toast.LENGTH_SHORT).show();
-
             }
 
             @Override
@@ -199,11 +193,130 @@ public class ListUsersActivity extends AppCompatActivity {
         });
 
 
-        // Optionally add an OnItemClickListener
+        // Clicou para iniciar uma conversa.
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
-                Toast.makeText(ListUsersActivity.this, "Foi clicado!", Toast.LENGTH_SHORT).show();
+
+                cards obj = (cards) dataObject;
+
+                //UserID do ou da pretendente
+                String userIdE = obj.getUserID();
+
+                isConnectiomMatch(UID, userIdE);
+
+                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                System.out.println(oppositeUserSex);
+
+                String UID = user.getUid();
+
+
+
+                DatabaseReference maleDb = FirebaseDatabase.getInstance().getReference("Usuarios").child(oppositeUserSex).child(userIdE);
+
+                maleDb.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        usersDb.child(oppositeUserSex).child(userIdE).child("connections").child("yeps").child(UID).setValue(true);
+                        usersDb.child(userSex).child(UID).child("connections").child("yeps").child(UID).setValue(true);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+                DatabaseReference chat = FirebaseDatabase.getInstance().getReference().child("Chat");
+                DatabaseReference currentUserConections = usersDb.child(userSex).child(UID).child("connections").child("yeps").child(userIdE);
+                DatabaseReference nameDB = usersDb.child(userSex).child(UID);
+
+                nameDB.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot3) {
+                        currentUserConections.addListenerForSingleValueEvent(new ValueEventListener() {
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                if(snapshot.exists() == false){
+
+
+                                    Calendar c = Calendar.getInstance();
+                                    String str = c.getTime().toString();
+
+                                    String Day = String.valueOf(c.get(Calendar.DATE)) + "↔";
+                                    String Mes = String.valueOf(c.get(Calendar.MONTH)) + "↔";
+                                    String Ano = String.valueOf(c.get(Calendar.YEAR)) + " ";
+
+                                    int PMAM = c.get(Calendar.AM_PM);
+
+                                    if(PMAM == 0){
+                                        APM = "AM ";
+                                    }else if(PMAM == 1){
+                                        APM = "PM ";
+                                    }
+                                    String AMPM = APM;
+
+
+
+                                    String Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND);
+
+                                    Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND);
+
+
+                                    System.out.println("x *" + Hora.length());
+
+
+                                    String DATA_HORA = Day + Mes + Ano + "➧" + AMPM + Hora;
+
+
+                                    String name = snapshot3.child("nome").getValue().toString();
+
+                                    String IDChat = FirebaseDatabase.getInstance().getReference().child("Chat").push().getKey();
+
+                                    usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID).setValue(true);
+                                    usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID + " C").child("ChatId").setValue(IDChat);
+                                    //chat.child(IDChat).setValue(name + ": Fez o Match!");
+
+
+                                    usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).setValue(true);
+                                    usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey() + " C").child("ChatId").setValue(IDChat);
+                                    //usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).child(UID).child(" C").setValue(IDChat);
+
+
+
+                                    chat.child(IDChat).child(str + "/ Data: " + DATA_HORA + ", "+ name +  "﹁").setValue(": Criou o chat!");
+
+                                    System.out.println("Current time " +  str);
+
+                                    Toast.makeText(ListUsersActivity.this, "Chat criado!", Toast.LENGTH_SHORT).show();
+
+                                    Intent intent = new Intent(getApplicationContext(), MatchesActivity.class);
+                                    intent.putExtra("userSex", userSex);
+                                    intent.putExtra("oppositeUserSex", oppositeUserSex);
+                                    startActivity(intent);
+
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+
             }
         });
 

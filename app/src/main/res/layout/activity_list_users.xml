@@ -10,14 +10,13 @@
         android:id="@+id/frame"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#ffeee9e2"
+        android:background="#2B2B2B"
         app:layout_constraintBottom_toTopOf="@+id/button2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:rotation_degrees="15.5"
-        tools:context=".MyActivity">
-    </com.lorentzos.flingswipe.SwipeFlingAdapterView>
+        tools:context=".MyActivity"></com.lorentzos.flingswipe.SwipeFlingAdapterView>
 
     <Button
         android:id="@+id/button2"
@@ -41,7 +40,7 @@
         android:id="@+id/button"
         android:layout_width="51dp"
         android:layout_height="45dp"
-        android:background="@drawable/hearticon"
+        android:background="@drawable/ic_baseline_chat_bubble_24"
         android:onClick="matchAc"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button2"

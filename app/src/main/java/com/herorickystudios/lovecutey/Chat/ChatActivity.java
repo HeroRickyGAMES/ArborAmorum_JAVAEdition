@@ -283,7 +283,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     String Menssage = dataSnapshot.toString().replace(",", " ").replace(datadb,"").replace("key", "").replace("{", "").replace("}", "").replace("=", " ").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replace("﹁", ",");
 
-                    String Datan = dataSnapshot.toString().replace(",", " ").replace(datadb,"").replace("key", "").replace("{", "").replace("}", "").replace("=", "").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replace(nomeUser,"").replace(nameoposite,"").replaceAll("[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzçéáãõ~´íÃÕÉÇÍÁ﹁ ]", "").replace("-", "").replace("➧"," ");
+                    String Datan = dataSnapshot.toString().replace(",", " ").replace(datadb,"").replace("key", "").replace("{", "").replace("}", "").replace("=", "").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replace(nomeUser,"").replace(nameoposite,"").replaceAll("[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzçéáãõ~´íÃÕÉÇÍÁ﹁!?,'<->=*.+ ]", "").replace("-", "").replace("➧"," ");
 
                     String UserMsg = dataSnapshot.toString().replaceAll("é", "=").replace(",", " ").replace(datadb,"").replace("key", "").replace("{", "").replace("}", "").replace("=", ": ").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replace("➧","").replace(" ","➩").replaceAll("[" + Datan + "]", "").replace("-", " ").replace("﹁", ": ").replace("➩", " ").replace("Data  PM","");
 

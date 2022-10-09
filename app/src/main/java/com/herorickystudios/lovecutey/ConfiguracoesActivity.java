@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -198,6 +199,15 @@ public class ConfiguracoesActivity extends AppCompatActivity {
     idade = idadeField.getText().toString();
     bio = bioField.getText().toString();
     procura = idadeProcuraField.getText().toString();
+
+        //SHARED PREFERENCES PARA REDUZIR O TAMANHO DO CODIGO!
+        SharedPreferences prefs = getSharedPreferences("userPreferencias", MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = prefs.edit();
+
+
+        editor.putString("nome", name);
+        editor.commit();
 
     if(name.isEmpty()  || idade.isEmpty() || bio.isEmpty() || procura.isEmpty()){
         Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();

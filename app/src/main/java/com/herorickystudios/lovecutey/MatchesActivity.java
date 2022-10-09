@@ -32,6 +32,9 @@ public class MatchesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matches);
 
+        //Esconde a action Bar
+        getSupportActionBar().hide();
+
         UIDcurrent = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         String userSex = getIntent().getExtras().getString("userSex");
