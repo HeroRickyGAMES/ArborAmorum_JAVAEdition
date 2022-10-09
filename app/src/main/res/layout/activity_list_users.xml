@@ -11,21 +11,12 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#2B2B2B"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:rotation_degrees="15.5"
         tools:context=".MyActivity"></com.lorentzos.flingswipe.SwipeFlingAdapterView>
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="57dp"
-        android:layout_height="48dp"
-        android:background="@drawable/ic_baseline_exit_to_app_24"
-        android:onClick="deslogbtn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/button3"
@@ -43,9 +34,45 @@
         android:background="@drawable/ic_baseline_chat_bubble_24"
         android:onClick="matchAc"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
-        app:layout_constraintStart_toEndOf="@+id/button3"
-        app:layout_constraintTop_toBottomOf="@+id/frame" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="75dp"
+        android:layout_height="76dp"
+        android:layout_marginStart="24dp"
+        android:background="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/frame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/frame"
+        app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="75dp"
+        android:layout_height="76dp"
+        android:layout_marginEnd="24dp"
+        android:background="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/frame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/frame"
+        app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="75dp"
+        android:layout_height="76dp"
+        android:layout_marginBottom="32dp"
+        android:background="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/frame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_baseline_chat_bubble_outline_24" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

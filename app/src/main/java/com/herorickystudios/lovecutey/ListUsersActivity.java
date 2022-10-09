@@ -421,13 +421,7 @@ public class ListUsersActivity extends AppCompatActivity {
         Toast.makeText(ctx, s, Toast.LENGTH_SHORT).show();
     }
 
-    public void deslogbtn(View view) {
-        FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(this, logiActivity.class);
-        startActivity(intent);
-        finish();
-        return;
-    }
+
 
     private String userSex;
     private String notUserSex;
