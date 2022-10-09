@@ -6,7 +6,8 @@
     <string name="prompt_repassword">Digite novamente sua senha</string>
     <string name="digite_nome">Digite seu nome</string>
     <string name="action_sign_in">Login</string>
-    <string name="toActivityRegister">Registre-se</string>
+    <string name="toActivityRegister">Crie sua conta!</string>
+    <string name="criarconta">Criar conta</string>
     <string name="idadetext">Sua idade</string>
     <string name="idadelabel">Sua idade</string>
     <string name="RegisterText">Você ainda não tem uma conta?</string>
@@ -20,7 +21,4 @@
     <string name="config">Configurações</string>
     <string name="masculino">Masculino</string>
     <string name="feminino">Feminino</string>
-    <string name="gay">Gay</string>
-    <string name="lesbica">Lesbica</string>
-    <string name="bi_sexual">Bi Sexual</string>
 </resources>

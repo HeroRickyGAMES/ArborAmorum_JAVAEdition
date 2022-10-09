@@ -41,6 +41,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.herorickystudios.lovecutey.ui.login.logiActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -289,4 +290,12 @@ public class registerActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Intent intent = new Intent(getApplicationContext(), logiActivity.class);
+        startActivity(intent);
+
+    }
 }
