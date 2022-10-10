@@ -5,6 +5,10 @@
 <h3> </h3>
 <h3> </h3>
 <h3>É um aplicativo de Relacionamento criado com o Android Studio!</h3>
+<h3> </h3>
+<h3>Ele está disponivel na PlayStore!</h3>
+<a href="https://play.google.com/store/apps/details?id=com.herorickystudios.lovecutey">Baixe agora!</a></p>
+<h3> </h3>
 <img src="srcImg/WhatsApp Image 2022-10-09 at 21.20.19.jpeg" alt="Lista usuarios">
 <h3>Funcionabilidades do Aplicativo:</h3>
 <h3>O Aplicativo usa o Firebase Realtime Database do google para gerenciar os usuarios e fazer todo o backend com o servidor.</h3>
