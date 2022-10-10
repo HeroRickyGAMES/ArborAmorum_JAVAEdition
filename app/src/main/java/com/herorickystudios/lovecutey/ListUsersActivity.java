@@ -18,9 +18,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.facebook.ads.AdSize;
+import com.facebook.ads.AdView;
+import com.facebook.ads.AudienceNetworkAds;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -49,6 +53,11 @@ public class ListUsersActivity extends AppCompatActivity {
     private ArrayAdapter arrayAdapter;
     private int i;
 
+    private AdView adView;
+    private String TestString = "";
+
+    private boolean testMode = true;
+
     String APM;
 
     private String nameUser;
@@ -75,7 +84,30 @@ public class ListUsersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_users);
 
 
+        String tst = getString(R.string.testModeAction);
 
+        testMode = Boolean.parseBoolean(tst);
+
+        // Initialize the Audience Network SDK
+        AudienceNetworkAds.initialize(this);
+
+        //Test Mode Verificador
+        if(testMode == true){
+            TestString = "IMG_16_9_APP_INSTALL#";
+        }else if(testMode == false){
+            TestString = "";
+        }
+
+        adView = new AdView(this,  TestString + "826059172156140_826059262156131", AdSize.BANNER_HEIGHT_50);
+
+// Find the Ad Container
+        LinearLayout adContainer = (LinearLayout) findViewById(R.id.banner_container);
+
+// Add the ad view to your activity layout
+        adContainer.addView(adView);
+
+// Request an ad
+        adView.loadAd();
 
 
 
@@ -128,7 +160,6 @@ public class ListUsersActivity extends AppCompatActivity {
                 maleDb.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String data = snapshot.child("Cidade").getValue().toString();
                         nameUser = snapshot.child("nome").getValue().toString();
                         usersDb.child(oppositeUserSex).child(userIdE).child("connections").child("nope").child(UID).setValue(true);
 

@@ -4,6 +4,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <application
         android:allowBackup="true"
@@ -13,6 +15,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LoveCuteY">
         <activity
+            android:name=".NotifyVerify"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".VerifySDK"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".PrimeiraVez"
             android:exported="true">
             <intent-filter>
@@ -20,6 +36,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -41,8 +58,15 @@
             android:exported="true" />
         <activity
             android:name=".ui.login.logiActivity"
+            android:exported="true" />
+
+        <service
+            android:name=".PushNotificationService"
             android:exported="true">
-        </activity>
+            <intent-filter>
+                <action android:name="con.google.firebase.MENSSAGIN_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
