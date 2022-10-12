@@ -9,7 +9,7 @@ android {
         applicationId "com.herorickystudios.lovecutey"
         minSdk 21
         targetSdk 33
-        versionCode 2
+        versionCode 3
         versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

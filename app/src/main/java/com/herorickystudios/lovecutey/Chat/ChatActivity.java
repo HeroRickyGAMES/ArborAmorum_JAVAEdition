@@ -287,9 +287,9 @@ public class ChatActivity extends AppCompatActivity {
 
                     String Datan = dataSnapshot.toString().replace(",", " ").replace(datadb,"").replace("key", "").replace("{", "").replace("}", "").replace("=", "").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replace(nomeUser,"").replace(nameoposite,"").replaceAll("[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzçéáãõ~´íÃÕÉÇÍÁ﹁!?,'<->=*.+ ]", "").replace("-", "").replace("➧"," ");
 
-                    String UserMsg = dataSnapshot.toString().replaceAll("é", "=").replace(",", " ").replace(datadb,"").replace("key", "").replace("{", "").replace("}", "").replace("=", ": ").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replace("➧","").replace(" ","➩").replaceAll("[" + Datan + "]", "").replace("-", " ").replace("﹁", ": ").replace("➩", " ").replace("Data  PM","");
+                    String msg = dataSnapshot.getValue().toString();
 
-                    opositeUserNameI.setText(nameoposite);
+                    String UserMsg = dataSnapshot.toString().replaceAll("é", "=").replace(",", " ").replace(datadb,"").replace("key", "").replace("{", "").replace("}", "").replace("=", ": ").replace("DataSnapshot","").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replace("➧","").replace(" ","➩").replaceAll("[" + Datan + "]", "").replace("-", " ").replace("﹁", ": ").replace("➩", " ").replace("Data  PM","");
 
                     String[] array = Menssage.split("\\s*, \\s* ,");
 
@@ -298,17 +298,17 @@ public class ChatActivity extends AppCompatActivity {
                     onlineTextView.setText(isOnline);
 
 
-                    System.out.println("A data é: " + Datan + " A mensagem é " + UserMsg);
+                    System.out.println("A data é: " + Datan + " A mensagem é " + msg);
 
                     //cardsChat chaatTxt = new cardsChat(Datan, UserMsg);
 
 
                     if(UserMsg.contains(nomeUser)){
-                        cardsChat chaatTxt = new cardsChat(Datan, UserMsg, "https://firebasestorage.googleapis.com/v0/b/lovecutey-95cc0.appspot.com/o/balon%2FblconversaiconUser.png?alt=media&token=d51b0e2e-e294-46aa-ba7e-72b7307cd0fd");
+                        cardsChat chaatTxt = new cardsChat(Datan,nomeUser +  ": " + msg, "https://firebasestorage.googleapis.com/v0/b/lovecutey-95cc0.appspot.com/o/balon%2FblconversaiconUser.png?alt=media&token=d51b0e2e-e294-46aa-ba7e-72b7307cd0fd");
                         list.add(chaatTxt);
                     }
                     if(UserMsg.contains(nameoposite)){
-                        cardsChat chaatTxt = new cardsChat(Datan, UserMsg, "https://firebasestorage.googleapis.com/v0/b/lovecutey-95cc0.appspot.com/o/balon%2FblconversaiconOposite.png?alt=media&token=34bb37c7-ab61-4e91-ad02-e4fecd2b5174");
+                        cardsChat chaatTxt = new cardsChat(Datan, nameoposite +  ": " + msg, "https://firebasestorage.googleapis.com/v0/b/lovecutey-95cc0.appspot.com/o/balon%2FblconversaiconOposite.png?alt=media&token=34bb37c7-ab61-4e91-ad02-e4fecd2b5174");
                         list.add(chaatTxt);
                     }
 
