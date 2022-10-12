@@ -53,6 +53,11 @@ public class ListUsersActivity extends AppCompatActivity {
     private ArrayAdapter arrayAdapter;
     private int i;
 
+    String SexoProcura;
+    String username;
+    String cidadeUsuario;
+    String sexoUsuario;
+
     private AdView adView;
     private String TestString = "";
 
@@ -329,6 +334,8 @@ public class ListUsersActivity extends AppCompatActivity {
                                     intent.putExtra("oppositeUserSex", oppositeUserSex);
                                     startActivity(intent);
 
+
+
                                 }
 
                             }
@@ -470,10 +477,10 @@ public class ListUsersActivity extends AppCompatActivity {
                 if (snapshot.getKey().equals(user.getUid())) {
 
                     //Strings para usar no sharedpreferences e em outras areas do aplicativo
-                    String SexoProcura = snapshot.child("ConfiguracoesPessoais").child("sexoDeProcura").getValue().toString();
-                    String username = snapshot.child("nome").getValue().toString();
-                    String cidadeUsuario = snapshot.child("cidade").getValue().toString();
-                    String sexoUsuario = snapshot.child("Genero").getValue().toString();
+                    SexoProcura = snapshot.child("ConfiguracoesPessoais").child("sexoDeProcura").getValue().toString();
+                    username = snapshot.child("nome").getValue().toString();
+                    cidadeUsuario = snapshot.child("cidade").getValue().toString();
+                    sexoUsuario = snapshot.child("Genero").getValue().toString();
 
 
                     //SHARED PREFERENCES PARA REDUZIR O TAMANHO DO CODIGO!
@@ -493,6 +500,8 @@ public class ListUsersActivity extends AppCompatActivity {
                     userSex = "Masculino";
                     oppositeUserSex = SexoProcura;
                     getOppositeSexUsers();
+
+                    maleDb.child(user.getUid()).child("isOnline").setValue("true");
                 }
             }
 
@@ -542,6 +551,8 @@ public class ListUsersActivity extends AppCompatActivity {
                     userSex = "Feminino";
                     oppositeUserSex = SexoProcura;
                     getOppositeSexUsers();
+
+                    femDB.child(user.getUid()).child("isOnline").setValue("true");
                 }
             }
 
@@ -866,41 +877,61 @@ public class ListUsersActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
 
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
+
+
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         String UID = user.getUid();
-        DatabaseReference recoverydbML = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Masculino").child(UID);
 
-        recoverydbML.child("isOnline").setValue("false");
+        DatabaseReference recoverydbFM = FirebaseDatabase.getInstance().getReference("Usuarios").child(userSex).child(UID);
+
+        recoverydbFM.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.getValue() != null){
+                    recoverydbFM.child("isOnline").setValue("false");
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
         super.onPause();
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onRestart() {
+
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
+
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         String UID = user.getUid();
 
-        DatabaseReference recoverydbML = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Masculino").child(UID);
+        DatabaseReference recoverydbFM = FirebaseDatabase.getInstance().getReference("Usuarios").child(userSex).child(UID);
 
-        recoverydbML.child("isOnline").setValue("true");
+        recoverydbFM.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.getValue() != null){
+                    recoverydbFM.child("isOnline").setValue("true");
+                }
 
-    }
+            }
 
-    @Override
-    protected void onResume() {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            }
+        });
 
-        String UID = user.getUid();
-
-        DatabaseReference recoverydbML = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Masculino").child(UID);
-
-        recoverydbML.child("isOnline").setValue("true");
-
-        super.onResume();
+        super.onRestart();
     }
 }
