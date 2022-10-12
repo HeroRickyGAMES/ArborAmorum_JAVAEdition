@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.herorickystudios.lovecutey.Chat.ChatActivity;
 
 public class MatchesViewHolders extends RecyclerView.ViewHolder implements View.OnClickListener {
-    public TextView MatchID, MatchName;
+    public TextView MatchID;
+    public TextView MatchName;
+    public TextView isOnline;
     public ImageView matchImage;
 
     public MatchesViewHolders(@NonNull View itemView) {
@@ -21,6 +23,7 @@ public class MatchesViewHolders extends RecyclerView.ViewHolder implements View.
 
         MatchID = (TextView) itemView.findViewById(R.id.matchid);
         MatchName = (TextView) itemView.findViewById(R.id.matchName);
+        isOnline = (TextView) itemView.findViewById(R.id.osOnline);
         matchImage = (ImageView) itemView.findViewById(R.id.matchImage);
     }
 
@@ -32,13 +35,19 @@ public class MatchesViewHolders extends RecyclerView.ViewHolder implements View.
         Bundle b = new Bundle();
         b.putString("matchId",MatchID.getText().toString());
         b.putString("nameOposite",MatchName.getText().toString());
+        b.putString("nameOposite",MatchName.getText().toString());
+        b.putString("isOnline",isOnline.getText().toString());
+
 
         String MatchIDd= MatchID.toString();
         String nameOposite= MatchName.toString();
+        String osOnline= isOnline.getText().toString();
 
         intent.putExtras(b);
         intent.putExtra("MatchIdd", MatchIDd);
         intent.putExtra("NameOposite", nameOposite);
+        intent.putExtra("isOnline", osOnline);
+
         v.getContext().startActivity(intent);
     }
 }

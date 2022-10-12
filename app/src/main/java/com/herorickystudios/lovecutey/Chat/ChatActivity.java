@@ -35,11 +35,11 @@ public class ChatActivity extends AppCompatActivity {
     ArrayList<cardsChat> list;
     private RecyclerView.LayoutManager ChatLayoutManager;
 
-    private String UIDcurrent, matchId, chatId, MatchIDD, nameoposite;
+    private String UIDcurrent, matchId, chatId, MatchIDD, nameoposite, isOnline;
     int intero = 1;
     Boolean clicou = false;
 
-    TextView opositeUserNameI;
+    TextView opositeUserNameI, onlineTextView;
 
     String APM;
 
@@ -67,6 +67,7 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         opositeUserNameI = findViewById(R.id.userNameInterfece);
+        onlineTextView = findViewById(R.id.onlineTextView);
 
         list = new ArrayList<cardsChat>();
         adapter = new chatAdapter(this, list);
@@ -92,6 +93,7 @@ public class ChatActivity extends AppCompatActivity {
 
         matchId = getIntent().getExtras().getString("matchId");
         nameoposite = getIntent().getExtras().getString("nameOposite");
+        isOnline = getIntent().getExtras().getString("isOnline");
 
         MatchIDD = getIntent().getExtras().getString("MatchIdd");
 
@@ -293,6 +295,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     tagArray = Arrays.asList(array);
 
+                    onlineTextView.setText(isOnline);
 
 
                     System.out.println("A data é: " + Datan + " A mensagem é " + UserMsg);

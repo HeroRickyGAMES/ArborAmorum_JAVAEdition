@@ -15,7 +15,7 @@ import java.util.List;
 public class MatchesAdapter extends RecyclerView.Adapter<MatchesViewHolders> {
     private List<MatchesObject> matchesList;
     private Context context;
-
+    private String isOnline;
 
     public MatchesAdapter(List<MatchesObject> matchesList, Context context){
         this.matchesList = matchesList;
@@ -39,6 +39,8 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesViewHolders> {
     public void onBindViewHolder(@NonNull MatchesViewHolders holder, int position) {
         holder.MatchID.setText(matchesList.get(position).getUserID());
         holder.MatchName.setText(matchesList.get(position).getName());
+        holder.isOnline.setText(matchesList.get(position).getIsOnline());
+
         Glide.with(context).load(matchesList.get(position).getProfileImageUrl()).into(holder.matchImage);
     }
 

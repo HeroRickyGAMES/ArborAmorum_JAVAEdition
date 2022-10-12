@@ -28,9 +28,11 @@ public class MatchesActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter MatchesAdaper;
     private RecyclerView.LayoutManager MatchesLayoutManager;
-
+    private boolean online;
     private AdView adView;
     private String TestString = "";
+    private String isOnline;
+    private String on;
 
     private boolean testMode = true;
 
@@ -129,10 +131,32 @@ public class MatchesActivity extends AppCompatActivity {
                 if (snapshot.exists()){
                     String userID = snapshot.getKey();
                     String name = snapshot.child("nome").getValue().toString();
+
+                    isOnline = snapshot.child("isOnline").getValue().toString();
+
+                    if(isOnline.equals("true")){
+
+                        online = true;
+
+                    }else if(isOnline.equals("false")){
+
+                        online = false;
+
+                    }
+
+                    if(online == true){
+
+                        on = "Online";
+
+                    }else if(online == false){
+
+                        on = "Offline";
+
+                    }
+
                     String profileUrl = snapshot.child("profileImageUri").child(userID).getValue().toString();
 
-
-                    MatchesObject obj = new MatchesObject(userID, name, profileUrl);
+                    MatchesObject obj = new MatchesObject(userID, name, profileUrl, on);
                     resultsMatches.add(obj);
                     MatchesAdaper.notifyDataSetChanged();
                 }

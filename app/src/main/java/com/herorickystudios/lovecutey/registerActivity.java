@@ -206,6 +206,7 @@ public class registerActivity extends AppCompatActivity {
 
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("nome").setValue(nome);
                                             referencia.child(genero).child(getUID).child("nome").setValue(nome);
+                                            referencia.child(genero).child(getUID).child("isOnline").setValue("true");
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("email").setValue(email);
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("idade").setValue(idade);
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("bio").setValue("Digite sua Bio!");

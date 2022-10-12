@@ -1,11 +1,15 @@
 package com.herorickystudios.lovecutey.Chat;
 
+import android.content.ClipData;
+import android.content.ClipDescription;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +25,8 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.MyViewHolder> 
     Context context;
     ArrayList<cardsChat> list;
     public ImageView bgPhoto;
+    public String st;
+
 
     public chatAdapter(Context context, ArrayList<cardsChat> list) {
         this.context = context;
@@ -37,19 +43,20 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
+
+
         cardsChat users = list.get(position);
         holder.name.setText(users.getName());
         holder.mensage.setText(users.getMenssage());
 
         Glide.with(context).load(list.get(position).getPhotoBG()).into(holder.photoBG);
     }
-
     @Override
     public int getItemCount() {
         return list.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ImageView bgPhoto;
         TextView name, mensage;
@@ -58,11 +65,22 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.MyViewHolder> 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            itemView.setOnClickListener(this);
+
             name = itemView.findViewById(R.id.usernameCard);
             mensage = itemView.findViewById(R.id.Menssage);
             photoBG = itemView.findViewById(R.id.photoBG);
 
+            //st = mensage.getText().toString();
+
+        }
+
+        @Override
+        public void onClick(View v) {
+
         }
     }
+
+
 
 }

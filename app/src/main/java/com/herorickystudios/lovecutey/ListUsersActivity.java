@@ -863,4 +863,44 @@ public class ListUsersActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    protected void onPause() {
+
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        String UID = user.getUid();
+        DatabaseReference recoverydbML = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Masculino").child(UID);
+
+        recoverydbML.child("isOnline").setValue("false");
+
+        super.onPause();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        String UID = user.getUid();
+
+        DatabaseReference recoverydbML = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Masculino").child(UID);
+
+        recoverydbML.child("isOnline").setValue("true");
+
+    }
+
+    @Override
+    protected void onResume() {
+
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        String UID = user.getUid();
+
+        DatabaseReference recoverydbML = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Masculino").child(UID);
+
+        recoverydbML.child("isOnline").setValue("true");
+
+        super.onResume();
+    }
 }
