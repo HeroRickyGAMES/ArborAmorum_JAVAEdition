@@ -100,6 +100,7 @@ public class ChatActivity extends AppCompatActivity {
         mandarEditText = findViewById(R.id.menssage);
         Mandar = findViewById(R.id.send);
 
+        opositeUserNameI.setText(nameoposite);
         String currentUserID = FirebaseAuth.getInstance().getUid();
 
 
