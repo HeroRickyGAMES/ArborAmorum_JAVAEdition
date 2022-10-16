@@ -875,7 +875,7 @@ public class ListUsersActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
+    protected void onStop() {
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
 
@@ -902,7 +902,7 @@ public class ListUsersActivity extends AppCompatActivity {
         });
 
 
-        super.onPause();
+        super.onStop();
     }
 
     @Override
