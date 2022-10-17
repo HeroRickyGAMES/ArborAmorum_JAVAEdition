@@ -13,8 +13,10 @@
         android:background="#2B2B2B"
         app:layout_constraintBottom_toTopOf="@+id/banner_container"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
         app:rotation_degrees="15.5"
         tools:context=".MyActivity"></com.lorentzos.flingswipe.SwipeFlingAdapterView>
 
@@ -22,15 +24,20 @@
         android:id="@+id/button3"
         android:layout_width="52dp"
         android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/ic_baseline_settings_24"
         android:onClick="goToSettings"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="51dp"
         android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/ic_baseline_chat_bubble_24"
         android:onClick="matchAc"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -43,12 +50,10 @@
         android:layout_height="76dp"
         android:layout_marginStart="24dp"
         android:background="#00FFFFFF"
-        app:layout_constraintBottom_toBottomOf="@+id/frame"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/frame"
-        app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
+        app:srcCompat="@drawable/ic_baseline_arrow_back_ios_new_24" />
 
     <ImageView
         android:id="@+id/imageView7"
@@ -56,10 +61,8 @@
         android:layout_height="76dp"
         android:layout_marginEnd="24dp"
         android:background="#00FFFFFF"
-        app:layout_constraintBottom_toBottomOf="@+id/frame"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView8"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/frame"
         app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
 
@@ -76,9 +79,12 @@
 
     <LinearLayout
         android:id="@+id/banner_container"
-        android:layout_width="375dp"
+        android:layout_width="0dp"
         android:layout_height="57dp"
         android:layout_alignParentBottom="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
