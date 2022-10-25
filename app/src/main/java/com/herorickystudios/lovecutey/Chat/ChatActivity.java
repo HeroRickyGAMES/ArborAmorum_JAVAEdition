@@ -63,7 +63,7 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         recyclerView = findViewById(R.id.recyclerChat);
-        recyclerView.setHasFixedSize(true);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         opositeUserNameI = findViewById(R.id.userNameInterfece);
@@ -242,7 +242,6 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
-        recyclerView.setHasFixedSize(true);
         ChatLayoutManager = new LinearLayoutManager(ChatActivity.this);
         recyclerView.setLayoutManager(ChatLayoutManager);
 

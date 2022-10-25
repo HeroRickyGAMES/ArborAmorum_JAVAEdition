@@ -528,11 +528,11 @@ public class ListUsersActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
                 if (snapshot.getKey().equals(user.getUid())) {
-                    String SexoProcura = snapshot.child("ConfiguracoesPessoais").child("sexoDeProcura").getValue().toString();
+                    SexoProcura = snapshot.child("ConfiguracoesPessoais").child("sexoDeProcura").getValue().toString();
 
-                    String username = snapshot.child("nome").getValue().toString();
-                    String cidadeUsuario = snapshot.child("cidade").getValue().toString();
-                    String sexoUsuario = snapshot.child("Genero").getValue().toString();
+                    username = snapshot.child("nome").getValue().toString();
+                    cidadeUsuario = snapshot.child("cidade").getValue().toString();
+                    sexoUsuario = snapshot.child("Genero").getValue().toString();
 
 
                     //SHARED PREFERENCES PARA REDUZIR O TAMANHO DO CODIGO!

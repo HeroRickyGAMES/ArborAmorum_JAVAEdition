@@ -53,7 +53,7 @@ public class MatchesActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerChat);
         recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setHasFixedSize(true);
+
         MatchesLayoutManager = new LinearLayoutManager(MatchesActivity.this);
         recyclerView.setLayoutManager(MatchesLayoutManager);
 
