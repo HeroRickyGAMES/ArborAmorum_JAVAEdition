@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -111,8 +112,13 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 // Request an ad
         adView.loadAd();
 
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
+
+        String cidadeUsuario = prefs.getString("cidadeUsuario", "");
+
+
         String userSex = getIntent().getExtras().getString("userSex");
-        String cidade = getIntent().getExtras().getString("cidade");
+        String cidade = cidadeUsuario;
         nameField = findViewById(R.id.name);
         idadeField = findViewById(R.id.idade);
         bioField = findViewById(R.id.bio);

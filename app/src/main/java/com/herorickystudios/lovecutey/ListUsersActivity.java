@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.IntStream;
 
 //Programado por HeroRickyGames
 
@@ -77,6 +78,8 @@ public class ListUsersActivity extends AppCompatActivity {
 
     ListView listView;
     List<cards> rowItems;
+
+    private String idadeUsuario;
 
     //API para a localização dos usuarios
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -168,6 +171,7 @@ public class ListUsersActivity extends AppCompatActivity {
                         nameUser = snapshot.child("nome").getValue().toString();
                         usersDb.child(oppositeUserSex).child(userIdE).child("connections").child("nope").child(UID).setValue(true);
 
+                        arrayAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -204,6 +208,8 @@ public class ListUsersActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                         usersDb.child(oppositeUserSex).child(userIdE).child("connections").child("yeps").child(UID).setValue(true);
+
+                        arrayAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -224,7 +230,7 @@ public class ListUsersActivity extends AppCompatActivity {
             public void onScroll(float scrollProgressPercent) {
                 //View view = flingContainer.getSelectedView();
                 //view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
-                //view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
+               //view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
             }
         });
 
@@ -533,6 +539,7 @@ public class ListUsersActivity extends AppCompatActivity {
                     username = snapshot.child("nome").getValue().toString();
                     cidadeUsuario = snapshot.child("cidade").getValue().toString();
                     sexoUsuario = snapshot.child("Genero").getValue().toString();
+                    idadeUsuario = snapshot.child(cidadeUsuario).child("Dados do Usuario").child("idade").getValue().toString();
 
 
                     //SHARED PREFERENCES PARA REDUZIR O TAMANHO DO CODIGO!
@@ -697,11 +704,12 @@ public class ListUsersActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             String idadeConfig = snapshot.child("ConfiguracoesPessoais").child("IdadeLimite").getValue().toString();
                             DatabaseReference opositeSexDb = FirebaseDatabase.getInstance().getReference().child("Usuarios").child(oppositeUserSex);
+
                             opositeSexDb.addChildEventListener(new ChildEventListener() {
                                 @Override
                                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                                    if (snapshot.exists() && !snapshot.child("connections").child("nope").hasChild(UID) && !snapshot.child("connections").child("yeps").hasChild(UID) && snapshot.hasChild(cidade))    {
 
-                                    if (snapshot.exists() && !snapshot.child("connections").child("nope").hasChild(UID) && !snapshot.child("connections").child("yeps").hasChild(UID)) {
 
 
 
@@ -713,38 +721,83 @@ public class ListUsersActivity extends AppCompatActivity {
                                         //Idade Configurada pelo proprio usuario
                                         int idadeConfigC = Integer.parseInt(idadeConfig);
 
-                                        cards Item = new cards( snapshot.getKey(), (String) snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue(), profileUrl, String.valueOf(idadeConfigC), cidade);
+                                        String cidadeOposite = String.valueOf(snapshot.child("cidade").getValue());
+
+
+
+
+
 
                                         //Pega a idade do usuario para filtrar
-                                        int idadeU = Integer.parseInt(snapshot.child(cidade).child("Dados do Usuario").child("idade").getValue().toString());
+
+                                        String idadeU = String.valueOf(snapshot.child(cidadeOposite).child("Dados do Usuario").child("idade").getValue());
 
 
-                                        if(idadeU <= idadeConfigC){
-                                            System.out.println("As informações estão sendo exibidas com sucesso!");
+
+                                        System.out.println(cidadeOposite);
+
+                                        if (Integer.parseInt(idadeU) <= idadeConfigC) {
+
+                                            cards Item = new cards(snapshot.getKey(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString(), profileUrl, idadeU, String.valueOf(snapshot.child("cidade").getValue()));
 
                                             rowItems.add(Item);
                                             arrayAdapter.notifyDataSetChanged();
 
-                                        }else{
+                                        } else {
 
                                         }
+
+
+
                                     }
                                 }
 
                                 @Override
                                 public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                                    int primeiro_elemento = rowItems.size();
+
+                                    int enesimo_elemento_multiplo_3 = 1000 - (1000 % 3);
+                                    int enesimo_elemento_multiplo_5 = 1000 - (1000 % 5);
+                                    int enesimo_elemento_multiplo_15 = 1000 - (1000 % 15);
+
+                                    double n_multiplo_3 = Math.ceil(1000 / 3.0);
+                                    double n_multiplo_5 = Math.ceil(1000 / 5.0);
+                                    double n_multiplo_15 = Math.ceil(1000 / 15.0);
+
+                                    double soma_multiplo_3 = (primeiro_elemento + enesimo_elemento_multiplo_3) * n_multiplo_3 / 2.0;
+                                    double soma_multiplo_5 = (primeiro_elemento + enesimo_elemento_multiplo_5) * n_multiplo_5 / 2.0;
+                                    double soma_multiplo_15 = (primeiro_elemento + enesimo_elemento_multiplo_15) * n_multiplo_15 / 2.0;
+
+                                    double soma = soma_multiplo_3 + soma_multiplo_5 - soma_multiplo_15;
+
+                                    System.out.println(soma_multiplo_5);
+
+
+                                    if( rowItems.size() == (1000 % 5)){
+                                        System.out.println("O multiplo é 5");
+                                    }else{
+                                        System.out.println("Não é");
+                                    }
+
+                                    System.out.println("O tamanho da lista é: " + rowItems.size());
+
+
+                                    System.out.println("As informações estão sendo exibidas com sucesso!");
                                 }
 
                                 @Override
                                 public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
                                 }
 
                                 @Override
                                 public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
                                 }
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
+
                                 }
                             });
                         }
