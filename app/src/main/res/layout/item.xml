@@ -26,7 +26,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center">
 
             <ImageView
@@ -41,11 +41,12 @@
                 android:layout_height="wrap_content"
                 android:background="#00FFFFFF"
                 android:gravity="center"
-                android:paddingTop="720dp"
+                android:paddingTop="690dp"
                 android:textColor="#FFFFFF"
                 android:textColorHighlight="@android:color/black"
                 android:textSize="40sp"
                 android:textStyle="bold"
+                style="@style/AudioFileInfoOverlayText"
                 tools:text="Mundo achar você uma florzinha" />
 
             <TextView
@@ -58,7 +59,8 @@
                 android:paddingHorizontal="90sp"
                 android:textSize="34sp"
                 android:textStyle="bold"
-                tools:text="Cidade" />
+                tools:text="Cidade"
+                style="@style/AudioFileInfoOverlayText"/>
 
             <TextView
                 android:id="@+id/idade"
@@ -69,7 +71,19 @@
                 android:background="#00FFFFFF"
                 android:paddingHorizontal="90sp"
                 android:textSize="48sp"
-                tools:text="20" />
+                tools:text="20"
+                style="@style/AudioFileInfoOverlayText"/>
+
+            <TextView
+                android:id="@+id/bioText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="100dp"
+                android:background="#00FFFFFF"
+                android:text="BioTEXT"
+                style="@style/AudioFileInfoOverlayText"
+                android:textSize="30sp" />
 
             <View
                 android:id="@+id/item_swipe_left_indicator"

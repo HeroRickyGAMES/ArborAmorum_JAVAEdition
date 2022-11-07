@@ -58,6 +58,8 @@ public class ListUsersActivity extends AppCompatActivity {
     String username;
     String cidadeUsuario;
     String sexoUsuario;
+    String Bio;
+    String isFistTime;
 
     private AdView adView;
     private String TestString = "";
@@ -83,8 +85,6 @@ public class ListUsersActivity extends AppCompatActivity {
 
     //API para a localização dos usuarios
     FusedLocationProviderClient fusedLocationProviderClient;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -495,13 +495,12 @@ public class ListUsersActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = prefs.edit();
 
 
-
                     editor.putString("nome", username);
+
                     editor.putString("SexoProcura", SexoProcura);
                     editor.putString("sexoUsuario", sexoUsuario);
                     editor.putString("cidadeUsuario", cidadeUsuario);
                     editor.commit();
-
 
                     userSex = "Masculino";
                     oppositeUserSex = SexoProcura;
@@ -738,7 +737,14 @@ public class ListUsersActivity extends AppCompatActivity {
 
                                         if (Integer.parseInt(idadeU) <= idadeConfigC) {
 
-                                            cards Item = new cards(snapshot.getKey(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString(), profileUrl, idadeU, String.valueOf(snapshot.child("cidade").getValue()));
+                                            Bio = String.valueOf(snapshot.child(cidade).child("Dados do Usuario").child("bio").getValue());
+
+                                            if(Bio.equals("Digite sua Bio!")){
+                                                Bio = "Sem bio :(";
+                                            }
+
+                                            //O que mostra na interface
+                                            cards Item = new cards(snapshot.getKey(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString(), profileUrl, idadeU, String.valueOf(snapshot.child("cidade").getValue()), Bio);
 
                                             rowItems.add(Item);
                                             arrayAdapter.notifyDataSetChanged();

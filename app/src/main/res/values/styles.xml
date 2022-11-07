@@ -4,5 +4,10 @@
         <item name="android:background">@drawable/edit_text</item>
     </style>
 
-
+    <style name="AudioFileInfoOverlayText">
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
+    </style>
 </resources>

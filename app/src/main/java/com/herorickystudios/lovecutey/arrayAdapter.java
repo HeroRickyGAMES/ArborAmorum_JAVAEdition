@@ -32,12 +32,14 @@ public class arrayAdapter extends ArrayAdapter<cards>{
         TextView name = (TextView) convertView.findViewById(R.id.name);
         TextView idade = (TextView) convertView.findViewById(R.id.idade);
         TextView cidade = (TextView) convertView.findViewById(R.id.cidade);
+        TextView bio = (TextView) convertView.findViewById(R.id.bioText);
         ImageView image = (ImageView) convertView.findViewById(R.id.image);
 
 
         name.setText(card_item.getName());
         idade.setText(card_item.getIdade());
         cidade.setText(card_item.getLocal());
+        bio.setText(card_item.getBio());
         Glide.with(getContext()).load(card_item.getProfileImageURI()).into(image);
 
         return convertView;

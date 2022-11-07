@@ -10,16 +10,27 @@ public class cards {
     private String name;
     private String idade;
     private String local;
+    private String bio;
     private String profileImageURI;
 
-    public cards(String userID, String name, String profileImageURI, String idade, String local){
+    public cards(String userID, String name, String profileImageURI, String idade, String local, String bio){
         this.userID = userID;
         this.name = name;
         this.idade = idade;
         this.local = local;
+        this.bio = bio;
         this.profileImageURI = profileImageURI;
 
     }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
     public String getUserID(){
         return userID;
     }
