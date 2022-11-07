@@ -25,6 +25,7 @@
 <h3>❌ Notificações do Servidor</h3>
 <h3>❌ Notificações dos Chats</h3>
 <h3>❌ Notificações dos Matchs</h3>
+<h3>✅ Chat por localização</h3>
 <h3> </h3>
 <img src="srcImg/WhatsApp Image 2022-10-09 at 21.20.19.jpeg" alt="Lista usuarios">
 <h3>Funcionabilidades do Aplicativo:</h3>
