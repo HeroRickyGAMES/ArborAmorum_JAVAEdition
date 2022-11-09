@@ -73,8 +73,8 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-location:21.0.1'
 
-    //facebookads
-    implementation 'com.facebook.android:audience-network-sdk:6.12.0'
+    //Start.io Ads
+    implementation 'com.startapp:inapp-sdk:4.10.+'
 
     //Firebase Menssaging
     implementation 'com.google.firebase:firebase-messaging'

@@ -23,9 +23,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.facebook.ads.AdSize;
-import com.facebook.ads.AdView;
-import com.facebook.ads.AudienceNetworkAds;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -67,7 +64,6 @@ public class registerActivity extends AppCompatActivity {
 
     LocationRequest locationRequest;
 
-    private AdView adView;
     private String TestString = "";
 
     private boolean testMode = true;
@@ -102,8 +98,6 @@ public class registerActivity extends AppCompatActivity {
 
         testMode = Boolean.parseBoolean(tst);
 
-        // Initialize the Audience Network SDK
-        AudienceNetworkAds.initialize(this);
 
         //Test Mode Verificador
         if(testMode == true){
@@ -111,19 +105,6 @@ public class registerActivity extends AppCompatActivity {
         }else if(testMode == false){
             TestString = "";
         }
-
-        adView = new AdView(this,  TestString + "826059172156140_826059262156131", AdSize.BANNER_HEIGHT_50);
-
-// Find the Ad Container
-        LinearLayout adContainer = (LinearLayout) findViewById(R.id.banner_container);
-
-// Add the ad view to your activity layout
-        adContainer.addView(adView);
-
-// Request an ad
-        adView.loadAd();
-
-
 
 
         //Esconde a action Bar

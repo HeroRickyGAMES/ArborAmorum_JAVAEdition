@@ -14,6 +14,12 @@
         android:roundIcon="@mipmap/ic_laun"
         android:supportsRtl="true"
         android:theme="@style/Theme.LoveCuteY">
+
+        <!-- TODO replace YOUR_APP_ID with actual value -->
+        <meta-data
+            android:name="com.startapp.sdk.APPLICATION_ID"
+            android:value="209689506" />
+
         <activity
             android:name=".NotifyVerify"
             android:exported="false">
