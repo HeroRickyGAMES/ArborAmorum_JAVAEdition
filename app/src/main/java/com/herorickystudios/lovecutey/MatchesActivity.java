@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.startapp.sdk.adsbase.StartAppSDK;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,12 +66,9 @@ public class MatchesActivity extends AppCompatActivity {
         testMode = Boolean.parseBoolean(tst);
 
 
-        //Test Mode Verificador
-        if(testMode == true){
-            TestString = "IMG_16_9_APP_INSTALL#";
-        }else if(testMode == false){
-            TestString = "";
-        }
+        // NOTE always use test ads during development and testing
+        StartAppSDK.setTestAdsEnabled(testMode);
+
     }
 
     private ArrayList<MatchesObject> resultsMatches = new ArrayList<MatchesObject>();

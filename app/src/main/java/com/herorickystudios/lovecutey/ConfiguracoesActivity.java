@@ -38,6 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.startapp.sdk.adsbase.StartAppAd;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -92,7 +93,6 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
 
 
-
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
 
         String cidadeUsuario = prefs.getString("cidadeUsuario", "");
@@ -127,6 +127,9 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         viewAD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //Mostra o Interstitial Ad
+                StartAppAd.showAd(getApplicationContext());
 
                 idadeProcuraField.setVisibility(View.VISIBLE);
                 textIdadeLimitInfo.setVisibility(View.VISIBLE);
