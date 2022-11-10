@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.herorickystudios.lovecutey.ui.login.logiActivity;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
+import com.startapp.sdk.adsbase.StartAppSDK;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -100,6 +102,8 @@ public class ListUsersActivity extends AppCompatActivity {
             TestString = "";
         }
 
+        // Starta a SDK
+        StartAppSDK.setTestAdsEnabled(testMode);
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         String UID = user.getUid();
@@ -667,11 +671,22 @@ public class ListUsersActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Location location) {
 
+                    if(location == null){
+
+                        Toast.makeText(ListUsersActivity.this, "O seu GPS está desativado! Por favor, ative o GPS para conseguir usar o Arbor Amorum!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ListUsersActivity.this, "Clique no FAB que centraliza a localização, pós isso, volte ao aplicativo!", Toast.LENGTH_LONG).show();
+
+                        Uri uri = Uri.parse("https://www.google.pt/maps");
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }
+
                     Geocoder geocoder = new Geocoder(ListUsersActivity.this);
 
                     List<Address> addresses = null;
                     try {
                         addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -819,29 +834,6 @@ public class ListUsersActivity extends AppCompatActivity {
                         System.out.println("LOCALIZAÇÃO EXATA: " + cidade);
                     } catch (Exception e) {
                         System.out.println("Não foi possivel encontrar sua localização!" + e);
-                    }
-
-                    System.out.println(location.getLatitude());
-                    System.out.println(location.getLongitude());
-                    System.out.println(location.getLongitude());
-
-
-
-
-                    if (location.hasAltitude()) {
-                        System.out.println("Latitude " + location.getLatitude());
-                    } else {
-                        System.out.println("Não disponivel");
-                    }
-                    if (location.hasSpeed()) {
-                        System.out.println("Velocidade " + location.getSpeed());
-                    } else {
-                        System.out.println("Não disponivel");
-                    }
-                    if (location.hasAltitude()) {
-                        System.out.println("Altitude " + location.getLatitude());
-                    } else {
-                        System.out.println("Não disponivel");
                     }
                 }
             });

@@ -66,9 +66,6 @@ public class MatchesActivity extends AppCompatActivity {
         testMode = Boolean.parseBoolean(tst);
 
 
-        // NOTE always use test ads during development and testing
-        StartAppSDK.setTestAdsEnabled(testMode);
-
     }
 
     private ArrayList<MatchesObject> resultsMatches = new ArrayList<MatchesObject>();

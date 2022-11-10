@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -141,11 +142,22 @@ public class registerActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Location location) {
 
+                    if(location == null){
+
+                        Toast.makeText(registerActivity.this, "O seu GPS está desativado! Por favor, ative o GPS para conseguir usar o Arbor Amorum!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(registerActivity.this, "Clique no FAB que centraliza a localização, pós isso, volte ao aplicativo!", Toast.LENGTH_LONG).show();
+
+                        Uri uri = Uri.parse("https://www.google.pt/maps");
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }
+
                     Geocoder geocoder = new Geocoder(registerActivity.this);
                     try{
                         List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 
                         String cidade = addresses.get(0).getSubAdminArea();
+
 
                         //Codigos de registro
                         register_button.setOnClickListener(new View.OnClickListener() {

@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -187,6 +188,16 @@ public class logiActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Location location) {
 
+                    if(location == null){
+
+                        Toast.makeText(logiActivity.this, "O seu GPS está desativado! Por favor, ative o GPS para conseguir usar o Arbor Amorum!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(logiActivity.this, "Clique no FAB que centraliza a localização, pós isso, volte ao aplicativo!", Toast.LENGTH_LONG).show();
+
+                        Uri uri = Uri.parse("https://www.google.pt/maps");
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }
+
                     Geocoder geocoder = new Geocoder(logiActivity.this);
                     try {
                         List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
@@ -198,27 +209,6 @@ public class logiActivity extends AppCompatActivity {
                         System.out.println("LOCALIZAÇÃO EXATA: " + cidade);
                     } catch (Exception e) {
                         System.out.println("Não foi possivel encontrar sua localização!" + e);
-                    }
-
-                    System.out.println(location.getLatitude());
-                    System.out.println(location.getLongitude());
-                    System.out.println(location.getLongitude());
-                    System.out.println(location.getAccuracy());
-
-                    if (location.hasAltitude()) {
-                        System.out.println("Latitude " + location.getLatitude());
-                    } else {
-                        System.out.println("Não disponivel");
-                    }
-                    if (location.hasSpeed()) {
-                        System.out.println("Velocidade " + location.getSpeed());
-                    } else {
-                        System.out.println("Não disponivel");
-                    }
-                    if (location.hasAltitude()) {
-                        System.out.println("Altitude " + location.getLatitude());
-                    } else {
-                        System.out.println("Não disponivel");
                     }
                 }
             });

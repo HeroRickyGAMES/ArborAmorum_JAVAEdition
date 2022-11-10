@@ -56,7 +56,7 @@
         app:layout_constraintEnd_toEndOf="@+id/imageView4"
         app:layout_constraintStart_toStartOf="@+id/imageView4"
         app:layout_constraintTop_toTopOf="@+id/imageView4" />
-    <LinearLayout
+    <com.startapp.sdk.ads.banner.Banner
         android:id="@+id/banner_container"
         android:layout_width="375dp"
         android:layout_height="57dp"

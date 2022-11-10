@@ -12,99 +12,105 @@
     android:paddingRight="40sp"
     android:paddingBottom="20sp">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:elevation="2dp"
-        app:cardCornerRadius="4dp"
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center">
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        style="@style/AudioFileInfoOverlayText"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="100dp"
+        android:background="#00FFFFFF"
+        android:gravity="center"
+        android:text="Mundo achar você uma florzinha"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="@android:color/black"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/image"
+        app:layout_constraintEnd_toEndOf="@+id/image"
+        app:layout_constraintStart_toStartOf="@+id/image" />
 
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
+    <TextView
+        android:id="@+id/cidade"
+        style="@style/AudioFileInfoOverlayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="#00FFFFFF"
+        android:paddingHorizontal="90sp"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/image"
+        app:layout_constraintStart_toStartOf="@+id/image"
+        app:layout_constraintTop_toBottomOf="@+id/idade"
+        tools:text="Cidade" />
 
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#00FFFFFF"
-                android:gravity="center"
-                android:paddingTop="690dp"
-                android:textColor="#FFFFFF"
-                android:textColorHighlight="@android:color/black"
-                android:textSize="40sp"
-                android:textStyle="bold"
-                style="@style/AudioFileInfoOverlayText"
-                tools:text="Mundo achar você uma florzinha" />
+    <TextView
+        android:id="@+id/idade"
+        style="@style/AudioFileInfoOverlayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#00FFFFFF"
+        android:paddingHorizontal="90sp"
+        android:textSize="48sp"
+        app:layout_constraintEnd_toEndOf="@+id/image"
+        app:layout_constraintStart_toStartOf="@+id/image"
+        app:layout_constraintTop_toTopOf="@+id/image"
+        tools:text="20" />
 
-            <TextView
-                android:id="@+id/cidade"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="90dp"
-                android:background="#00FFFFFF"
-                android:paddingHorizontal="90sp"
-                android:textSize="34sp"
-                android:textStyle="bold"
-                tools:text="Cidade"
-                style="@style/AudioFileInfoOverlayText"/>
+    <TextView
+        android:id="@+id/bioText"
+        style="@style/AudioFileInfoOverlayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginTop="16dp"
+        android:background="#00FFFFFF"
+        android:text="BioTEXT"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline7" />
 
-            <TextView
-                android:id="@+id/idade"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="30dp"
-                android:background="#00FFFFFF"
-                android:paddingHorizontal="90sp"
-                android:textSize="48sp"
-                tools:text="20"
-                style="@style/AudioFileInfoOverlayText"/>
+    <View
+        android:id="@+id/item_swipe_left_indicator"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="20dp"
+        android:alpha="0"
+        android:background="#A5F"
+        app:layout_constraintStart_toStartOf="@+id/image"
+        app:layout_constraintTop_toTopOf="@+id/image" />
 
-            <TextView
-                android:id="@+id/bioText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center"
-                android:layout_marginBottom="100dp"
-                android:background="#00FFFFFF"
-                android:text="BioTEXT"
-                style="@style/AudioFileInfoOverlayText"
-                android:textSize="30sp" />
+    <View
+        android:id="@+id/item_swipe_right_indicator"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="right"
+        android:layout_margin="10dp"
+        android:alpha="0"
+        android:background="#5AF"
+        app:layout_constraintEnd_toEndOf="@+id/image"
+        app:layout_constraintTop_toTopOf="@+id/image" />
 
-            <View
-                android:id="@+id/item_swipe_left_indicator"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_margin="20dp"
-                android:alpha="0"
-                android:background="#A5F" />
-
-            <View
-                android:id="@+id/item_swipe_right_indicator"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="right"
-                android:layout_margin="10dp"
-                android:alpha="0"
-                android:background="#5AF" />
-
-        </FrameLayout>
-
-
-    </androidx.cardview.widget.CardView>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.67" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

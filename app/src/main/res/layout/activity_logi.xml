@@ -120,7 +120,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
+            <com.startapp.sdk.ads.banner.Banner
                 android:id="@+id/banner_container"
                 android:layout_width="0dp"
                 android:layout_height="57dp"
