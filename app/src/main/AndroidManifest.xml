@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -66,13 +67,13 @@
             android:name=".ui.login.logiActivity"
             android:exported="true" />
 
-        <service
-            android:name=".PushNotificationService"
+        <receiver android:name=".BootCompletedIntentReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="con.google.firebase.MENSSAGIN_EVENT" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-        </service>
+        </receiver>
+        <service android:name=".PushNotificationService"/>
     </application>
 
 </manifest>

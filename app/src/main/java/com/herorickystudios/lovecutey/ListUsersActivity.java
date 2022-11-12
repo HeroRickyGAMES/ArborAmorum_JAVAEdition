@@ -90,6 +90,8 @@ public class ListUsersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_users);
 
 
+        startService(new Intent(getBaseContext(), PushNotificationService.class));
+
         String tst = getString(R.string.testModeAction);
 
         testMode = Boolean.parseBoolean(tst);
