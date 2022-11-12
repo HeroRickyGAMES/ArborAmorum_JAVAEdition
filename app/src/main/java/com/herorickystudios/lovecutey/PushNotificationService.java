@@ -146,7 +146,7 @@ public class PushNotificationService extends Service {
                                                             Notification.Builder builder = null;
                                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                                                 builder = new Notification.Builder(getApplicationContext(), CHANNEL_ID)
-                                                                        .setContentTitle("titulo")
+                                                                        .setContentTitle("Chegou uma nova Mensagem! Verifique nos chats!!")
                                                                         .setContentText(msg)
                                                                         .setSmallIcon(R.drawable.hearticon)
                                                                         .setAutoCancel(true);

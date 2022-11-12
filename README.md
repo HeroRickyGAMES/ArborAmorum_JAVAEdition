@@ -24,7 +24,7 @@
 <h3>✅❌ Status Online</h3>
 <h3>✅ Permissão de notificação</h3>
 <h3>❌ Notificações do Servidor</h3>
-<h3>❌ Notificações dos Chats</h3>
+<h3>✅❌ Notificações dos Chats - Parcialmente funcionando</h3>
 <h3>❌ Notificações dos Matchs</h3>
 <h3> </h3>
 <img src="srcImg/WhatsApp Image 2022-10-09 at 21.20.19.jpeg" alt="Lista usuarios">
