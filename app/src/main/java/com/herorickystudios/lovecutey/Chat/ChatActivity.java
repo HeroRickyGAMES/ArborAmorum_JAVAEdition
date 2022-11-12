@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -62,6 +61,8 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
 
+        stopService(new Intent(getBaseContext(), PushNotificationService.class));
+
         //Esconde a action Bar
         getSupportActionBar().hide();
 
@@ -105,8 +106,6 @@ public class ChatActivity extends AppCompatActivity {
 
         opositeUserNameI.setText(nameoposite);
         String currentUserID = FirebaseAuth.getInstance().getUid();
-
-
 
         Mandar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,6 +225,9 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        entrou();
+
+        usersDb.child(sexoUser).child(UIDcurrent).child("connections").child("matches").child(matchId + " C").child("isOnChat").setValue(true);
 
         DatabaseReference nameDB = usersDb.child(sexoUser).child(UIDcurrent);
         nameDB.addValueEventListener(new ValueEventListener() {
@@ -358,120 +360,70 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onStop() {
-
+    public void entrou(){
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
 
+
+        String nomeUser = prefs.getString("nome", "");
         String sexoProcura = prefs.getString("SexoProcura", "");
+        String cidadeUsuario = prefs.getString("cidadeUsuario", "");
         String sexoUser = prefs.getString("sexoUsuario", "");
+        String clicktimere = prefs.getString("clicktime", "");
 
-        //startService(new Intent(getApplicationContext(), PushNotificationService.class));
 
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        usersDb.child(sexoUser).child(UIDcurrent).child("connections").child("matches").child(matchId + " C").child("isOnChat").setValue(true);
+    }
+
+    @Override
+    protected void onStop() {
+
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
+
+
+        String nomeUser = prefs.getString("nome", "");
+        String sexoProcura = prefs.getString("SexoProcura", "");
+        String cidadeUsuario = prefs.getString("cidadeUsuario", "");
+        String sexoUser = prefs.getString("sexoUsuario", "");
+        String clicktimere = prefs.getString("clicktime", "");
+
 
         usersDb.child(sexoUser).child(UIDcurrent).child("connections").child("matches").child(matchId + " C").child("isOnChat").setValue(false);
-
-        String UID = user.getUid();
-
-        DatabaseReference recoverydbFM = FirebaseDatabase.getInstance().getReference("Usuarios").child(sexoUser).child(UID);
-
-        recoverydbFM.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.getValue() != null){
-                    recoverydbFM.child("isOnline").setValue("false");
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-
         super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
+
+
+        String nomeUser = prefs.getString("nome", "");
+        String sexoProcura = prefs.getString("SexoProcura", "");
+        String cidadeUsuario = prefs.getString("cidadeUsuario", "");
+        String sexoUser = prefs.getString("sexoUsuario", "");
+        String clicktimere = prefs.getString("clicktime", "");
+
+
+        usersDb.child(sexoUser).child(UIDcurrent).child("connections").child("matches").child(matchId + " C").child("isOnChat").setValue(true);
+
+        super.onResume();
     }
 
     @Override
     protected void onPause() {
 
-        startService(new Intent(getApplicationContext(), PushNotificationService.class));
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
+
+
+        String nomeUser = prefs.getString("nome", "");
+        String sexoProcura = prefs.getString("SexoProcura", "");
+        String cidadeUsuario = prefs.getString("cidadeUsuario", "");
+        String sexoUser = prefs.getString("sexoUsuario", "");
+        String clicktimere = prefs.getString("clicktime", "");
+
+
+        usersDb.child(sexoUser).child(UIDcurrent).child("connections").child("matches").child(matchId + " C").child("isOnChat").setValue(false);
 
         super.onPause();
     }
-
-    @Override
-    protected void onStart() {
-
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
-
-        String sexoProcura = prefs.getString("SexoProcura", "");
-        String sexoUser = prefs.getString("sexoUsuario", "");
-
-
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        String UID = user.getUid();
-
-        usersDb.child(sexoUser).child(UIDcurrent).child("connections").child("matches").child(matchId + " C").child("isOnChat").setValue(true);
-
-        DatabaseReference recoverydbFM = FirebaseDatabase.getInstance().getReference("Usuarios").child(sexoUser).child(UID);
-
-        recoverydbFM.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.getValue() != null){
-                    recoverydbFM.child("isOnline").setValue("true");
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        super.onStart();
-    }
-
-    @Override
-    protected void onRestart() {
-
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
-
-        String sexoProcura = prefs.getString("SexoProcura", "");
-        String sexoUser = prefs.getString("sexoUsuario", "");
-
-
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        String UID = user.getUid();
-
-        usersDb.child(sexoUser).child(UIDcurrent).child("connections").child("matches").child(matchId + " C").child("isOnChat").setValue(true);
-
-        DatabaseReference recoverydbFM = FirebaseDatabase.getInstance().getReference("Usuarios").child(sexoUser).child(UID);
-
-        recoverydbFM.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.getValue() != null){
-                    recoverydbFM.child("isOnline").setValue("true");
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        super.onRestart();
-    }
-
 }

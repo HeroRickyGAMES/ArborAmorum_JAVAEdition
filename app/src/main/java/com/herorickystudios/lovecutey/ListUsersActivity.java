@@ -89,7 +89,6 @@ public class ListUsersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_users);
 
-
         startService(new Intent(getBaseContext(), PushNotificationService.class));
 
         String tst = getString(R.string.testModeAction);
@@ -307,12 +306,13 @@ public class ListUsersActivity extends AppCompatActivity {
 
                                     usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID).setValue(true);
                                     usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID + " C").child("ChatId").setValue(IDChat);
-                                    usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID + " C").child("isOnChat").setValue(false);
                                     //chat.child(IDChat).setValue(name + ": Fez o Match!");
 
 
                                     usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).setValue(true);
                                     usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey() + " C").child("ChatId").setValue(IDChat);
+                                    usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey() + " C").child("isOnChat").setValue(false);
+
                                     //usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).child(UID).child(" C").setValue(IDChat);
 
 
@@ -419,12 +419,12 @@ public class ListUsersActivity extends AppCompatActivity {
 
                                     usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID).setValue(true);
                                     usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID + " C").child("ChatId").setValue(IDChat);
-                                    usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID + " C").child("isOnChat").setValue(false);
                                     //chat.child(IDChat).setValue(name + ": Fez o Match!");
 
 
                                     usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).setValue(true);
                                     usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey() + " C").child("ChatId").setValue(IDChat);
+                                    usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey() + " C").child("isOnChat").setValue(false);
                                     //usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).child(UID).child(" C").setValue(IDChat);
 
 
@@ -915,8 +915,6 @@ public class ListUsersActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
 
-        startService(new Intent(getApplicationContext(), PushNotificationService.class));
-
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         String UID = user.getUid();
@@ -945,7 +943,6 @@ public class ListUsersActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
 
-        startService(new Intent(getApplicationContext(), PushNotificationService.class));
 
         super.onPause();
     }

@@ -12,31 +12,29 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.IBinder;
-import android.service.notification.NotificationListenerService;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessagingService;
-import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.Arrays;
 
 
 public class PushNotificationService extends Service {
 
     private DatabaseReference usersDb, chatID, chatdb;
+    private String isOnChat;
+    private String matchKey;
+    private String ConexionMatch;
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -47,62 +45,155 @@ public class PushNotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        chatdb = FirebaseDatabase.getInstance().getReference().child("Chat").child("-NGF15GWvDia5Qoc3kh5");
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        chatdb.addChildEventListener(new ChildEventListener() {
+        String UID = user.getUid();
+
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
+
+        String sexoProcura = prefs.getString("SexoProcura", "");
+        String sexoUser = prefs.getString("sexoUsuario", "");
+
+
+        DatabaseReference recoverydbFM = FirebaseDatabase.getInstance().getReference("Usuarios").child(sexoUser).child(UID).child("connections").child("matches");
+
+        usersDb = FirebaseDatabase.getInstance().getReference().child("Usuarios");
+
+        recoverydbFM.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            public void onDataChange(@NonNull DataSnapshot snapshot2) {
+                if(snapshot2.getValue() != null){
 
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    String data = dataSnapshot.getValue().toString();
 
-                    System.out.println(data);
+                    for(DataSnapshot dataSnapshot2 : snapshot2.getChildren()){
 
+
+
+                        DatabaseReference matchDb = FirebaseDatabase.getInstance().getReference().child("Usuarios").child(sexoUser).child(UID).child("connections").child("matches");
+                        matchDb.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()){
+                                    for(DataSnapshot match : snapshot.getChildren()){
+
+                                        matchKey = match.getKey().replaceAll(" C", "");
+
+                                        ConexionMatch = snapshot.child(matchKey + " C").child("ChatId").getValue().toString();
+                                        isOnChat = snapshot.child(matchKey + " C").child("isOnChat").getValue().toString();
+
+                                        System.out.println("Está no chat? "+ ConexionMatch);
+
+
+                                        //ConexionMatch = snapshot.child(matchKey + " C").child("ChatId").getValue().toString();
+                                        //isOnChat = snapshot.child(matchKey + " C").child("isOnChat").getValue().toString();
+
+
+
+                                        System.out.println(matchKey);
+
+                                        SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
+
+                                        String nomeUser = prefs.getString("nome", "");
+                                        String sexoProcura = prefs.getString("SexoProcura", "");
+                                        String cidadeUsuario = prefs.getString("cidadeUsuario", "");
+                                        String sexoUser = prefs.getString("sexoUsuario", "");
+
+                                        //System.out.println("tste "+dataSnapshot.getValue().toString());
+
+                                        chatdb = FirebaseDatabase.getInstance().getReference().child("Chat").child(ConexionMatch);
+
+
+                                        DatabaseReference nameDB = usersDb.child(sexoUser).child(UID);
+                                        //DatabaseReference PhotoDb = usersDb.child(sexoUser).child(UIDcurrent);
+
+                                        chatdb.addChildEventListener(new ChildEventListener() {
+                                            @Override
+                                            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                                                if(snapshot.exists()){
+                                                    for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                                                        System.out.println("O valor do está no chat? é: " + isOnChat);
+
+                                                        //Database to frontend
+                                                        String datadb = dataSnapshot.getKey();
+
+                                                        String Menssage = dataSnapshot.toString().replace(",", " ").replace(datadb, "").replace("key", "").replace("{", "").replace("}", "").replace("=", " ").replace("DataSnapshot", "").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replace("﹁", ",");
+
+
+                                                        String msg = dataSnapshot.getValue().toString();
+
+                                                        System.out.println("Menssagem : " + msg);
+
+
+                                                        if(isOnChat.equals("false")){
+
+                                                            final String CHANNEL_ID = "HANDS_UP_NOTIFICATION";
+                                                            NotificationChannel channel = null;
+                                                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                                                channel = new NotificationChannel(
+                                                                        CHANNEL_ID,
+                                                                        "Hands Up Notification",
+                                                                        NotificationManager.IMPORTANCE_DEFAULT
+                                                                );
+                                                            }
+
+                                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                                    getSystemService(NotificationManager.class).createNotificationChannel(channel);
+                                                                }
+                                                            }
+                                                            Notification.Builder builder = null;
+                                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                                builder = new Notification.Builder(getApplicationContext(), CHANNEL_ID)
+                                                                        .setContentTitle("titulo")
+                                                                        .setContentText(msg)
+                                                                        .setSmallIcon(R.drawable.hearticon)
+                                                                        .setAutoCancel(true);
+                                                            }
+
+                                                            NotificationManagerCompat.from(getApplicationContext()).notify(1,builder.build());
+
+                                                        }
+                                                    }
+                                                }
+
+                                            }
+
+                                            @Override
+                                            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                                            }
+
+                                            @Override
+                                            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                                            }
+
+                                            @Override
+                                            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                            }
+                                        });
+                                        }
+                                    }
+                                }
+
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
 
 
                     }
-                    final String CHANNEL_ID = "HANDS_UP_NOTIFICATION";
-                    NotificationChannel channel = null;
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        channel = new NotificationChannel(
-                                CHANNEL_ID,
-                                "Hands Up Notification",
-                                NotificationManager.IMPORTANCE_DEFAULT
-                        );
-                    }
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            getSystemService(NotificationManager.class).createNotificationChannel(channel);
-                        }
-                    }
-                    Notification.Builder builder = null;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        builder = new Notification.Builder(getApplicationContext(), CHANNEL_ID)
-                                .setContentTitle("titulo")
-                                .setContentText(data)
-                                .setSmallIcon(R.drawable.hearticon)
-                                .setAutoCancel(true);
-                    }
-
-                    NotificationManagerCompat.from(getApplicationContext()).notify(1,builder.build());
-
                 }
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
             }
 
