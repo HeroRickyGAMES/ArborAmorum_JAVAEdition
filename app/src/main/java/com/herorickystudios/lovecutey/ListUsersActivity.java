@@ -307,6 +307,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
                                     usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID).setValue(true);
                                     usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID + " C").child("ChatId").setValue(IDChat);
+                                    usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID + " C").child("isOnChat").setValue(false);
                                     //chat.child(IDChat).setValue(name + ": Fez o Match!");
 
 
@@ -418,6 +419,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
                                     usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID).setValue(true);
                                     usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID + " C").child("ChatId").setValue(IDChat);
+                                    usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID + " C").child("isOnChat").setValue(false);
                                     //chat.child(IDChat).setValue(name + ": Fez o Match!");
 
 
@@ -913,6 +915,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
 
+        startService(new Intent(getApplicationContext(), PushNotificationService.class));
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -937,6 +940,14 @@ public class ListUsersActivity extends AppCompatActivity {
 
 
         super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+
+        startService(new Intent(getApplicationContext(), PushNotificationService.class));
+
+        super.onPause();
     }
 
     @Override
