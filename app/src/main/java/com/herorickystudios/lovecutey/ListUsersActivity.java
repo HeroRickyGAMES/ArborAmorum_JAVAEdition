@@ -976,4 +976,13 @@ public class ListUsersActivity extends AppCompatActivity {
 
         super.onRestart();
     }
+
+    @Override
+    protected void onDestroy() {
+        
+        startService(new Intent(getBaseContext(), PushNotificationService.class));
+
+
+        super.onDestroy();
+    }
 }

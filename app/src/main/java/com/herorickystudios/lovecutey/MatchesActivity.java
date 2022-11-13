@@ -3,6 +3,7 @@ package com.herorickystudios.lovecutey;
 //Programado por HeroRickyGames
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.widget.LinearLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +33,8 @@ public class MatchesActivity extends AppCompatActivity {
     private String TestString = "";
     private String isOnline;
     private String on;
+
+    private DatabaseReference chatdb;
 
     private boolean testMode = true;
 
@@ -103,12 +107,30 @@ public class MatchesActivity extends AppCompatActivity {
 
     private void FecthMatchInformation(String key, String oppositeUserSex) {
         DatabaseReference userDb = FirebaseDatabase.getInstance().getReference().child("Usuarios").child(oppositeUserSex).child(key);
+        DatabaseReference ChatHistory = FirebaseDatabase.getInstance().getReference().child("Chat");
         userDb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
                     String userID = snapshot.getKey();
                     String name = snapshot.child("nome").getValue().toString();
+
+                    chatdb = FirebaseDatabase.getInstance().getReference().child("Chat").child(key);
+
+                    chatdb.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot2) {
+
+                            for(DataSnapshot dataSnapshot : snapshot2.getChildren()) {
+                                System.out.println("Menssagem: " + dataSnapshot.getValue());
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
 
                     isOnline = snapshot.child("isOnline").getValue().toString();
 

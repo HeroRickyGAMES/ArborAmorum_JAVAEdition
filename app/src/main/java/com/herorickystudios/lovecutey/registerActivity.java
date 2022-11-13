@@ -8,18 +8,17 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -46,7 +45,12 @@ import com.google.firebase.storage.UploadTask;
 import com.herorickystudios.lovecutey.ui.login.logiActivity;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //Programado por HeroRickyGames
 
@@ -59,6 +63,10 @@ public class registerActivity extends AppCompatActivity {
     String[] menssagens = {"Preencha todos os campos para continuar", "Cadastro feito com sucesso!"};
     //String[] Filtropalavrões = {"Preencha todos os campos para continuar", "Cadastro feito com sucesso!"};
     String usuarioID;
+
+    Map userInfo = new HashMap();
+
+    private DatabaseReference reference;
 
     //API para a localização dos usuarios
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -84,7 +92,6 @@ public class registerActivity extends AppCompatActivity {
         register_button = findViewById(R.id.register_button);
         idade_text = findViewById(R.id.idade_text);
         radioGrup = findViewById(R.id.radioGroup);
-
 
         //Codigos de localização
         locationRequest = new LocationRequest();
@@ -207,9 +214,44 @@ public class registerActivity extends AppCompatActivity {
                                             referencia.child(genero).child(getUID).child("Genero").setValue(genero);
                                             referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("cidade").setValue(cidade);
 
+                                            StorageReference filepath = FirebaseStorage.getInstance().getReference().child("ProfileImages").child(getUID);
+
                                             String URL = "https://firebasestorage.googleapis.com/v0/b/lovecutey-95cc0.appspot.com/o/" +  "ProfileImages" + "%2F" + getUID + "?alt=media";
+                                            java.net.URL URLNEW = null;
+
+                                            Bitmap bitmap = null;
+
+                                            try {
+                                                URLNEW = new URL("https://cdn-icons-png.flaticon.com/512/149/149071.png");
+
+                                                //bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), URLNEW);
+
+                                                bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.def);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                            bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
+                                            byte[] data = baos.toByteArray();
+
+                                            UploadTask uploadTask = filepath.putBytes(data);
+
+                                            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                @Override
+                                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
 
+                                                    Task<Uri> downloadUri = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+
+                                                    System.out.println(taskSnapshot);
+
+                                                    //userInfo.put("profileImageUri", "https://firebasestorage.googleapis.com/v0/b/lovecutey-95cc0.appspot.com/o/FotoPadrao%2F149071.png?alt=media");
+
+                                                    finish();
+                                                    return;
+                                                }
+                                            });
 
                                             referencia.child(genero).child(getUID).child("profileImageUri").child(getUID).setValue(URL);
 
