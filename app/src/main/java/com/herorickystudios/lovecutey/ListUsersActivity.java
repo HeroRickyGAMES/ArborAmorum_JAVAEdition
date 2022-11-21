@@ -216,7 +216,7 @@ public class ListUsersActivity extends AppCompatActivity {
             public void onScroll(float scrollProgressPercent) {
                 //View view = flingContainer.getSelectedView();
                 //view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
-               //view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
+                //view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
             }
         });
 
@@ -368,79 +368,72 @@ public class ListUsersActivity extends AppCompatActivity {
 
     private void isConnectiomMatch(String UID, String userIdE) {
         DatabaseReference chat = FirebaseDatabase.getInstance().getReference().child("Chat");
-                DatabaseReference currentUserConections = usersDb.child(userSex).child(UID).child("connections").child("yeps").child(userIdE);
-                DatabaseReference nameDB = usersDb.child(userSex).child(UID);
+        DatabaseReference currentUserConections = usersDb.child(userSex).child(UID).child("connections").child("yeps").child(userIdE);
+        DatabaseReference nameDB = usersDb.child(userSex).child(UID);
 
-                nameDB.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot3) {
-                        currentUserConections.addListenerForSingleValueEvent(new ValueEventListener() {
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        nameDB.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot3) {
+                currentUserConections.addListenerForSingleValueEvent(new ValueEventListener() {
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                if(snapshot.exists()){
-
-
-                                    Calendar c = Calendar.getInstance();
-                                    String str = c.getTime().toString();
-
-                                    String Day = String.valueOf(c.get(Calendar.DATE)) + "↔";
-                                    String Mes = String.valueOf(c.get(Calendar.MONTH)) + "↔";
-                                    String Ano = String.valueOf(c.get(Calendar.YEAR)) + " ";
-
-                                    int PMAM = c.get(Calendar.AM_PM);
-
-                                    if(PMAM == 0){
-                                        APM = "AM ";
-                                    }else if(PMAM == 1){
-                                        APM = "PM ";
-                                    }
-                                    String AMPM = APM;
+                        if(snapshot.exists()){
 
 
+                            Calendar c = Calendar.getInstance();
+                            String str = c.getTime().toString();
 
-                                    String Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND);
+                            String Day = String.valueOf(c.get(Calendar.DATE)) + "↔";
+                            String Mes = String.valueOf(c.get(Calendar.MONTH)) + "↔";
+                            String Ano = String.valueOf(c.get(Calendar.YEAR)) + " ";
 
-                                    Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND);
+                            int PMAM = c.get(Calendar.AM_PM);
 
-
-                                    System.out.println("x *" + Hora.length());
-
-
-                                    String DATA_HORA = Day + Mes + Ano + "➧" + AMPM + Hora;
-
-
-
-                                    //Exibe o novo match!
-                                    Toast.makeText(ListUsersActivity.this, "Novo Match!", Toast.LENGTH_SHORT).show();
-
-                                    String name = snapshot3.child("nome").getValue().toString();
-
-                                    String IDChat = FirebaseDatabase.getInstance().getReference().child("Chat").push().getKey();
-
-                                    usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID).setValue(true);
-                                    usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID + " C").child("ChatId").setValue(IDChat);
-                                    //chat.child(IDChat).setValue(name + ": Fez o Match!");
-
-
-                                    usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).setValue(true);
-                                    usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey() + " C").child("ChatId").setValue(IDChat);
-                                    usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey() + " C").child("isOnChat").setValue(false);
-                                    //usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).child(UID).child(" C").setValue(IDChat);
-
-
-
-                                    chat.child(IDChat).child(str + "/ Data: " + DATA_HORA + ", "+ name +  "﹁").setValue(": Fez o Match!");
-
-                                    System.out.println("Current time " +  str);
-                                }
-
+                            if(PMAM == 0){
+                                APM = "AM ";
+                            }else if(PMAM == 1){
+                                APM = "PM ";
                             }
+                            String AMPM = APM;
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
 
-                            }
-                        });
+
+                            String Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND);
+
+                            Hora = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.MILLISECOND);
+
+
+                            System.out.println("x *" + Hora.length());
+
+
+                            String DATA_HORA = Day + Mes + Ano + "➧" + AMPM + Hora;
+
+
+
+                            //Exibe o novo match!
+                            Toast.makeText(ListUsersActivity.this, "Novo Match!", Toast.LENGTH_SHORT).show();
+
+                            String name = snapshot3.child("nome").getValue().toString();
+
+                            String IDChat = FirebaseDatabase.getInstance().getReference().child("Chat").push().getKey();
+
+                            usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID).setValue(true);
+                            usersDb.child(oppositeUserSex).child(snapshot.getKey()).child("connections").child("matches").child(UID + " C").child("ChatId").setValue(IDChat);
+                            //chat.child(IDChat).setValue(name + ": Fez o Match!");
+
+
+                            usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).setValue(true);
+                            usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey() + " C").child("ChatId").setValue(IDChat);
+                            usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey() + " C").child("isOnChat").setValue(false);
+                            //usersDb.child(userSex).child(UID).child("connections").child("matches").child(snapshot.getKey()).child(UID).child(" C").setValue(IDChat);
+
+
+
+                            chat.child(IDChat).child(str + "/ Data: " + DATA_HORA + ", "+ name +  "﹁").setValue(": Fez o Match!");
+
+                            System.out.println("Current time " +  str);
+                        }
+
                     }
 
                     @Override
@@ -448,6 +441,13 @@ public class ListUsersActivity extends AppCompatActivity {
 
                     }
                 });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     static void makeToast(Context ctx, String s) {
@@ -852,55 +852,8 @@ public class ListUsersActivity extends AppCompatActivity {
     }
 
     public void goToSettings(View view) {
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-
-                    Geocoder geocoder = new Geocoder(ListUsersActivity.this);
-                    try {
-                        List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-
-                        String cidade = addresses.get(0).getSubAdminArea();
-                        Intent intent = new Intent(ListUsersActivity.this, ConfiguracoesActivity.class);
-                        intent.putExtra("userSex", userSex);
-                        intent.putExtra("cidade", cidade);
-                        startActivity(intent);
-
-                        //Codigos de registro
-
-                        System.out.println("LOCALIZAÇÃO EXATA: " + cidade);
-                    } catch (Exception e) {
-                        System.out.println("Não foi possivel encontrar sua localização!" + e);
-                    }
-
-                    System.out.println(location.getLatitude());
-                    System.out.println(location.getLongitude());
-                    System.out.println(location.getLongitude());
-                    System.out.println(location.getAccuracy());
-
-                    if (location.hasAltitude()) {
-                        System.out.println("Latitude " + location.getLatitude());
-                    } else {
-                        System.out.println("Não disponivel");
-                    }
-                    if (location.hasSpeed()) {
-                        System.out.println("Velocidade " + location.getSpeed());
-                    } else {
-                        System.out.println("Não disponivel");
-                    }
-                    if (location.hasAltitude()) {
-                        System.out.println("Altitude " + location.getLatitude());
-                    } else {
-                        System.out.println("Não disponivel");
-                    }
-                }
-            });
-        }
+        Intent intent = new Intent(ListUsersActivity.this, ConfiguracoesActivity.class);
+        startActivity(intent);
     }
 
     public void matchAc(View view){
@@ -979,7 +932,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        
+
         startService(new Intent(getBaseContext(), PushNotificationService.class));
 
 

@@ -98,7 +98,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         String cidadeUsuario = prefs.getString("cidadeUsuario", "");
 
 
-        String userSex = getIntent().getExtras().getString("userSex");
+        String userSex = prefs.getString("sexoUsuario", "");
         String cidade = cidadeUsuario;
         nameField = findViewById(R.id.name);
         idadeField = findViewById(R.id.idade);

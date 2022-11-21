@@ -172,7 +172,7 @@ public class logiActivity extends AppCompatActivity {
         switch (requestCode){
             case PERMISSIONS_FINE_LOCATION:
                 if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                //Não fazer nada
+                    //Não fazer nada
                 }else{
                     Toast.makeText(this, "Esse aplicativo precisa das permissões para funcionar, caso você negou sem querer, acesse as configurações!", Toast.LENGTH_LONG).show();
                     finish();
