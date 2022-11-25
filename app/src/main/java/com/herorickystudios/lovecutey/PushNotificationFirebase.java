@@ -34,7 +34,7 @@ public class PushNotificationFirebase extends FirebaseMessagingService {
         Notification.Builder builder = new Notification.Builder(this, CHANNEL_ID)
                 .setContentTitle(titulo)
                 .setContentText(texto)
-                .setSmallIcon(R.drawable.hearticon)
+                .setSmallIcon(R.mipmap.ic_laun)
                 .setAutoCancel(true);
 
         NotificationManagerCompat.from(this).notify(1,builder.build());
