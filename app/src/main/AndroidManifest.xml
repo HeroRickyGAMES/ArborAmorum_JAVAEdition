@@ -74,6 +74,15 @@
             </intent-filter>
         </receiver>
         <service android:name=".PushNotificationService"/>
+
+        <service
+            android:name=".PushNotificationFirebase"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="con.google.firebase.MENSSAGIN_EVENT" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

@@ -35,6 +35,7 @@ public class PushNotificationService extends Service {
     private String isOnChat;
     private String matchKey;
     private String ConexionMatch;
+    private String userName;
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -119,41 +120,61 @@ public class PushNotificationService extends Service {
                                                     String Menssage = dataSnapshot.toString().replace(",", " ").replace(datadb, "").replace("key", "").replace("{", "").replace("}", "").replace("=", " ").replace("DataSnapshot", "").replace("]", "").replace("[", "").replace("value", "").replace("↔", "/").replace("﹁", ",");
 
 
+                                                    System.out.println(Menssage);
+
+                                                    SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPreferencias", Context.MODE_PRIVATE);
+
+                                                    userName = prefs.getString("nome", "");
+
+
+
                                                     String msg = dataSnapshot.getValue().toString();
 
+                                                    if(Menssage.contains(msg)){
+                                                        if(Menssage.contains(userName)){
+
+
+
+                                                        }
+                                                    }
                                                     System.out.println("Menssagem : " + msg);
 
+                                                    if(Menssage.contains(msg)){
 
-                                                    if(isOnChat.equals("false")){
+                                                        if(!Menssage.contains(userName)){
 
-                                                        System.out.println(isOnChat);
+                                                            if(isOnChat.equals("false")){
 
-                                                        final String CHANNEL_ID = "HANDS_UP_NOTIFICATION";
-                                                        NotificationChannel channel = null;
-                                                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                                                            channel = new NotificationChannel(
-                                                                    CHANNEL_ID,
-                                                                    "Hands Up Notification",
-                                                                    NotificationManager.IMPORTANCE_DEFAULT
-                                                            );
-                                                        }
+                                                                System.out.println(isOnChat);
 
-                                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                                                getSystemService(NotificationManager.class).createNotificationChannel(channel);
+                                                                final String CHANNEL_ID = "HANDS_UP_NOTIFICATION";
+                                                                NotificationChannel channel = null;
+                                                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                                                    channel = new NotificationChannel(
+                                                                            CHANNEL_ID,
+                                                                            "Hands Up Notification",
+                                                                            NotificationManager.IMPORTANCE_DEFAULT
+                                                                    );
+                                                                }
+
+                                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                                        getSystemService(NotificationManager.class).createNotificationChannel(channel);
+                                                                    }
+                                                                }
+                                                                Notification.Builder builder = null;
+                                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                                    builder = new Notification.Builder(getApplicationContext(), CHANNEL_ID)
+                                                                            .setContentTitle("Chegou uma nova Mensagem! Verifique nos chats!!")
+                                                                            .setContentText(msg)
+                                                                            .setSmallIcon(R.drawable.hearticon)
+                                                                            .setAutoCancel(true);
+                                                                }
+
+                                                                NotificationManagerCompat.from(getApplicationContext()).notify(1,builder.build());
+
                                                             }
                                                         }
-                                                        Notification.Builder builder = null;
-                                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                                            builder = new Notification.Builder(getApplicationContext(), CHANNEL_ID)
-                                                                    .setContentTitle("Chegou uma nova Mensagem! Verifique nos chats!!")
-                                                                    .setContentText(msg)
-                                                                    .setSmallIcon(R.drawable.hearticon)
-                                                                    .setAutoCancel(true);
-                                                        }
-
-                                                        NotificationManagerCompat.from(getApplicationContext()).notify(1,builder.build());
-
                                                     }
                                                 }
                                             }
