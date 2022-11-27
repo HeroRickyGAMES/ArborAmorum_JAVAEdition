@@ -89,6 +89,7 @@ public class ListUsersActivity extends AppCompatActivity {
     //API para a localização dos usuarios
     FusedLocationProviderClient fusedLocationProviderClient;
     private String profileURI;
+    private String idadeLimite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -498,6 +499,7 @@ public class ListUsersActivity extends AppCompatActivity {
                         cidadeUsuario = document.getString("cidade");
                         sexoUsuario = document.getString("Genero");
                         profileURI = document.getString("profileUri");
+                        idadeLimite = document.getString("IdadeLimite");
 
                         System.out.println("Informações do Usuario");
                         System.out.println(SexoProcura);
@@ -585,8 +587,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
                     String cidade = addresses.get(0).getSubAdminArea();
 
-
-                    usersDb.collection("Usuarios").whereEqualTo("Genero", SexoProcura).whereEqualTo("cidade", cidade).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        usersDb.collection("Usuarios").whereEqualTo("Genero", SexoProcura).whereEqualTo("cidade", cidade).whereEqualTo("sexoDeProcura", sexoUsuario).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             for(DocumentSnapshot dataSnapshot : queryDocumentSnapshots.getDocuments()){
@@ -609,8 +610,12 @@ public class ListUsersActivity extends AppCompatActivity {
                                 //O que mostra na interface
                                 cards Item = new cards("£" + userIDo + "£", nameuser, profURI, idade, cidade, bio);
 
-                                rowItems.add(Item);
-                                arrayAdapter.notifyDataSetChanged();
+                                if(Integer.valueOf(idade) <= Integer.valueOf(idadeLimite)){
+
+                                    rowItems.add(Item);
+                                    arrayAdapter.notifyDataSetChanged();
+
+                                }
 
                             }
                         }

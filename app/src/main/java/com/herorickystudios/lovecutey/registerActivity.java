@@ -236,7 +236,7 @@ public class registerActivity extends AppCompatActivity {
                                             user.put("username", nome);
                                             user.put("email", email);
                                             user.put("isOnline", true);
-                                            user.put("idade", idade);
+                                            user.put("idade", Integer.valueOf(idade));
                                             user.put("bio", "Digite sua Bio!");
                                             user.put("cidade", cidade);
                                             user.put("profileUri", URL);
