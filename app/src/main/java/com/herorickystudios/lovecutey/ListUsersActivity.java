@@ -1,7 +1,6 @@
 package com.herorickystudios.lovecutey;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -13,37 +12,40 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.herorickystudios.lovecutey.ui.login.logiActivity;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
-import com.startapp.sdk.adsbase.StartAppSDK;
 
-import java.io.IOException;
+
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.Map;
 
 //Programado por HeroRickyGames
 
@@ -68,7 +70,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
     private String nameUser;
 
-    private DatabaseReference usersDb;
+    private FirebaseFirestore usersDb;
 
     private static final int PERMISSIONS_FINE_LOCATION = 99;
 
@@ -103,13 +105,11 @@ public class ListUsersActivity extends AppCompatActivity {
             TestString = "";
         }
 
-        // Starta a SDK
-        StartAppSDK.setTestAdsEnabled(testMode);
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         String UID = user.getUid();
 
-        usersDb = FirebaseDatabase.getInstance().getReference().child("Usuarios");
+        usersDb = FirebaseFirestore.getInstance();
 
         //Esconde a action Bar
         getSupportActionBar().hide();
@@ -149,23 +149,31 @@ public class ListUsersActivity extends AppCompatActivity {
 
                 String UID = user.getUid();
 
-                DatabaseReference maleDb = FirebaseDatabase.getInstance().getReference("Usuarios").child(oppositeUserSex).child(userIdE);
+                //DatabaseReference maleDb = FirebaseDatabase.getInstance().getReference("Usuarios").child(oppositeUserSex).child(userIdE);
 
-                maleDb.addValueEventListener(new ValueEventListener() {
+                //Database push
+                //DatabaseReference reference = referencia.getReference();
+
+                DocumentReference maleDb =  usersDb.collection("Usuarios").document(user.getUid());
+
+                maleDb.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        nameUser = snapshot.child("nome").getValue().toString();
-                        usersDb.child(oppositeUserSex).child(userIdE).child("connections").child("nope").child(UID).setValue(true);
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isComplete()){
+                            DocumentSnapshot document = task.getResult();
 
-                        arrayAdapter.notifyDataSetChanged();
+                            if(document.exists()){
+                                nameUser = document.getString("username");
+
+                            }
+                        }
                     }
-
+                }).addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                    public void onFailure(@NonNull Exception e) {
 
                     }
                 });
-
             }
 
             //Pu oto
@@ -193,7 +201,11 @@ public class ListUsersActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        usersDb.child(oppositeUserSex).child(userIdE).child("connections").child("yeps").child(UID).setValue(true);
+
+                        //Aqui eu faço o Sim, ainda não finalizei
+
+
+                        //usersDb.child(oppositeUserSex).child(userIdE).child("connections").child("yeps").child(UID).setValue(true);
 
                         arrayAdapter.notifyDataSetChanged();
                     }
@@ -241,7 +253,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
 
 
-                DatabaseReference maleDb = FirebaseDatabase.getInstance().getReference("Usuarios").child(oppositeUserSex).child(userIdE);
+                /*DatabaseReference maleDb = FirebaseDatabase.getInstance().getReference("Usuarios").child(oppositeUserSex).child(userIdE);
 
                 maleDb.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -347,7 +359,7 @@ public class ListUsersActivity extends AppCompatActivity {
                     }
                 });
 
-
+*/
 
             }
         });
@@ -367,6 +379,7 @@ public class ListUsersActivity extends AppCompatActivity {
     }
 
     private void isConnectiomMatch(String UID, String userIdE) {
+        /*
         DatabaseReference chat = FirebaseDatabase.getInstance().getReference().child("Chat");
         DatabaseReference currentUserConections = usersDb.child(userSex).child(UID).child("connections").child("yeps").child(userIdE);
         DatabaseReference nameDB = usersDb.child(userSex).child(UID);
@@ -448,6 +461,8 @@ public class ListUsersActivity extends AppCompatActivity {
 
             }
         });
+
+         */
     }
 
     static void makeToast(Context ctx, String s) {
@@ -462,208 +477,92 @@ public class ListUsersActivity extends AppCompatActivity {
     private String oth = "Feminino";
 
     public void checkUserSex() {
+
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        DatabaseReference maleDb = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Masculino");
-        maleDb.addChildEventListener(new ChildEventListener() {
+        DocumentReference onScreen =  usersDb.collection("Usuarios").document(user.getUid());
+
+        onScreen.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isComplete()){
+                    DocumentSnapshot document = task.getResult();
 
-                if (snapshot.getKey().equals(user.getUid())) {
+                    if(document.exists()){
+                        SexoProcura = document.getString("sexoDeProcura");
+                        username = document.getString("username");
+                        cidadeUsuario = document.getString("cidade");
+                        sexoUsuario = document.getString("Genero");
 
-                    //Strings para usar no sharedpreferences e em outras areas do aplicativo
-                    SexoProcura = snapshot.child("ConfiguracoesPessoais").child("sexoDeProcura").getValue().toString();
-                    username = snapshot.child("nome").getValue().toString();
-                    cidadeUsuario = snapshot.child("cidade").getValue().toString();
-                    sexoUsuario = snapshot.child("Genero").getValue().toString();
+                        System.out.println("Informações do Usuario");
+                        System.out.println(SexoProcura);
+                        System.out.println(username);
+                        System.out.println(cidadeUsuario);
+                        System.out.println(sexoUsuario);
+                        //SHARED PREFERENCES PARA REDUZIR O TAMANHO DO CODIGO!
+                        SharedPreferences prefs = getSharedPreferences("userPreferencias", MODE_PRIVATE);
+
+                        SharedPreferences.Editor editor = prefs.edit();
 
 
-                    //SHARED PREFERENCES PARA REDUZIR O TAMANHO DO CODIGO!
-                    SharedPreferences prefs = getSharedPreferences("userPreferencias", MODE_PRIVATE);
+                        editor.putString("nome", username);
 
-                    SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("SexoProcura", SexoProcura);
+                        editor.putString("sexoUsuario", sexoUsuario);
+                        editor.putString("cidadeUsuario", cidadeUsuario);
+                        editor.commit();
+
+                        userSex = "Masculino";
+                        oppositeUserSex = SexoProcura;
+                        getOppositeSexUsers();
+
+                        Map<String, Object> edicao = new HashMap<>();
+                        edicao.put("isOnline", false);
 
 
-                    editor.putString("nome", username);
+                        getOppositeSexUsers();
 
-                    editor.putString("SexoProcura", SexoProcura);
-                    editor.putString("sexoUsuario", sexoUsuario);
-                    editor.putString("cidadeUsuario", cidadeUsuario);
-                    editor.commit();
+                        onScreen.update(edicao).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
 
-                    userSex = "Masculino";
-                    oppositeUserSex = SexoProcura;
-                    getOppositeSexUsers();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
 
-                    maleDb.child(user.getUid()).child("isOnline").setValue("true");
+                            }
+                        });
+                    }
                 }
             }
-
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
+            public void onFailure(@NonNull Exception e) {
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-
-        DatabaseReference femDB = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Feminino");
-        femDB.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                if (snapshot.getKey().equals(user.getUid())) {
-                    SexoProcura = snapshot.child("ConfiguracoesPessoais").child("sexoDeProcura").getValue().toString();
-
-                    username = snapshot.child("nome").getValue().toString();
-                    cidadeUsuario = snapshot.child("cidade").getValue().toString();
-                    sexoUsuario = snapshot.child("Genero").getValue().toString();
-                    idadeUsuario = snapshot.child(cidadeUsuario).child("Dados do Usuario").child("idade").getValue().toString();
-
-
-                    //SHARED PREFERENCES PARA REDUZIR O TAMANHO DO CODIGO!
-                    SharedPreferences prefs = getSharedPreferences("userPreferencias", MODE_PRIVATE);
-
-                    SharedPreferences.Editor editor = prefs.edit();
-
-
-                    editor.putString("nome", username);
-                    editor.putString("SexoProcura", SexoProcura);
-                    editor.putString("sexoUsuario", sexoUsuario);
-                    editor.putString("cidadeUsuario", cidadeUsuario);
-                    editor.commit();
-
-
-                    userSex = "Feminino";
-                    oppositeUserSex = SexoProcura;
-                    getOppositeSexUsers();
-
-                    femDB.child(user.getUid()).child("isOnline").setValue("true");
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-
-        DatabaseReference biQ = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Bi Sexual");
-        biQ.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                if (snapshot.getKey().equals(user.getUid())) {
-                    String SexoProcura = snapshot.child("ConfiguracoesPessoais").child("sexoDeProcura").getValue().toString();
-
-                    userSex = "Bi Sexual";
-                    oppositeUserSex = SexoProcura;
-                    getOppositeSexUsers();
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-        DatabaseReference LesQ = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Lesbica");
-        LesQ.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                if (snapshot.getKey().equals(user.getUid())) {
-                    String SexoProcura = snapshot.child("ConfiguracoesPessoais").child("sexoDeProcura").getValue().toString();
-
-                    userSex = "Lesbica";
-                    oppositeUserSex = SexoProcura;
-                    getOppositeSexUsers();
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-        DatabaseReference GayQ = FirebaseDatabase.getInstance().getReference().child("Usuarios").child("Gay");
-        GayQ.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                if (snapshot.getKey().equals(user.getUid())) {
-                    String SexoProcura = snapshot.child("ConfiguracoesPessoais").child("sexoDeProcura").getValue().toString();
-
-
-                    System.out.println(SexoProcura);
-                    userSex = "Gay";
-                    oppositeUserSex = SexoProcura;
-                    getOppositeSexUsers();
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
             }
         });
     }
 
     public void getOppositeSexUsers() {
+        CollectionReference onScreen =  usersDb.collection("Usuarios");
 
+        onScreen.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                Object[] dados = queryDocumentSnapshots.getDocuments().toArray();
+                System.out.println("DADOS: "+ dados[1]);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
+/*
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         String UID = user.getUid();
@@ -816,6 +715,7 @@ public class ListUsersActivity extends AppCompatActivity {
                 }
             });
         }
+        */
 
     }
     private void updateGPS() {

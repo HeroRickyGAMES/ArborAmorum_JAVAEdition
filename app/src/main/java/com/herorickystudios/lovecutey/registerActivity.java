@@ -39,6 +39,8 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -77,7 +79,7 @@ public class registerActivity extends AppCompatActivity {
 
     private boolean testMode = true;
 
-    public DatabaseReference referencia = FirebaseDatabase.getInstance().getReference("Usuarios");
+    FirebaseFirestore referencia = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,20 +206,65 @@ public class registerActivity extends AppCompatActivity {
 
                                             String genero = radioButton.getText().toString();
 
-                                            referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("nome").setValue(nome);
-                                            referencia.child(genero).child(getUID).child("nome").setValue(nome);
-                                            referencia.child(genero).child(getUID).child("isOnline").setValue("true");
-                                            referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("email").setValue(email);
-                                            referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("idade").setValue(idade);
-                                            referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("bio").setValue("Digite sua Bio!");
-                                            referencia.child(genero).child(getUID).child("cidade").setValue(cidade);
-                                            referencia.child(genero).child(getUID).child("Genero").setValue(genero);
-                                            referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("cidade").setValue(cidade);
+                                            //referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("nome").setValue(nome);
+                                            //referencia.child(genero).child(getUID).child("nome").setValue(nome);
+                                            //referencia.child(genero).child(getUID).child("isOnline").setValue("true");
+                                            //referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("email").setValue(email);
+                                            //referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("idade").setValue(idade);
+                                            //referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("bio").setValue("Digite sua Bio!");
+                                            //referencia.child(genero).child(getUID).child("cidade").setValue(cidade);
+                                            //referencia.child(genero).child(getUID).child("Genero").setValue(genero);
+                                            //referencia.child(genero).child(getUID).child(cidade).child("Dados do Usuario").child("cidade").setValue(cidade);
 
                                             StorageReference filepath = FirebaseStorage.getInstance().getReference().child("ProfileImages").child(getUID);
 
                                             String URL = "https://firebasestorage.googleapis.com/v0/b/lovecutey-95cc0.appspot.com/o/" +  "ProfileImages" + "%2F" + getUID + "?alt=media";
                                             java.net.URL URLNEW = null;
+
+                                            DocumentReference setDB = referencia.collection("Usuarios").document(getUID);
+
+                                            int idadee = Integer.parseInt(idade);
+                                            int aMais = 5;
+                                            int Resultado = idadee + 5;
+
+                                            String ConfigIdade = String.valueOf(Resultado);
+
+                                            System.out.println(ConfigIdade);
+
+                                            // Create a new user with a first and last name
+                                            Map<String, Object> user = new HashMap<>();
+                                            user.put("username", nome);
+                                            user.put("email", email);
+                                            user.put("isOnline", true);
+                                            user.put("idade", idade);
+                                            user.put("bio", "Digite sua Bio!");
+                                            user.put("cidade", cidade);
+                                            user.put("profileUri", URL);
+                                            user.put("IdadeLimite", ConfigIdade);
+                                            user.put("Genero", genero);
+                                            user.put("id",getUID);
+
+                                            if(genero.equals("Feminino")){
+                                                user.put("sexoDeProcura", "Masculino");
+                                            }
+                                            if (genero.equals("Masculino")){
+                                                user.put("sexoDeProcura", "Feminino");
+                                            }
+
+
+                                            //referencia.collection("Usuarios");
+
+                                            setDB.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    System.out.println("Erro ao adicionar usuario no banco: " + e);
+                                                }
+                                            });
 
                                             Bitmap bitmap = null;
 
@@ -253,38 +300,9 @@ public class registerActivity extends AppCompatActivity {
                                                 }
                                             });
 
-                                            referencia.child(genero).child(getUID).child("profileImageUri").child(getUID).setValue(URL);
+                                            //referencia.child(genero).child(getUID).child("profileImageUri").child(getUID).setValue(URL);
 
-
-
-                                            if(genero.equals("Gay")){
-                                                referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("sexoDeProcura").setValue(genero);
-                                                referencia.child(genero).child(getUID).child("connections").child("yeps").child(getUID).setValue(true);
-                                            }
-                                            if (genero.equals("Lesbica")){
-                                                referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("sexoDeProcura").setValue(genero);
-                                                referencia.child(genero).child(getUID).child("connections").child("yeps").child(getUID).setValue(true);
-                                            }
-                                            if (genero.equals("Bi Sexual")){
-                                                referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("sexoDeProcura").setValue("Bi Sexual");
-                                                referencia.child(genero).child(getUID).child("connections").child("yeps").child(getUID).setValue(true);
-                                            }
-                                            if(genero.equals("Feminino")){
-                                                referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("sexoDeProcura").setValue("Masculino");
-                                            }
-                                            if (genero.equals("Masculino")){
-                                                referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("sexoDeProcura").setValue("Feminino");
-                                            }
-
-                                            int idadee = Integer.parseInt(idade);
-                                            int aMais = 5;
-                                            int Resultado = idadee + 5;
-
-                                            String ConfigIdade = String.valueOf(Resultado);
-
-                                            System.out.println(ConfigIdade);
-
-                                            referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("IdadeLimite").setValue(ConfigIdade);
+                                            //referencia.child(genero).child(getUID).child("ConfiguracoesPessoais").child("IdadeLimite").setValue(ConfigIdade);
 
                                             //Lançar activity dps do cadastro
                                             Intent intent = new Intent(registerActivity.this, ListUsersActivity.class);

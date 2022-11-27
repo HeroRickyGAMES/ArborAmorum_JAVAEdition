@@ -66,6 +66,7 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-auth'
 
+    //FireStore Database
     implementation 'com.google.firebase:firebase-firestore'
 
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
