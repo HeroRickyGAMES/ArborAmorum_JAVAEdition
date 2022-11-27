@@ -242,6 +242,7 @@ public class registerActivity extends AppCompatActivity {
                                             user.put("profileUri", URL);
                                             user.put("IdadeLimite", ConfigIdade);
                                             user.put("Genero", genero);
+                                            user.put("id", usuarioID);
 
                                             if(genero.equals("Feminino")){
                                                 user.put("sexoDeProcura", "Masculino");

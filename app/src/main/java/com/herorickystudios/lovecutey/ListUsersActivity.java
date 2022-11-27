@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,6 +43,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -553,41 +555,6 @@ public class ListUsersActivity extends AppCompatActivity {
 
         String UID = user.getUid();
 
-
-        usersDb.collection("Usuarios").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(DocumentSnapshot dataSnapshot : queryDocumentSnapshots.getDocuments()){
-
-
-                    String data = dataSnapshot.getId();
-
-
-                    System.out.println("UIDS: " + data);
-
-                    System.out.println("Dados recuperados: "+ dataSnapshot.get("username"));
-
-                    String nameuser = dataSnapshot.get("username").toString().replaceAll(username, "");
-                    //String userID = dataSnapshot.get("id").toString().replaceAll(UID, "");
-                    String profURI = dataSnapshot.get("profileUri").toString().replaceAll(profileURI, "");
-                    String idade = dataSnapshot.get("idade").toString();
-                    String cidade = dataSnapshot.get("cidade").toString();
-                    String bio = dataSnapshot.get("bio").toString();
-
-                    //O que mostra na interface
-                    cards Item = new cards("", nameuser, profURI, idade, cidade, bio);
-
-                    rowItems.add(Item);
-                    arrayAdapter.notifyDataSetChanged();
-
-                }
-            }
-        });
-
-/*
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        String UID = user.getUid();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -618,126 +585,40 @@ public class ListUsersActivity extends AppCompatActivity {
 
                     String cidade = addresses.get(0).getSubAdminArea();
 
-                    DatabaseReference userConfig = FirebaseDatabase.getInstance().getReference().child("Usuarios").child(userSex).child(UID);
-                    userConfig.addValueEventListener(new ValueEventListener() {
+
+                    usersDb.collection("Usuarios").whereEqualTo("Genero", SexoProcura).whereEqualTo("cidade", cidade).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            String idadeConfig = snapshot.child("ConfiguracoesPessoais").child("IdadeLimite").getValue().toString();
-                            DatabaseReference opositeSexDb = FirebaseDatabase.getInstance().getReference().child("Usuarios").child(oppositeUserSex);
-
-                            opositeSexDb.addChildEventListener(new ChildEventListener() {
-                                @Override
-                                public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                                    if (snapshot.exists() && !snapshot.child("connections").child("nope").hasChild(UID) && !snapshot.child("connections").child("yeps").hasChild(UID) && snapshot.hasChild(cidade))    {
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for(DocumentSnapshot dataSnapshot : queryDocumentSnapshots.getDocuments()){
 
 
+                                String data = dataSnapshot.getId();
 
 
-                                        //Tive dificuldades de adicionar mais adiconei como uma String e assim foi!
-                                        String UIDEX = snapshot.getKey();
+                                System.out.println("UIDS: " + data);
 
-                                        String profileUrl = snapshot.child("profileImageUri").child(UIDEX).getValue().toString();
+                                System.out.println("Dados recuperados: "+ dataSnapshot.get("username"));
 
-                                        //Idade Configurada pelo proprio usuario
-                                        int idadeConfigC = Integer.parseInt(idadeConfig);
+                                String nameuser = dataSnapshot.get("username").toString().replaceAll(username, "");
+                                String userIDo = dataSnapshot.get("id").toString();
+                                String profURI = dataSnapshot.get("profileUri").toString().replaceAll(profileURI, "");
+                                String idade = dataSnapshot.get("idade").toString();
+                                String cidade = dataSnapshot.get("cidade").toString();
+                                String bio = dataSnapshot.get("bio").toString();
 
-                                        String cidadeOposite = String.valueOf(snapshot.child("cidade").getValue());
+                                //O que mostra na interface
+                                cards Item = new cards("£" + userIDo + "£", nameuser, profURI, idade, cidade, bio);
 
+                                rowItems.add(Item);
+                                arrayAdapter.notifyDataSetChanged();
 
-
-
-
-
-                                        //Pega a idade do usuario para filtrar
-
-                                        String idadeU = String.valueOf(snapshot.child(cidadeOposite).child("Dados do Usuario").child("idade").getValue());
-
-
-
-                                        System.out.println(cidadeOposite);
-
-                                        if (Integer.parseInt(idadeU) <= idadeConfigC) {
-
-                                            Bio = String.valueOf(snapshot.child(cidade).child("Dados do Usuario").child("bio").getValue());
-
-                                            if(Bio.equals("Digite sua Bio!")){
-                                                Bio = "Sem bio :(";
-                                            }
-
-                                            //O que mostra na interface
-                                            cards Item = new cards(snapshot.getKey(), snapshot.child(cidade).child("Dados do Usuario").child("nome").getValue().toString(), profileUrl, idadeU, String.valueOf(snapshot.child("cidade").getValue()), Bio);
-
-                                            rowItems.add(Item);
-                                            arrayAdapter.notifyDataSetChanged();
-
-                                        } else {
-
-                                        }
-
-
-
-                                    }
-                                }
-
-                                @Override
-                                public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                                    int primeiro_elemento = rowItems.size();
-
-                                    int enesimo_elemento_multiplo_3 = 1000 - (1000 % 3);
-                                    int enesimo_elemento_multiplo_5 = 1000 - (1000 % 5);
-                                    int enesimo_elemento_multiplo_15 = 1000 - (1000 % 15);
-
-                                    double n_multiplo_3 = Math.ceil(1000 / 3.0);
-                                    double n_multiplo_5 = Math.ceil(1000 / 5.0);
-                                    double n_multiplo_15 = Math.ceil(1000 / 15.0);
-
-                                    double soma_multiplo_3 = (primeiro_elemento + enesimo_elemento_multiplo_3) * n_multiplo_3 / 2.0;
-                                    double soma_multiplo_5 = (primeiro_elemento + enesimo_elemento_multiplo_5) * n_multiplo_5 / 2.0;
-                                    double soma_multiplo_15 = (primeiro_elemento + enesimo_elemento_multiplo_15) * n_multiplo_15 / 2.0;
-
-                                    double soma = soma_multiplo_3 + soma_multiplo_5 - soma_multiplo_15;
-
-                                    System.out.println(soma_multiplo_5);
-
-
-                                    if( rowItems.size() == (1000 % 5)){
-                                        System.out.println("O multiplo é 5");
-                                    }else{
-                                        System.out.println("Não é");
-                                    }
-
-                                    System.out.println("O tamanho da lista é: " + rowItems.size());
-
-
-                                    System.out.println("As informações estão sendo exibidas com sucesso!");
-                                }
-
-                                @Override
-                                public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-                                }
-
-                                @Override
-                                public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
+                            }
                         }
                     });
+
                 }
             });
         }
-        */
 
     }
     private void updateGPS() {
