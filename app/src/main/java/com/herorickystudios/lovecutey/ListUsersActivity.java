@@ -43,6 +43,7 @@ import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,6 +86,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
     //API para a localização dos usuarios
     FusedLocationProviderClient fusedLocationProviderClient;
+    private String profileURI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -493,6 +495,7 @@ public class ListUsersActivity extends AppCompatActivity {
                         username = document.getString("username");
                         cidadeUsuario = document.getString("cidade");
                         sexoUsuario = document.getString("Genero");
+                        profileURI = document.getString("profileUri");
 
                         System.out.println("Informações do Usuario");
                         System.out.println(SexoProcura);
@@ -546,19 +549,38 @@ public class ListUsersActivity extends AppCompatActivity {
 
     public void getOppositeSexUsers() {
         CollectionReference onScreen =  usersDb.collection("Usuarios");
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        onScreen.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        String UID = user.getUid();
+
+
+        usersDb.collection("Usuarios").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(DocumentSnapshot dataSnapshot : queryDocumentSnapshots.getDocuments()){
 
-                Object[] dados = queryDocumentSnapshots.getDocuments().toArray();
-                System.out.println("DADOS: "+ dados[1]);
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+                    String data = dataSnapshot.getId();
 
+
+                    System.out.println("UIDS: " + data);
+
+                    System.out.println("Dados recuperados: "+ dataSnapshot.get("username"));
+
+                    String nameuser = dataSnapshot.get("username").toString().replaceAll(username, "");
+                    //String userID = dataSnapshot.get("id").toString().replaceAll(UID, "");
+                    String profURI = dataSnapshot.get("profileUri").toString().replaceAll(profileURI, "");
+                    String idade = dataSnapshot.get("idade").toString();
+                    String cidade = dataSnapshot.get("cidade").toString();
+                    String bio = dataSnapshot.get("bio").toString();
+
+                    //O que mostra na interface
+                    cards Item = new cards("", nameuser, profURI, idade, cidade, bio);
+
+                    rowItems.add(Item);
+                    arrayAdapter.notifyDataSetChanged();
+
+                }
             }
         });
 
