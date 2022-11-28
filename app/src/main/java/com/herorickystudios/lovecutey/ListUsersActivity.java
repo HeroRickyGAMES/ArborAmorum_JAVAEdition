@@ -595,7 +595,6 @@ public class ListUsersActivity extends AppCompatActivity {
 
                                 String data = dataSnapshot.getId();
 
-
                                 System.out.println("UIDS: " + data);
 
                                 System.out.println("Dados recuperados: "+ dataSnapshot.get("username"));
